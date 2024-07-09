@@ -37,16 +37,6 @@ class PengajuanController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show_ketua_tim(Pengajuan $pengajuan)
-    {
-        return Inertia::render('KetuaTim/RiwayatPengajuan', [
-            'title' => 'Riwayat Pengajuan',
-            'pengajuan' => Pengajuan::all()
-        ]);
-    }
 
     /**
      * Display the specified resource.
@@ -79,4 +69,16 @@ class PengajuanController extends Controller
     {
         //
     }
+
+
+
+
+
+
+
+
+
+
+
+
 }

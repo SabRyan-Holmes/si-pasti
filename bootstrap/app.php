@@ -14,6 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+
+        ])->alias([
+            'ketua_tim' => \App\Http\Middleware\KetuaTim::class,
+            'ppk' => \App\Http\Middleware\PPK::class,
+            'pbj' => \App\Http\Middleware\PBJ::class,
+            'keuangan' => \App\Http\Middleware\Keuangan::class,
         ]);
 
         //

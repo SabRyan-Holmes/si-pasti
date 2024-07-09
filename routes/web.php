@@ -1,38 +1,77 @@
 <?php
 
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\KetuaTimController;
+use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\PBJController;
+use App\Http\Controllers\PPKController;
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+// s
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return Inertia::render('Auth/Login');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('KetuaTim/Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::middleware('auth')->group(function () {
+// Ketua Tim Pengajuan
+Route::middleware(['auth', 'ketua_tim'])->prefix('dashboard/ketua-tim')->name('ketua_tim.')->group(function () {
+
     // Pengajuan
-    Route::resource('pengajuan', PengajuanController::class);
+    Route::get('/pengajuan', [KetuaTimController::class, 'pengajuan'])->name('pengajuan');
+    Route::post('/pengajuan', [KetuaTimController::class, 'ajukan_pengajuan'])->name('ajukan_pengajuan');
+
+    // Riwayat Pengajuan
+    Route::get('/riwayat-pengajuan', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+});
 
 
+// PPK
+Route::middleware(['auth', 'ppk'])->prefix('dashboard/ppk')->name('ppk.')->group(function () {
+    // Cek Berkas
+    Route::get('/cek-berkas-ketua-tim', [PPKController::class, 'show_kt'])->name('show-berkas-kt');
+    Route::get('/cek-berkas-pbj', [PPKController::class, 'show_pbj'])->name('show-berkas-pbj');
 
-    // Cek dan Verifikasi
+    // Unggah Berkas
+    Route::get('/unggah-berkas-pengajuan-pbj', [PPKController::class, 'pengajuan_pbj'])->name('unggah-pengajuan-pbj');
+    Route::get('/unggah-berkas-pemesanan', [PPKController::class, 'unggah_pemesanan'])->name('unggah-pemesanan');
+    Route::get('/unggah-berkas-kuitansi', [PPKController::class, 'unggah_kuitansi'])->name('unggah-kuitansi');
 
+    // Riwayat Pengajuan
+    Route::get('/riwayat-pengajuan', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+});
 
-    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// PBJ
+Route::middleware(['auth', 'pbj'])->prefix('dashboard/pbj')->name('pbj.')->group(function () {
 
+    // Cek Berkas
+    Route::get('/cek-berkas', [PBJController::class, 'cek_berkas'])->name('cek_berkas');
 
+    // Unggah Berkas
+    Route::get('/unggah-berkas', [PBJController::class, 'unggah_berkas'])->name('unggah_berkas');
+
+    //Pengadaan
+    Route::get('/pengadaan', [PBJController::class, 'pengadaan'])->name('pengadaan');
+
+    // Riwayat Pengajuan
+    Route::get('/riwayat-pengajuan', [PBJController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+});
+
+// Keuangan
+Route::middleware(['auth', 'keuangan'])->prefix('dashboard/keuangan')->name('keuangan.')->group(function () {
+    // Cek Berkas
+    Route::get('/cek-berkas', [KeuanganController::class, 'cek_berkas'])->name('cek_berkas');
+
+    // Unggah Berkas
+    Route::get('/unggah-berkas', [KeuanganController::class, 'unggah_berkas'])->name('unggah_berkas');
+
+    // Riwayat Pengajuan
+    Route::get('/riwayat-pengajuan', [KeuanganController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
 });
 
 
@@ -42,4 +81,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
