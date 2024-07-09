@@ -31,6 +31,11 @@ export default {
                 "8xl": "2400px",
             },
 
+            fontSize: {
+                xs: '13px',
+
+              }
+
         },
     },
 

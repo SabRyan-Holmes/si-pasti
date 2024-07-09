@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 
 export default function NavLink({ active = false, className = '', children, ...props }) {
     return (
-        <li className='hover:text-yellow-600 active:text-primary'>
+        <li className='hover:text-primary active:text-primary focus:bg-success'>
             <Link
                 {...props}
                 className={

@@ -10,6 +10,9 @@ import NavLinkCollapse from "./NavLinkCollapse";
 import { CiViewTimeline } from "react-icons/ci";
 import { GrOverview } from "react-icons/gr";
 import { MdOutlineDocumentScanner } from "react-icons/md";
+import { ImFolderUpload } from "react-icons/im";
+import { MdOutlineEventAvailable } from "react-icons/md";
+import { HiDocumentMagnifyingGlass } from "react-icons/hi2";
 
 const AdminDrawer = ({ divisi }) => {
     console.log(divisi);
@@ -28,27 +31,28 @@ const AdminDrawer = ({ divisi }) => {
                 {/* <ApplicationLogo className="mx-16 " /> */}
                 <div className="border-b-2 border-yellow-600 mt-4 mb-2" />
 
+                {/* Link Dashboard */}
+                <NavLinkDashboard
+                    href={route("dashboard")}
+                    active={route().current("dashboard")}
+                >
+                    <MdSpaceDashboard />
+                    Dashboard
+                </NavLinkDashboard>
+
                 {divisi == "Ketua Tim" ? (
                     <section>
                         <NavLinkDashboard
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            <MdSpaceDashboard />
-                            Dashboard
-                        </NavLinkDashboard>
-
-                        <NavLinkDashboard
-                            href={route("pengajuan.create")}
-                            active={route().current("pengajuan.create")}
+                            href={route("ketua_tim.pengajuan")}
+                            active={route().current("ketua_tim.pengajuan")}
                         >
                             <FaNotesMedical />
                             Pengajuan
                         </NavLinkDashboard>
 
                         <NavLinkDashboard
-                            href={route("pengajuan.index")}
-                            active={route().current("pengajuan.index")}
+                            href={route("ketua_tim.riwayat_pengajuan")}
+                            active={route().current("ketua_tim.riwayat_pengajuan")}
                         >
                             <MdSwitchAccount />
                             Riwayat Pengajuan
@@ -60,53 +64,36 @@ const AdminDrawer = ({ divisi }) => {
 
                 {divisi == "PPK" ? (
                     <section>
-                        <NavLinkDashboard
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            <MdSpaceDashboard />
-                            Dashboard
-                        </NavLinkDashboard>
-
                         <NavLinkCollapse
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                            submenu={['Ketua Tim', 'PBJ']}
+                            // href={route("dashboard")}
+                            // active={route().current("pengajuan.show_ketua_tim") || route().current("pengajuan.show_pbj") }
+                            submenu={["Ketua Tim", "PBJ"]}
+                            routes={[
+                                "ppk.show-berkas-kt",
+                                "ppk.show-berkas-pbj",
+                            ]}
                         >
-                            <MdOutlineDocumentScanner />
+                            <HiDocumentMagnifyingGlass />
                             Cek Berkas
                         </NavLinkCollapse>
 
-                        {/* <ul className="menu bg-base-200 rounded-box w-56">
-
-                            <li>
-                                <details open>
-                                    <summary> <MdOutlineDocumentScanner /> Parent</summary>
-                                    <ul>
-                                        <li>
-                                            <a>Submenu 1</a>
-                                        </li>
-                                        <li>
-                                            <a>Submenu 2</a>
-                                        </li>
-
-                                    </ul>
-                                </details>
-                            </li>
-
-                        </ul> */}
-
-                        {/* <NavLinkDashboard href={route('pengajuan.create')} active={route().current('pengajuan.create')}><FaNotesMedical />
-              Cek Berkas
-            </NavLinkDashboard>
-              <ul className="inline-block menu menu-xs w-40 ml-12">
-                <li>Ketua Tim</li>
-                <li>PBJ</li>
-              </ul> */}
+                        <NavLinkCollapse
+                            // href={route("dashboard")}
+                            // active={route().current("pengajuan.show_ketua_tim") || route().current("pengajuan.show_pbj") }
+                            submenu={["Pengajuan PBJ", "Pemesanan", "Kuitansi"]}
+                            routes={[
+                                "ppk.unggah-pengajuan-pbj",
+                                "ppk.unggah-pemesanan",
+                                "ppk.unggah-kuitansi",
+                            ]}
+                        >
+                            <ImFolderUpload />
+                            Unggah Berkas
+                        </NavLinkCollapse>
 
                         <NavLinkDashboard
-                            href={route("pengajuan.index")}
-                            active={route().current("pengajuan.index")}
+                            href={route("ppk.riwayat_pengajuan")}
+                            active={route().current("ppk.riwayat_pengajuan")}
                         >
                             <MdSwitchAccount />
                             Riwayat Pengajuan
@@ -115,6 +102,75 @@ const AdminDrawer = ({ divisi }) => {
                 ) : (
                     ""
                 )}
+
+                {divisi == "PBJ" ? (
+                    <section>
+                        <NavLinkDashboard
+                            href={route("pbj.cek_berkas")}
+                            active={route().current("pbj.cek_berkas")}
+                        >
+                            <HiDocumentMagnifyingGlass />
+                            Cek Berkas
+                        </NavLinkDashboard>
+
+                        <NavLinkDashboard
+                            href={route("pbj.unggah_berkas")}
+                            active={route().current("pbj.unggah_berkas")}
+                        >
+                            <ImFolderUpload />
+                            Unggah Berkas
+                        </NavLinkDashboard>
+
+                        <NavLinkDashboard
+                            href={route("pbj.pengadaan")}
+                            active={route().current("pbj.pengadaan")}
+                        >
+                            <MdOutlineEventAvailable />
+                            Pengadaan
+                        </NavLinkDashboard>
+
+                        <NavLinkDashboard
+                            href={route("pbj.riwayat_pengajuan")}
+                            active={route().current("pbj.riwayat_pengajuan")}
+                        >
+                            <MdSwitchAccount />
+                            Riwayat Pengajuan
+                        </NavLinkDashboard>
+                    </section>
+                ) : (
+                    ""
+                )}
+
+                {divisi == "Keuangan" ? (
+                    <section>
+                        <NavLinkDashboard
+                            href={route("keuangan.cek_berkas")}
+                            active={route().current("keuangan.cek_berkas")}
+                        >
+                            <HiDocumentMagnifyingGlass />
+                            Cek Berkas
+                        </NavLinkDashboard>
+
+                        <NavLinkDashboard
+                            href={route("keuangan.unggah_berkas")}
+                            active={route().current("keuangan.unggah_berkas")}
+                        >
+                            <ImFolderUpload />
+                            Unggah Berkas
+                        </NavLinkDashboard>
+
+                        <NavLinkDashboard
+                            href={route("keuangan.riwayat_pengajuan")}
+                            active={route().current("keuangan.riwayat_pengajuan")}
+                        >
+                            <MdSwitchAccount />
+                            Riwayat Pengajuan
+                        </NavLinkDashboard>
+                    </section>
+                ) : (
+                    ""
+                )}
+
             </ul>
         </div>
     );
