@@ -9,7 +9,7 @@ import { IconContext } from "react-icons";
 import { LuFileCheck2 } from "react-icons/lu";
 import { AiFillCloseSquare } from "react-icons/ai";
 
-export default function CekBerkasKT({ title, auth }) {
+export default function Pemesanan({ title, auth }) {
     const { data, setData, post, processing, errors } = useForm({
         nama_kegiatan: "",
         kak: null,

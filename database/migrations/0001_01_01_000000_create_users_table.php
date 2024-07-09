@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            // $table->integer('divisi')->unique();
+            $table->enum('divisi', ['Ketua Tim', 'PPK', 'PBJ', 'Keuangan']);
 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

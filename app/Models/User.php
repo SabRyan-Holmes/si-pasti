@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function kegiatan()
+    {
+        return $this->hasMany(Kegiatan::class, 'created_by');
+    }
 }

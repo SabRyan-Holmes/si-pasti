@@ -11,24 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengajuans', function (Blueprint $table) {
+        Schema::create('kegiatans', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            // Ketua Tim
             $table->string('nama_kegiatan');
-            $table->string('kak');
-            $table->string('form_permintaan');
-
-            // PPK
-            $table->foreignId('ketua_tim');
-
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->string('status');
+            $table->string('current_stage'); //kayak diproses PPK?
 
 
-
-            // PBJ
-
-            //Keuangan
-
+            $table->timestamps();
         });
     }
 
@@ -37,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengajuans');
+        Schema::dropIfExists('kegiatans');
     }
 };
