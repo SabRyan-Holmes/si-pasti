@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('kegiatan_id');
             $table->foreign('kegiatan_id')->references('id')->on('kegiatans')->onDelete('cascade');
-            $table->string('stage');
+            $table->enum('status', ['diproses',  'ditolak', 'selesai']);
+            $table->enum('stage', ['diajukan ketua tim', 'diproses ppk', 'dipesan pbj', 'pesanan selesai', 'pembayaran', 'diproses keuangan', 'selesai']);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
 

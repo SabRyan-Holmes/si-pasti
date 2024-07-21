@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nama_kegiatan');
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-            $table->string('status');
-            $table->string('current_stage'); //kayak diproses PPK?
+            // $table->string('status');
+            // $table->string('current_stage'); //kayak diproses PPK?
 
 
             $table->timestamps();

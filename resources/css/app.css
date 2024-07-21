@@ -89,5 +89,5 @@ body {
 }
 
 .action-btn {
-    @apply rounded-lg inline-flex items-center border border-primary/60 shadow-md p-1 px-2 bg-info
+    @apply rounded-lg inline-flex items-center border  shadow-md p-1 px-2
 }

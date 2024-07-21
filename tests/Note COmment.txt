@@ -1,0 +1,27 @@
+
+        // router.post(route("ketua_tim.ajukan_pengajuan"),  {
+        //     _token: props.csrf_token,
+        //     data: data,
+        //     _method: "POST",
+        //     preserveScroll: true,
+        //     onSuccess: () => {
+        //         console.log(flash.message);
+        //         Swal.fire({
+        //             title: "Berhasil!",
+        //             text: `${flash.message}`,
+        //             icon: "success",
+        //             iconColor: "#50C878",
+        //             confirmButtonText: "Oke",
+        //             confirmButtonColor: "#2D95C9",
+        //         }),
+        //             reset(
+        //                 "name_kegiatan",
+        //                 "kak",
+        //                 "form_permintaan",
+        //                 "surat_permintaan"
+        //             );
+        //         // clearErrors();
+        //         e.preventDefault();
+
+        //     },
+        // });

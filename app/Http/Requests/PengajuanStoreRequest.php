@@ -23,9 +23,9 @@ class PengajuanStoreRequest extends FormRequest
     {
         return [
             'nama_kegiatan' => ['required', 'string', 'max:100'],
-            'kak' => ['required', 'file', 'mimes:pdf', 'max:8192'],
-            'form_permintaan' => ['nullable','required_without:surat_permintaan','file', 'mimes:pdf', 'max:8192'],
-            'surat_permintaan' => ['nullable','required_without:form_permintaan', 'file',  'mimes:pdf', 'max:8192'],
+            'kak' => ['required', 'file', 'mimes:pdf', 'max:15192'],
+            'form_permintaan' => ['sometimes', 'required_without:surat_permintaan',  'file', 'mimes:pdf', 'max:15192'],
+            'surat_permintaan' => ['sometimes', 'required_without:form_permintaan', 'file',  'mimes:pdf', 'max:15192'],
 
 
             // required_if:email,null|string|exists:users,nim

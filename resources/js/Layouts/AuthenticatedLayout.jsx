@@ -7,7 +7,7 @@ import { Link, Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar";
 import AdminDrawer from "@/Components/AdminDrawer";
 
-export default function Authenticated({ user, title, header, children }) {
+export default function Authenticated({ user, title, header, children, current }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -28,7 +28,7 @@ export default function Authenticated({ user, title, header, children }) {
                     </div>
                 </div>
                 <AdminDrawer
-                    active={route().current("pengajuan.index")}
+                    active={(current? current :  route().current("pengajuan.index"))}
                     divisi={user.name}
                 ></AdminDrawer>
             </div>

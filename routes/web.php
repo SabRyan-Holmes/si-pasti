@@ -26,6 +26,10 @@ Route::middleware(['auth', 'ketua_tim'])->prefix('dashboard/ketua-tim')->name('k
     Route::get('/pengajuan', [KetuaTimController::class, 'pengajuan'])->name('pengajuan');
     Route::post('/pengajuan', [KetuaTimController::class, 'ajukan_pengajuan'])->name('ajukan_pengajuan');
 
+    // Detail
+    Route::get('/pengajuan/show/{pengajuan:id}', [KetuaTimController::class, 'show_pengajuan'])->name('show_pengajuan');
+    Route::post('/document/{path}', [KetuaTimController::class, 'open_document'])->name('open_document');
+
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
 });
@@ -33,11 +37,17 @@ Route::middleware(['auth', 'ketua_tim'])->prefix('dashboard/ketua-tim')->name('k
 
 // PPK
 Route::middleware(['auth', 'ppk'])->prefix('dashboard/ppk')->name('ppk.')->group(function () {
-    // Cek Berkas
-    Route::get('/cek-berkas-ketua-tim', [PPKController::class, 'show_kt'])->name('show-berkas-kt');
-    Route::get('/cek-berkas-pbj', [PPKController::class, 'show_pbj'])->name('show-berkas-pbj');
+    // Daftar Berkas
+    Route::get('/daftar-berkas', [PPKController::class, 'daftar_berkas'])->name('daftar-berkas');
+    // Route::get('/cek-berkas-ketua-tim', [PPKController::class, 'berkas_kt'])->name('berkas-kt');
+    Route::get('/cek-berkas-ketua-tim/{pengajuan:id}', [PPKController::class, 'show_berkas'])->name('show-berkas-kt');
+
+    // Route::get('/cek-berkas-pbj', [PPKController::class, 'show_pbj'])->name('berkas-pbj');
+    Route::get('/cek-berkas-pbj/{pengajuan:id}', [PPKController::class, 'show_pbj'])->name('show-berkas-pbj');
 
     // Unggah Berkas
+    Route::get('/unggah-berkas', [PPKController::class, 'unggah_berkas'])->name('unggah-berkas');
+
     Route::get('/unggah-berkas-pengajuan-pbj', [PPKController::class, 'pengajuan_pbj'])->name('unggah-pengajuan-pbj');
     Route::get('/unggah-berkas-pemesanan', [PPKController::class, 'unggah_pemesanan'])->name('unggah-pemesanan');
     Route::get('/unggah-berkas-kuitansi', [PPKController::class, 'unggah_kuitansi'])->name('unggah-kuitansi');

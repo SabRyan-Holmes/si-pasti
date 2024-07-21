@@ -64,20 +64,16 @@ const AdminDrawer = ({ divisi }) => {
 
                 {divisi == "PPK" ? (
                     <section>
-                        <NavLinkCollapse
-                            // href={route("dashboard")}
-                            // active={route().current("pengajuan.show_ketua_tim") || route().current("pengajuan.show_pbj") }
-                            submenu={["Ketua Tim", "PBJ"]}
-                            routes={[
-                                "ppk.show-berkas-kt",
-                                "ppk.show-berkas-pbj",
-                            ]}
+                        <NavLinkDashboard
+                            href={route("ppk.daftar-berkas")}
+                            active={route().current("ppk.daftar-berkas") || route().current("pengajuan.show_pbj") }
+
                         >
                             <HiDocumentMagnifyingGlass />
-                            Cek Berkas
-                        </NavLinkCollapse>
+                            Daftar Berkas
+                        </NavLinkDashboard>
 
-                        <NavLinkCollapse
+                        {/* <NavLinkCollapse
                             // href={route("dashboard")}
                             // active={route().current("pengajuan.show_ketua_tim") || route().current("pengajuan.show_pbj") }
                             submenu={["Pengajuan PBJ", "Pemesanan", "Kuitansi"]}
@@ -89,7 +85,7 @@ const AdminDrawer = ({ divisi }) => {
                         >
                             <ImFolderUpload />
                             Unggah Berkas
-                        </NavLinkCollapse>
+                        </NavLinkCollapse> */}
 
                         <NavLinkDashboard
                             href={route("ppk.riwayat_pengajuan")}

@@ -18,12 +18,14 @@ export default function AdminPage({
     kegiatanCount,
     documentCount,
     processCount,
+    rejectedCount,
+    acceptedCount
 }) {
     console.log(`isi route  : ${route}`);
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
             {/* content */}
-            <div class="grid bg-white grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-3 sm:px-8">
+            <div class="grid bg-white grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-3 sm:px-8 capitalize">
                 <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
                     <div class="p-4 bg-primary">
                         <IconContext.Provider
@@ -78,9 +80,9 @@ export default function AdminPage({
                     </div>
                     <div class="px-4 text-gray-700">
                         <h3 class="text-sm tracking-wider">
-                            Total Semua Proses Terverifikasi
+                            Total Pengajuan yang Selesai
                         </h3>
-                        <p class="text-3xl">{processCount}</p>
+                        <p class="text-3xl">{acceptedCount}</p>
                     </div>
                 </div>
 
@@ -94,7 +96,7 @@ export default function AdminPage({
                     </div>
                     <div class="px-4 text-gray-700">
                         <h3 class="text-sm tracking-wider">
-                            Total Semua Proses Belum Terverifikasi
+                            Total pengajuan masih diproses
                         </h3>
                         <p class="text-3xl">{processCount}</p>
                     </div>
@@ -112,7 +114,7 @@ export default function AdminPage({
                         <h3 class="text-sm tracking-wider">
                             Total pengajuan yang tertolak
                         </h3>
-                        <p class="text-3xl">{processCount}</p>
+                        <p class="text-3xl">{rejectedCount}</p>
                     </div>
                 </div>
             </div>

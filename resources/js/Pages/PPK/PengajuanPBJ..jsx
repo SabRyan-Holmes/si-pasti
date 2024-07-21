@@ -30,7 +30,7 @@ export default function PengajuanPBJ({ title, auth }) {
                     <Navbar user={auth.user} />
                     <div className="mx-6 mt-6 h-full bg-white">
                         {/* content */}
-                        <div className="mx-24 ">
+                        <div className="mx-24 ">x
                             <div className="overflow-x-auto">
                                 <table className="table table-zebra">
                                     {/* head */}

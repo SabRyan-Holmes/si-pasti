@@ -18,24 +18,28 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Ketua Tim',
             'email' => 'ketua.tim.bps@gmail.com',
+            'username' => 'ketua_tim.bps',
             'divisi' => 'Ketua Tim',
             'password' => 'password'
         ]);
         User::create([
             'name' => 'PPK',
             'email' => 'ppk.bps@gmail.com',
+            'username' => 'ppk.bps',
             'divisi' => 'PPK',
             'password' => 'password'
         ]);
         User::create([
             'name' => 'PBJ',
             'email' => 'pbj.bps@gmail.com',
+            'username' => 'pbj.bps',
             'divisi' => 'PBJ',
             'password' => 'password'
         ]);
         User::create([
             'name' => 'Keuangan',
             'email' => 'keuangan.bps@gmail.com',
+            'username' => 'keuangan.bps',
             'divisi' => 'Keuangan',
             'password' => 'password'
         ]);

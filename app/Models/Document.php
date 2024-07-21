@@ -12,10 +12,7 @@ class Document extends Model
 
 
     // Relasi Start
-    public function process()
-    {
-        return $this->belongsTo(Process::class);
-    }
+
 
     public function kegiatan()
     {

@@ -66,12 +66,17 @@ class ProfileController extends Controller
     }
 
     public function dashboard() {
+        $process = Process::where('status', 'diproses')->count();
+        $rejected = Process::where('status', 'ditolak')->count();
+        $accepted = Process::where('status', 'selesai')->count();
         return Inertia::render('Dashboard', [
             'title' => 'Dashboard',
             'userCount' => User::all()->count(),
             'kegiatanCount' => Kegiatan::all()->count(),
             'documentCount' => Document::all()->count(),
-            'processCount' => Process::all()->count(),
+            'rejectedCount' => $rejected,
+            'acceptedCount' => $accepted,
+            'processCount' => $process,
 
         ]);
     }

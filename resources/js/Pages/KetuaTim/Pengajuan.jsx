@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import Navbar from "@/Components/Navbar";
-import { useForm, Link, Head, usePage } from "@inertiajs/react";
+import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
 import AdminDrawer from "@/Components/AdminDrawer";
 import TextInput from "@/Components/TextInput";
 import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
 import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
+import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { IoIosSend } from "react-icons/io";
 
-export default function Pengajuan({ title, auth }) {
-    const props = usePage().props;F
-    const { data, setData, post, processing, errors, reset, clearErrors } =
+export default function Pengajuan({ title, auth, flash }) {
+    const props = usePage().props;
+    const { data, setData, post, processing, errors, reset, clearErrors,recentlySuccessful } =
         useForm({
             nama_kegiatan: "",
             kak: null,
@@ -28,6 +28,7 @@ export default function Pengajuan({ title, auth }) {
                 _method: "POST",
                 preserveScroll: true,
                 onSuccess: () => {
+                    console.log("Berhasil cuy")
                     reset(
                         "name_kegiatan",
                         "kak",
@@ -36,17 +37,34 @@ export default function Pengajuan({ title, auth }) {
                     );
                     clearErrors();
                 },
+                recentlySuccessful: () => {
+                    console.log("Berhasil cuy")
+
+                }
             })
         );
+
     }
+
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
+            <Head title={"Pengajuan"}/>
             {/* content */}
             <div className="mx-24">
                 <strong className="text-2xl text-center w-full mx-auto flex justify-center mb-16">
                     {title}
                 </strong>
 
+                {flash.message &&
+                    Swal.fire({
+                        title: "Berhasil!",
+                        text: `${flash.message}`,
+                        icon: "success",
+                        iconColor: "#50C878",
+                        confirmButtonText: "Oke",
+                        confirmButtonColor: "#2D95C9",
+                    })
+                }
                 <form
                     onSubmit={submit}
                     method="post"
@@ -92,7 +110,7 @@ export default function Pengajuan({ title, auth }) {
                                 onChange={(e) =>
                                     setData("kak", e.target.files[0])
                                 }
-                                class="
+                                className="
                                             file:absolute file:right-0
                                             file:bg-primary file:text-white file:border-0
                                             file:py-1 file:px-3 file:rounded-full

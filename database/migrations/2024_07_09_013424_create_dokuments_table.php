@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('tipe');
+            $table->string('tipe_file');
+            $table->string('jenis_dokumen');
             $table->string('path');
-            $table->string('konten')->nullable();
+            // $table->string('konten')->nullable();
             $table->unsignedBigInteger('kegiatan_id');
             $table->foreign('kegiatan_id')->references('id')->on('kegiatans')->onDelete('cascade');
             $table->unsignedBigInteger('submitted_by');
             $table->foreign('submitted_by')->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('is_approved');
+            $table->boolean('is_valid')->default(false);
 
 
 

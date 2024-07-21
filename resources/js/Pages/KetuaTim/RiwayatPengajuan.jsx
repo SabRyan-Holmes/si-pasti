@@ -5,8 +5,10 @@ import AdminDrawer from "@/Components/AdminDrawer";
 
 import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import moment from "moment/min/moment-with-locales";
 
-export default function RiwayatPengajuan({ title, auth }) {
+export default function RiwayatPengajuan({ title, auth, pengajuan }) {
+    moment.locale("id");
     const { data, setData, post, processing, errors } = useForm({
         nama_kegiatan: "",
         kak: null,
@@ -18,7 +20,7 @@ export default function RiwayatPengajuan({ title, auth }) {
             {/* content */}
             <div className="mx-24 ">
                 <div className="overflow-x-auto">
-                    <table className="table table-zebra">
+                    <table className="table  ">
                         {/* head */}
                         <thead>
                             <tr>
@@ -31,43 +33,26 @@ export default function RiwayatPengajuan({ title, auth }) {
                         </thead>
                         <tbody>
                             {/* row 1 */}
-                            <tr>
-                                <th>1</th>
-                                <td>Seminar OJK</td>
-                                <td>05 Juli 2024</td>
-                                <td>10 Juli 2024</td>
-                                <td className="">
-                                    <div className=" uppercase text-center rounded-lg p-1 bg-info text-slate-700 font-semibold text-xs ">
-                                        Menunggu Validasi
-                                    </div>
-                                </td>
-                            </tr>
-                            {/* row 2 */}
-                            <tr>
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>07 Juli 2024</td>
-                                {/* Kalo Berhasil jadi bg-success/hijau */}
-                                <td>10 Juli 2024</td>
-                                <td className="">
-                                    <div className=" uppercase text-center rounded-lg p-1 bg-success text-slate-700 font-semibold text-xs ">
-                                        selesai
-                                    </div>
-                                </td>
-                            </tr>
-                            {/* row 3 */}
-                            <tr>
-                                <th>3</th>
-                                <td>Brice Swyre</td>
-                                <td>9 Juli 2024</td>
-                                {/* Kalo Ditolak jadi jadi bg-warning/merah */}
-                                <td>10 Juli 2024</td>
-                                <td className="">
-                                    <div className=" uppercase text-center rounded-lg p-1 bg-warning/60 text-slate-700 font-semibold text-xs ">
-                                        ditolak
-                                    </div>
-                                </td>
-                            </tr>
+                            {pengajuan.map((data, i) => (
+                                <Link
+                                    as="tr"
+                                    className="group/item hover:bg-primary/50" href={route('ketua_tim.show_pengajuan', data.kegiatan_id)}
+                                >
+                                    <th>{i + 1}</th>
+                                    <td className="capitalize">{data.kegiatan.nama_kegiatan}</td>
+                                    <td>
+                                        {moment(data.created_at).format("LL")}
+                                    </td>
+                                    <td>
+                                        {moment(data.updated_at).format("LL")}
+                                    </td>
+                                    <td className="">
+                                        <div className=" uppercase text-center rounded-lg p-1 bg-info text-slate-700 font-semibold text-xs ">
+                                            {data.stage}
+                                        </div>
+                                    </td>
+                                </Link>
+                            ))}
                         </tbody>
                     </table>
                 </div>
