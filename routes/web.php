@@ -60,13 +60,13 @@ Route::middleware(['auth', 'ppk'])->prefix('dashboard/ppk')->name('ppk.')->group
 Route::middleware(['auth', 'pbj'])->prefix('dashboard/pbj')->name('pbj.')->group(function () {
 
     // Cek Berkas
-    Route::get('/cek-berkas', [PBJController::class, 'cek_berkas'])->name('cek_berkas');
+    Route::get('/daftar-berkas', [PBJController::class, 'daftar_berkas'])->name('daftar_berkas');
 
     // Unggah Berkas
     Route::get('/unggah-berkas', [PBJController::class, 'unggah_berkas'])->name('unggah_berkas');
 
     //Pengadaan
-    Route::get('/pengadaan', [PBJController::class, 'pengadaan'])->name('pengadaan');
+    Route::get('/cek-berkas', [PBJController::class, 'cek_berkas'])->name('cek_berkas');
 
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan', [PBJController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');

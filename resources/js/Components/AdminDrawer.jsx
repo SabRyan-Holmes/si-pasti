@@ -102,10 +102,18 @@ const AdminDrawer = ({ divisi }) => {
                 {divisi == "PBJ" ? (
                     <section>
                         <NavLinkDashboard
+                            href={route("pbj.daftar_berkas")}
+                            active={route().current("pbj.daftar_berkas")}
+                        >
+                            <HiDocumentMagnifyingGlass />
+                            Daftar Berkas
+                        </NavLinkDashboard>
+
+                        <NavLinkDashboard
                             href={route("pbj.cek_berkas")}
                             active={route().current("pbj.cek_berkas")}
                         >
-                            <HiDocumentMagnifyingGlass />
+                            <MdOutlineEventAvailable />
                             Cek Berkas
                         </NavLinkDashboard>
 
@@ -117,13 +125,13 @@ const AdminDrawer = ({ divisi }) => {
                             Unggah Berkas
                         </NavLinkDashboard>
 
-                        <NavLinkDashboard
+                        {/* <NavLinkDashboard
                             href={route("pbj.pengadaan")}
                             active={route().current("pbj.pengadaan")}
                         >
                             <MdOutlineEventAvailable />
                             Pengadaan
-                        </NavLinkDashboard>
+                        </NavLinkDashboard> */}
 
                         <NavLinkDashboard
                             href={route("pbj.riwayat_pengajuan")}

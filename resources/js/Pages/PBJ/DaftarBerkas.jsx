@@ -3,15 +3,8 @@ import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
 import AdminDrawer from "@/Components/AdminDrawer";
 
-import PrimaryButton from "@/Components/PrimaryButton";
-
-export default function RiwayatPengajuan({ title, auth }) {
-    const { data, setData, post, processing, errors } = useForm({
-        nama_kegiatan: "",
-        kak: null,
-        form_permintaan: null,
-        surat_permintaan: false,
-    });
+export default function DaftarBerkas({ title, auth }) {
+    console.log(`isi route  : ${route}`);
     return (
         <div className="h-full">
             <Head title={title} />
@@ -26,7 +19,7 @@ export default function RiwayatPengajuan({ title, auth }) {
                     <Navbar user={auth.user} />
                     <div className="mx-6 mt-6 h-full bg-white">
                         {/* content */}
-                        <div className="text-xl font-bold">History Pengajuan</div>
+                        <div className="text-xl font-bold">Daftar Berkas</div>
                         <div className="w-11/12 rounded-md border mt-3">
                             <table className="table">
                                 {/* head */}
@@ -37,6 +30,7 @@ export default function RiwayatPengajuan({ title, auth }) {
                                         <th>Kegiatan</th>
                                         <th>Tanggal Pengajuan</th>
                                         <th>Status Berkas</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,7 +40,8 @@ export default function RiwayatPengajuan({ title, auth }) {
                                         <td>Sabrian Maulana</td>
                                         <td>Seminar OJK</td>
                                         <td>Rabu, 1 Juli 2024</td>
-                                        <td><div className="bg-[#B3B3B3] text-center rounded-md font-bold">diproses</div></td>
+                                        <td><div className="bg-[#B3B3B3] text-center rounded-md font-bold cursor-pointer">Cek Berkas</div></td>
+                                        <td><div className="bg-[#B3B3B3] text-center rounded-md font-bold cursor-pointer">Unggah Berkas</div></td>
                                     </tr>
                                     {/* row 2 */}
                                     <tr className="hover">
@@ -55,25 +50,17 @@ export default function RiwayatPengajuan({ title, auth }) {
                                         <td>Seminar OJK</td>
                                         <td>Rabu, 1 Juli 2024</td>
                                         <td><div className="bg-[#ADE1A8] text-center rounded-md font-bold">Selesai</div></td>
-                                    </tr>
-                                    
-                                    {/* row3 */}
-                                    <tr className="hover">
-                                        <th>2</th>
-                                        <td>Sabrian Maulana</td>
-                                        <td>Seminar OJK</td>
-                                        <td>Rabu, 1 Juli 2024</td>
-                                        <td><div className="bg-warning/60 text-center rounded-md font-bold">ditolak</div></td>
+                                        <td><div className="bg-[#ADE1A8] text-center rounded-md font-bold">Selesai</div></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* end of content */}
+                        {/* end of content  */}
                     </div>
                 </div>
                 <AdminDrawer
-                    active={route().current("pengajuan.index")} divisi={auth.user.name}
+                    divisi={auth.user.name}
+                    active={route().current("dashboard")}
                 ></AdminDrawer>
             </div>
         </div>
