@@ -111,7 +111,18 @@ class PPKController extends Controller
     {
         return Inertia::render('PPK/RiwayatPengajuan', [
             'title' => 'Riwayat Pengajuan',
-            'pengajuan' => Pengajuan::all()
+            'pengajuan' => Process::latest()->get()
+        ]);
+    }
+
+    public function show_pengajuan(Process $pengajuan)
+    {
+
+        return Inertia::render('PPK/DetailPengajuan', [
+            'title' => 'Status Pengadaan Barang',
+            'pengajuan' => $pengajuan,
+            'kegiatan' => $pengajuan->kegiatan,
+
         ]);
     }
 }

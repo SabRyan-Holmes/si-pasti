@@ -37,6 +37,7 @@ export default function CekBerkasKT({ title, auth, pengajuans }) {
                     <div className="mx-6 mt-6 h-full bg-white">
                         {/* content */}
                         <div className="mx-24 ">
+                            {/* Breadcumbs */}
                             <div className="breadcrumbs my-3 text-sm">
                                 <ul>
                                     <li>

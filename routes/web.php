@@ -31,7 +31,8 @@ Route::middleware(['auth', 'ketua_tim'])->prefix('dashboard/ketua-tim')->name('k
     Route::post('/document/{path}', [KetuaTimController::class, 'open_document'])->name('open_document');
 
     // Riwayat Pengajuan
-    Route::get('/riwayat-pengajuan', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+    Route::get('/riwayat-pengajuan', [PPKController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+    Route::get('/riwayat-pengajuan/show/{pengajuan:id}', [PPKController::class, 'riwayat_pengajuan'])->name('show_pengajuan');
 });
 
 
@@ -53,7 +54,8 @@ Route::middleware(['auth', 'ppk'])->prefix('dashboard/ppk')->name('ppk.')->group
     Route::get('/unggah-berkas-kuitansi', [PPKController::class, 'unggah_kuitansi'])->name('unggah-kuitansi');
 
     // Riwayat Pengajuan
-    Route::get('/riwayat-pengajuan', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+    Route::get('/riwayat-pengajuan', [PPKController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+    Route::get('/riwayat-pengajuan/show/{pengajuan:id}', [PPKController::class, 'riwayat_pengajuan'])->name('show_pengajuan');
 });
 
 // PBJ
