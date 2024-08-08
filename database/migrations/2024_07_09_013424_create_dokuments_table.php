@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('kategori')->nullable();
             $table->string('tipe_file');
             $table->string('jenis_dokumen');
             $table->string('path');
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->foreign('kegiatan_id')->references('id')->on('kegiatans')->onDelete('cascade');
             $table->unsignedBigInteger('submitted_by');
             $table->foreign('submitted_by')->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('is_valid')->default(false);
+            $table->boolean('is_valid')->nullable(); //If Null = Menunggu Validasi
 
 
 

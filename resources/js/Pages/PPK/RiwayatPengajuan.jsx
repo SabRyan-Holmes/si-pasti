@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
 import { FaHistory } from "react-icons/fa";
-import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import moment from "moment/min/moment-with-locales";
 import { FaEye } from "react-icons/fa";

@@ -1,18 +1,25 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
-import daisyui from "daisyui"
+import defaultTheme from "tailwindcss/defaultTheme";
+import forms from "@tailwindcss/forms";
+import daisyui from "daisyui";
 
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-        './resources/js/**/*.jsx',
+        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
+        "./storage/framework/views/*.php",
+        "./resources/views/**/*.blade.php",
+        "./resources/js/**/*.jsx",
     ],
 
     theme: {
         extend: {
+            colors: {
+                transparent: "transparent",
+                current: "currentColor",
+                oren: "#fb923c",
+                hijau: "#22c55e",
+                bermuda: "#78dcca",
+            },
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
                 inder: ["Inder"],
@@ -26,49 +33,47 @@ export default {
 
             screens: {
                 xs: "400px",
+                phone: "320px",
+                tablet: "768px",
+                laptop: "1024px",
+                desktop: "1440px",
+                "8xl": "2400px",
                 // "2xl": "1320px",
                 // "3xl": "1536px",
-                "8xl": "2400px",
             },
 
             fontSize: {
-                xs: '13px',
-
-              }
-
+                xs: "13px",
+            },
         },
     },
 
     daisyui: {
         themes: [
             {
-                mytheme: {
-                    primary: "#2D95C9",
+                bps_theme: {
+                    primary: "#38bdf8",
 
-                    secondary: "#f97316",
+                    secondary: "#fb923c",
+                    oren: "#fb923c",
 
-                    accent: "#ffffff",
+                    accent: "#9ca3af",
 
                     neutral: "#ffffff",
 
-                    base: "#FBEDD7",
+                    "base-100": "#f3f4f6",
 
-                    "base-100": "#e0f2fe",
+                    info: "#7dd3fc",
 
-                    info: "#cbd5e1",
+                    success: "#00ff00",
 
-                    success: "#50C878",
+                    warning: "#fb7185",
 
-                    warning: "#dc2626",
-
-                    error: "#ffffff",
+                    error: "#ff0000",
                 },
             },
         ],
     },
 
-    plugins: [
-        daisyui,
-        forms
-    ],
+    plugins: [daisyui, forms],
 };

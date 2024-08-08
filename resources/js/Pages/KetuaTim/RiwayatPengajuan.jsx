@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
-
-import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import moment from "moment/min/moment-with-locales";
 
@@ -36,19 +32,26 @@ export default function RiwayatPengajuan({ title, auth, pengajuan }) {
                             {pengajuan.map((data, i) => (
                                 <Link
                                     as="tr"
-                                    className="group/item hover:bg-primary/50" href={route('ketua_tim.show_pengajuan', data.kegiatan_id)}
+                                    className="group/item hover:bg-primary/50"
+                                    href={route(
+                                        "ketua_tim.show_pengajuan",
+                                        data.id
+                                    )}
                                 >
                                     <th>{i + 1}</th>
-                                    <td className="capitalize">{data.kegiatan.nama_kegiatan}</td>
+                                    <td className="capitalize">
+                                        {data.kegiatan.nama_kegiatan}
+                                    </td>
                                     <td>
                                         {moment(data.created_at).format("LL")}
                                     </td>
                                     <td>
                                         {moment(data.updated_at).format("LL")}
                                     </td>
-                                    <td className="">
-                                        <div className=" uppercase text-center rounded-lg p-1 bg-info text-slate-700 font-semibold text-xs ">
-                                            {data.stage}
+                                    <td >
+
+                                        <div className=" label-base bg-base-200 text-center ">
+                                            {data.status}
                                         </div>
                                     </td>
                                 </Link>

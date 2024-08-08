@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
 
-import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { FaFileUpload } from "react-icons/fa";
-import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
+import { SecondaryButton } from "@/Components";
 
 export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
+            <Head title={title}/>
             {/* content */}
             <div className="mx-24">
                 <div className="my-6">
@@ -59,7 +58,9 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                             {kegiatan.documents.map((data, i) => (
                                 <tr>
                                     <th className="text-primary">{i + 1}</th>
-                                    <td className="capitalize">{data.jenis_dokumen}</td>
+                                    <td className="capitalize">
+                                        {data.jenis_dokumen}
+                                    </td>
                                     <td className="capitalize text-xs">
                                         {data.nama}.
                                         <span className="lowercase">

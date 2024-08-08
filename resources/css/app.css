@@ -7,6 +7,18 @@ body {
     @apply text-slate-700;
 }
 
+/* Ensure the spinner controls are always visible */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: inner-spin-button !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Remove default spinner in Firefox */
+}
+
 .btn-glass {
     @apply btn glass bg-orange-400 text-orange-800 mt-3  hover:bg-primary hover:scale-105 text-lg;
 }
@@ -29,23 +41,31 @@ body {
 }
 
 .gradient-primary {
-    @apply bg-gradient-to-b from-primary/40 to-secondary opacity-100;
+    @apply bg-gradient-to-br from-primary from-30% via-50% to-10%  via-hijau to-secondary opacity-100;
 }
 
 .gradient-sidebar {
     @apply bg-gradient-to-b from-primary/50 to-secondary opacity-100;
 }
 
+.gradient-bps {
+    @apply bg-gradient-to-r from-primary from-30% via-50% to-10%  via-hijau to-secondary opacity-100;
+}
+
 .text-gradient {
-    @apply bg-clip-text text-transparent gradient-base;
+    @apply bg-clip-text text-transparent;
 }
 
 .button-glass {
-    @apply bg-red-400  btn glass scale-75 items-center   border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
+    @apply bg-red-400  btn glass scale-75 items-center border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
 }
 
 .border-card {
     @apply border-t-secondary border-l-secondary border-r-primary/45 border-b-primary/45 focus:border-none focus:border-primary border focus:ring-yellow-600;
+}
+
+.border-gradient {
+    @apply bg-slate-100/60 border-t-primary border-l-primary border-r-secondary border-b-hijau focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-opacity-60 focus:ring-primary;
 }
 
 .large-primary-button {
@@ -81,7 +101,7 @@ body {
 }
 
 .button-correct {
-    @apply bg-emerald-500/90 inline-flex scale-[0.78] btn glass items-center px-4 py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-emerald-600 active:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
+    @apply bg-emerald-500/90  inline-flex scale-[0.78] btn glass items-center px-4 py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-emerald-600 active:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
 }
 
 .button-incorrect {
@@ -89,5 +109,47 @@ body {
 }
 
 .action-btn {
-    @apply rounded-lg inline-flex items-center border  shadow-md p-1 px-2
+    @apply rounded-lg inline-flex items-center border  shadow-md p-1 px-2;
 }
+
+.label-warning {
+    @apply rounded-md bg-rose-500/90 uppercase p-1 mx-3 text-xs font-semibold
+}
+
+.label-secondary {
+    @apply rounded-md bg-secondary/90 uppercase p-1 mx-3 text-xs font-semibold text-center
+}
+
+.label-success {
+    @apply rounded-md bg-success uppercase p-1 mx-3 text-xs font-semibold text-center
+}
+
+.label-base {
+    @apply rounded-md uppercase p-1 mx-3 text-xs font-semibold text-center
+}
+
+table.table-bordered {
+    /* table-layout: auto; */
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    line-height: 1rem;
+
+    @apply border-slate-600
+
+}
+
+table.table-bordered > thead > tr > th {
+    @apply border border-slate-500
+}
+
+table.table-bordered > tbody > tr > td {
+    @apply border border-slate-500
+}
+table.table-bordered > tbody > tr > th {
+    @apply border border-slate-500
+}
+
+/* table.table-bordered > tbody > tr > td {
+    border: 1px solid #334454;
+} */

@@ -1,13 +1,14 @@
 import { useState } from "react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import Dropdown from "@/Components/Dropdown";
-import NavLink from "@/Components/NavLink";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, Head } from "@inertiajs/react";
-import Navbar from "@/Components/Navbar";
-import AdminDrawer from "@/Components/AdminDrawer";
+import { Navbar, Sidebar } from "@/Components";
 
-export default function Authenticated({ user, title, header, children, current }) {
+export default function Authenticated({
+    user,
+    title,
+    header,
+    children,
+    current,
+}) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -27,10 +28,12 @@ export default function Authenticated({ user, title, header, children, current }
                         <main>{children}</main>
                     </div>
                 </div>
-                <AdminDrawer
-                    active={(current? current :  route().current("pengajuan.index"))}
+                <Sidebar
+                    active={
+                        current ? current : route().current("pengajuan.index")
+                    }
                     divisi={user.name}
-                ></AdminDrawer>
+                ></Sidebar>
             </div>
         </div>
     );

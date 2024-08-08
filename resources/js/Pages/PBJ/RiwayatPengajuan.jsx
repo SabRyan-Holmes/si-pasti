@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
 import AdminDrawer from "@/Components/AdminDrawer";
-
+import { FaHistory } from "react-icons/fa";
 import PrimaryButton from "@/Components/PrimaryButton";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import moment from "moment/min/moment-with-locales";
+import { FaEye } from "react-icons/fa";
 
-export default function RiwayatPengajuan({ title, auth }) {
+export default function RiwayatPengajuan({ title, auth, pengajuan }) {
     const { data, setData, post, processing, errors } = useForm({
         nama_kegiatan: "",
         kak: null,
@@ -13,69 +16,72 @@ export default function RiwayatPengajuan({ title, auth }) {
         surat_permintaan: false,
     });
     return (
-        <div className="h-full">
-            <Head title={title} />
-
-            <div className="drawer lg:drawer-open h-full">
-                <input
-                    id="my-drawer-2"
-                    type="checkbox"
-                    className="drawer-toggle"
-                />
-                <div className="drawer-content flex flex-col bg-neutral h-full">
-                    <Navbar user={auth.user} />
-                    <div className="mx-6 mt-6 h-full bg-white">
-                        {/* content */}
-                        <div className="text-xl font-bold">History Pengajuan</div>
-                        <div className="w-11/12 rounded-md border mt-3">
-                            <table className="table">
-                                {/* head */}
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Ketua TIM</th>
-                                        <th>Kegiatan</th>
-                                        <th>Tanggal Pengajuan</th>
-                                        <th>Status Berkas</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {/* row 1 */}
-                                    <tr className="hover">
-                                        <th>1</th>
-                                        <td>Sabrian Maulana</td>
-                                        <td>Seminar OJK</td>
-                                        <td>Rabu, 1 Juli 2024</td>
-                                        <td><div className="bg-[#B3B3B3] text-center rounded-md font-bold">diproses</div></td>
-                                    </tr>
-                                    {/* row 2 */}
-                                    <tr className="hover">
-                                        <th>2</th>
-                                        <td>Sabrian Maulana</td>
-                                        <td>Seminar OJK</td>
-                                        <td>Rabu, 1 Juli 2024</td>
-                                        <td><div className="bg-[#ADE1A8] text-center rounded-md font-bold">Selesai</div></td>
-                                    </tr>
-                                    
-                                    {/* row3 */}
-                                    <tr className="hover">
-                                        <th>2</th>
-                                        <td>Sabrian Maulana</td>
-                                        <td>Seminar OJK</td>
-                                        <td>Rabu, 1 Juli 2024</td>
-                                        <td><div className="bg-warning/60 text-center rounded-md font-bold">ditolak</div></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        {/* end of content */}
-                    </div>
+        <AuthenticatedLayout user={auth.user} title={title}>
+            {/* content */}
+            <div className="mx-24 ">
+                {/* Breadcumbs */}
+                <div className="breadcrumbs my-3 text-sm">
+                    <ul>
+                        <li>
+                            <a>
+                            <FaHistory className="w-4 h-4 mr-2" />
+                                Riwayat Pengajuan
+                            </a>
+                        </li>
+                        <li>
+                            <a></a>
+                        </li>
+                    </ul>
                 </div>
-                <AdminDrawer
-                    active={route().current("pengajuan.index")} divisi={auth.user.name}
-                ></AdminDrawer>
+                <div className="overflow-x-auto">
+                    <table className="table ">
+                        {/* head */}
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Ketua Tim</th>
+                                <th>Kegiatan</th>
+                                <th>Tanggal Pengajuan</th>
+                                <th className="text-center">Status</th>
+                                <th className="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {/* row 1 */}
+                            {pengajuan.data?.map((data, i) => (
+                                // <Link
+                                //     as="tr"
+                                //     className="group/item hover:bg-primary/50" href={route('pbj.show_pengajuan', data.kegiatan_id)}
+                                // >
+                                <tr>
+
+                                    <th>{i + 1}</th>
+                                    <td className="capitalize">Nama {data.kegiatan.user.name}</td>
+                                    <td>
+                                    {data.kegiatan.nama_kegiatan}
+                                    </td>
+                                    <td>
+                                        {moment(data.updated_at).format("LL")}
+                                    </td>
+                                    <td className="">
+                                        <div className=" uppercase text-center rounded-lg p-1 bg-info text-slate-700 font-semibold text-xs ">
+                                            {data.stage}
+                                        </div>
+                                    </td>
+
+                                    <Link as="td" href={route('pbj.show-pengajuan', data.kegiatan_id)} className="flex justify-center items-center gap-2 hover:bg-primary action-btn mt-2">
+                                    <span>Lihat</span>
+                                    <FaEye />
+                                    </Link>
+                                {/* </Link> */}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+
+            {/* end of content */}
+        </AuthenticatedLayout>
     );
 }

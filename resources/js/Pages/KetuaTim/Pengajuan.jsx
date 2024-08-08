@@ -1,70 +1,103 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
-import TextInput from "@/Components/TextInput";
-import InputLabel from "@/Components/InputLabel";
-import InputError from "@/Components/InputError";
-import PrimaryButton from "@/Components/PrimaryButton";
+
+import { InputError, InputLabel, TextInput, PrimaryButton } from "@/Components";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { IoIosSend } from "react-icons/io";
 
 export default function Pengajuan({ title, auth, flash }) {
     const props = usePage().props;
-    const { data, setData, post, processing, errors, reset, clearErrors,recentlySuccessful } =
-        useForm({
-            nama_kegiatan: "",
-            kak: null,
-            form_permintaan: null,
-            surat_permintaan: false,
-        });
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+        clearErrors,
+        recentlySuccessful,
+    } = useForm({
+        nama_kegiatan: "",
+        kak: null,
+        form_permintaan: null,
+        surat_permintaan: null,
+    });
 
     function submit(e) {
         e.preventDefault();
-        post(
-            route("ketua_tim.ajukan_pengajuan", data, {
-                _token: props.csrf_token,
-                _method: "POST",
-                preserveScroll: true,
-                onSuccess: () => {
-                    console.log("Berhasil cuy")
-                    reset(
-                        "name_kegiatan",
-                        "kak",
-                        "form_permintaan",
-                        "surat_permintaan"
-                    );
-                    clearErrors();
-                },
-                recentlySuccessful: () => {
-                    console.log("Berhasil cuy")
-
-                }
-            })
-        );
-
+        post(route("ketua_tim.ajukan_pengajuan"), {
+            data: data,
+            _token: props.csrf_token,
+            _method: "POST",
+            forceFormData: true,
+            onSuccess: () => {
+                reset();
+                clearErrors();
+                console.log("Submit selesai dari On Success");
+            },
+            onError: () => {
+                console.log("Gagal submit");
+            },
+            // onFinish: () => {
+            //     location.reload()
+            // },
+        });
     }
+
+    // post(
+    //     route("ppk.ajukan-berkas"),
+    //     {
+    //         data,
+    //         _token: props.csrf_token,
+    //         _method: "POST",
+    //         forceFormData: true,
+    //     },
+    //     {
+    //         onSuccess: () => {
+    //             clearErrors();
+    //             console.log("Submit selesai dari On Success");
+
+    //             router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
+    //         },
+    //         onError: () => {
+    //             console.log("Gagal submit");
+    //         },
+    //         onFinish: () => {
+    //             console.log("Submit selesai");
+    //         },
+    //     }
+    // );
+
+    useEffect(() => {
+        if (flash.message) {
+            Swal.fire({
+                title: "Berhasil!",
+                text: `${flash.message}`,
+                icon: "success",
+                iconColor: "#50C878",
+                confirmButtonText: "Oke",
+                confirmButtonColor: "#2D95C9",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload()
+                }
+              });
+        }
+    }, [flash.message]);
+
+    console.log(data);
 
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
-            <Head title={"Pengajuan"}/>
+            <Head title={"Pengajuan"} />
             {/* content */}
             <div className="mx-24">
                 <strong className="text-2xl text-center w-full mx-auto flex justify-center mb-16">
                     {title}
                 </strong>
 
-                {flash.message &&
-                    Swal.fire({
-                        title: "Berhasil!",
-                        text: `${flash.message}`,
-                        icon: "success",
-                        iconColor: "#50C878",
-                        confirmButtonText: "Oke",
-                        confirmButtonColor: "#2D95C9",
-                    })
-                }
                 <form
                     onSubmit={submit}
                     method="post"
@@ -81,10 +114,10 @@ export default function Pengajuan({ title, auth, flash }) {
                         <TextInput
                             type="text"
                             name="nama_kegiatan"
+                            id="nama_kegiatan"
                             placeholder="Masukkan nama kegiatan"
                             isFocused={true}
                             className="bg-white mb-2 input input-bordered input-primary w-full"
-                            value={data.question}
                             onChange={(e) =>
                                 setData("nama_kegiatan", e.target.value)
                             }
@@ -191,7 +224,7 @@ export default function Pengajuan({ title, auth, flash }) {
                         <PrimaryButton
                             disabled={processing}
                             type="submit"
-                            className="bg-success"
+                            className="bg-hijau"
                         >
                             Ajukan <IoIosSend className="ml-1 w-5 h-5" />
                         </PrimaryButton>

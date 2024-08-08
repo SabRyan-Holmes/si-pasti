@@ -36,77 +36,12 @@ class KetuaTimController extends Controller
             'created_by' => Auth::user()->id, // Relasi dgn Tabel User(divisi)
         ]);
 
-        // Logic Store KAK
-        if ($request->file('kak')) {
 
-            // if ($request->oldImage) {
-            //     Storage::delete($request->oldImage);
-            // }
+        // Logic Store Document
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang', $new_kegiatan->id);
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_kegiatan->id);
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_kegiatan->id);
 
-            // KAK
-            $KAKFileName = 'KAK-' . $request->nama_kegiatan . '.' . $request->file('kak')->getClientOriginalExtension();
-            $path = 'public/kak-file/';
-            Storage::disk('local')->putFileAs($path, $request->file('kak'), $KAKFileName);
-            $validated['kak'] = 'kak-file/' . $KAKFileName;
-
-
-            Document::create([
-                'nama' => 'KAK - ' . $validated['nama_kegiatan'],
-                'tipe_file' => $request->file('kak')->getClientOriginalExtension(),
-                'path' => $validated['kak'],
-                'jenis_dokumen' => 'kerangka ajuan kerja',
-
-
-                // Relas dgn Kegiatan & User
-                'kegiatan_id' => $new_kegiatan->id,
-                'submitted_by' => Auth::user()->id,
-                // 'is_approved' => false
-            ]);
-        }
-
-        // Logic Store Form Permintaan
-        if ($request->file('form_permintaan')) {
-
-            // FP /Form Permintaan
-            $FPFileName = 'FP-' .$request->nama_kegiatan . '.' . $request->file('form_permintaan')->getClientOriginalExtension();
-            $path = 'public/fp-file/';
-            Storage::disk('local')->putFileAs($path, $request->file('form_permintaan'), $FPFileName);
-            $validated['form_permintaan'] = 'fp-file/' . $FPFileName;
-
-
-            Document::create([
-                'nama' => 'FP - ' .$validated['nama_kegiatan'],
-                'tipe_file' => $request->file('form_permintaan')->getClientOriginalExtension(),
-                'path' => $validated['form_permintaan'],
-                'jenis_dokumen' => 'form permintaan',
-
-                // Relas dgn Kegiatan
-                'kegiatan_id' => $new_kegiatan->id,
-                'submitted_by' => Auth::user()->id,
-                // 'is_approved' => false
-            ]);
-        }
-
-        // Logic Store Surat Permintaan
-        if ($request->file('surat_permintaan')) {
-
-            $SPFileName = 'SP-' .$request->nama_kegiatan . '.' . $request->file('surat_permintaan')->getClientOriginalExtension();
-            $path = 'public/sp-file/';
-            Storage::disk('local')->putFileAs($path, $request->file('surat_permintaan'), $SPFileName);
-            $validated['surat_permintaan'] = 'sp-file/' . $SPFileName;
-
-
-            Document::create([
-                'nama' => 'SP - ' . $validated['nama_kegiatan'],
-                'tipe_file' => $request->file('surat_permintaan')->getClientOriginalExtension(),
-                'path' => $validated['surat_permintaan'],
-                'jenis_dokumen' => 'surat permintaan',
-                // Relas dgn Kegiatan
-                'kegiatan_id' => $new_kegiatan->id,
-                'submitted_by' => Auth::user()->id,
-                // 'is_approved' => false
-            ]);
-        }
 
         // Store Process/Pengajuan
         Process::create([
@@ -120,6 +55,53 @@ class KetuaTimController extends Controller
 
         // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
         return Redirect::route('ketua_tim.pengajuan')->with('message', 'Pengajuan berhasil diajukan!');
+    }
+
+    private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori, $kegiatanId)
+    {
+        if ($request->file($fileKey)) {
+            // Membuat nama file
+            $fileName = $prefix . '-' . $request->nama_kegiatan . '.' . $request->file($fileKey)->getClientOriginalExtension();
+            $path = 'public/' . strtolower($prefix) . '-file/';
+
+            // Menyimpan file
+            Storage::disk('local')->putFileAs($path, $request->file($fileKey), $fileName);
+
+            // Path yang akan disimpan di database
+            $filePath = strtolower($prefix) . '-file/' . $fileName;
+
+
+            // Mencari dokumen yang sudah ada berdasarkan kegiatan_id, nama, dan kategori
+            $existingDocument = Document::where('kegiatan_id', $kegiatanId)
+                ->where('nama', $prefix . ' - ' . $request->nama_kegiatan)
+                ->where('kategori', $kategori)
+                ->where('submitted_by', Auth()->user()->id)
+                ->first();
+
+            if ($existingDocument) {
+                // Menghapus file sebelumnya
+                Storage::delete('/storage/'. $existingDocument->path);
+
+                // Mengupdate dokumen yang sudah ada
+                $existingDocument->update([
+                    'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
+                    'path' => $filePath,
+                    'jenis_dokumen' => $jenisDokumen,
+                    'submitted_by' => Auth()->user()->id,
+                ]);
+            } else {
+                // Membuat entri dokumen
+                Document::create([
+                    'nama' => $prefix . ' - ' . $request->nama_kegiatan,
+                    'kategori' => $kategori,
+                    'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
+                    'path' => $filePath,
+                    'jenis_dokumen' => $jenisDokumen,
+                    'kegiatan_id' => $kegiatanId,
+                    'submitted_by' => Auth()->user()->id,
+                ]);
+            }
+        }
     }
 
     public function show_pengajuan(Process $pengajuan)
@@ -141,7 +123,8 @@ class KetuaTimController extends Controller
         ]);
     }
 
-    public function open_document(Request $request){
+    public function open_document(Request $request)
+    {
         dd($request);
         return response()->file($request->path);
     }

@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
-import { Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
 import { IconContext } from "react-icons";
 import { FaUserTie } from "react-icons/fa";
 import { MdEvent } from "react-icons/md";

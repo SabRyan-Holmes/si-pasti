@@ -1,27 +1,16 @@
 import React, { useState } from "react";
 import Navbar from "@/Components/Navbar";
-import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
-import { FaUserEdit } from "react-icons/fa";
-import PrimaryButton from "@/Components/PrimaryButton";
+import { Link, Head } from "@inertiajs/react";
 import { FiEye } from "react-icons/fi";
-import { IconContext } from "react-icons";
-import { LuFileCheck2 } from "react-icons/lu";
-import { AiFillCloseSquare } from "react-icons/ai";
-import { GrDocumentExcel } from "react-icons/gr";
 import moment from "moment/min/moment-with-locales";
 import { RiFolderUploadFill } from "react-icons/ri";
+import { Sidebar } from "@/Components";
 
-export default function CekBerkasKT({ title, auth, pengajuans }) {
+export default function DaftarBerkas({ title, auth, pengajuans }) {
     moment.locale("id");
 
-    const { data, setData, post, processing, errors } = useForm({
-        nama_kegiatan: "",
-        kak: null,
-        form_permintaan: null,
-        surat_permintaan: false,
-    });
-    console.log('current route : ', route().current());
+
+    console.log("current route : ", route().current());
     return (
         <div className="h-full">
             <Head title={title} />
@@ -64,7 +53,7 @@ export default function CekBerkasKT({ title, auth, pengajuans }) {
                                 </ul>
                             </div>
                             <div className="my-10 overflow-x-auto">
-                                <table className="table table-zebra">
+                                <table className="table ">
                                     {/* head */}
                                     <thead>
                                         <tr>
@@ -89,7 +78,9 @@ export default function CekBerkasKT({ title, auth, pengajuans }) {
                                             return (
                                                 <tr>
                                                     <th>{pengajuan.id}</th>
-                                                    <td>Namas {ketua_tim.name}</td>
+                                                    <td>
+                                                        Namas {ketua_tim.name}
+                                                    </td>
                                                     <td>
                                                         {kegiatan.nama_kegiatan}
                                                     </td>
@@ -101,7 +92,7 @@ export default function CekBerkasKT({ title, auth, pengajuans }) {
                                                     <td>
                                                         {pengajuan.status ==
                                                             "diproses" && (
-                                                            <div className="uppercase text-center rounded-lg p-1 bg-info text-slate-700 font-semibold text-xs ">
+                                                            <div className="label-base bg-base-200 ">
                                                                 {
                                                                     pengajuan.status
                                                                 }
@@ -126,7 +117,7 @@ export default function CekBerkasKT({ title, auth, pengajuans }) {
                                                             </div>
                                                         )}
                                                     </td>
-                                                    <td className="flex justify-between  items-center ">
+                                                    <td className="flex justify-around items-center gap-3 ">
                                                         {/* Button View */}
                                                         <Link
                                                             href={route(
@@ -143,8 +134,9 @@ export default function CekBerkasKT({ title, auth, pengajuans }) {
                                                         {/* Button Upload */}
                                                         <Link
                                                             href={route(
-                                                                "ppk.unggah-berkas"
-                                                            )} pengajuanId={pengajuan.id}
+                                                                "ppk.unggah-berkas",
+                                                                pengajuan.id
+                                                            )}
                                                             className=" action-btn scale-125 border-secondary/30 bg-secondary/5"
                                                         >
                                                             <span className="text-xs font-medium text-slate-500 scale-[0.8]">
@@ -164,10 +156,10 @@ export default function CekBerkasKT({ title, auth, pengajuans }) {
                         {/* end of content */}
                     </div>
                 </div>
-                <AdminDrawer
+                <Sidebar
                     active={route().current("ppk.show-berkas-kt")}
                     divisi={auth.user.name}
-                ></AdminDrawer>
+                ></Sidebar>
             </div>
         </div>
     );
