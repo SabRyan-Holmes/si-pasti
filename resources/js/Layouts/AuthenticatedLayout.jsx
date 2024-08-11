@@ -32,7 +32,7 @@ export default function Authenticated({
                     active={
                         current ? current : route().current("pengajuan.index")
                     }
-                    divisi={user.name}
+                    divisi={user.divisi}
                 ></Sidebar>
             </div>
         </div>

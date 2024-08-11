@@ -16,7 +16,7 @@ class PPK
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->name == "PPK") {
+        if (Auth::user()->divisi == "PPK") {
             return $next($request);
         }
         abort(401);

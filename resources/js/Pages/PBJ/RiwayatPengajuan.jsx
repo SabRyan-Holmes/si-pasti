@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
 import { FaHistory } from "react-icons/fa";
-import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import moment from "moment/min/moment-with-locales";
 import { FaEye } from "react-icons/fa";
@@ -69,7 +66,7 @@ export default function RiwayatPengajuan({ title, auth, pengajuan }) {
                                         </div>
                                     </td>
 
-                                    <Link as="td" href={route('pbj.show-pengajuan', data.kegiatan_id)} className="flex justify-center items-center gap-2 hover:bg-primary action-btn mt-2">
+                                    <Link as="td" href={route('pbj.show-pengajuan', data.kegiatan_id)} className="flex justify-center items-center gap-2 hover:bg-primary action-btn mt-2 text-center">
                                     <span>Lihat</span>
                                     <FaEye />
                                     </Link>

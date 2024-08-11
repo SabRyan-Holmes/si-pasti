@@ -62,7 +62,7 @@ export default function AdminPage({
                         </IconContext.Provider>
                     </div>
                     <div class="px-4 text-gray-700">
-                        <h3 class="text-sm tracking-wider">Jumlah Divisi</h3>
+                        <h3 class="text-sm tracking-wider">Jumlah Pengguna</h3>
                         <p class="text-3xl">{userCount}</p>
                     </div>
                 </div>

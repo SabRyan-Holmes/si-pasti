@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
+// import AdminDrawer from "@/Components/AdminDrawer";
 
 export default function CekBerkas({ title, auth }) {
     console.log(`isi route  : ${route}`);
@@ -91,7 +91,7 @@ export default function CekBerkas({ title, auth }) {
 
                                     <tr className="hover">
                                         <th>4</th>
-                                        <td>Surat Penunjukan Penjabat 
+                                        <td>Surat Penunjukan Penjabat
                                         Pengadaan </td>
                                         <td>dokumen.pdf</td>
                                         <td>                                            <div className="flex">
@@ -122,7 +122,7 @@ export default function CekBerkas({ title, auth }) {
                                     {/* row 1 */}
                                     <tr className="hover">
                                         <th>1</th>
-                                        <td>Surat Penetapan Pemenang 
+                                        <td>Surat Penetapan Pemenang
                                         Barang dan Jasa (SPPBJ)</td>
                                         <td>dokumen.pdf</td>
                                         <td>

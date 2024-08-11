@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
-import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
 
-import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { FaFileUpload } from "react-icons/fa";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";

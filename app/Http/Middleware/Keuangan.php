@@ -20,7 +20,7 @@ class Keuangan
         //     return response()->json('Opps! You do not have permission to access.');
         // }
         // return $next($request);
-        if (Auth::user()->name == "Keuangan") {
+        if (Auth::user()->divisi == "Keuangan") {
             return $next($request);
         }
         abort(401);

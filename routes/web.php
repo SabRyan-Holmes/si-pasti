@@ -20,24 +20,20 @@ Route::get('/dashboard', [ProfileController::class, 'dashboard'])->middleware(['
 
 
 // Ketua Tim Pengajuan
-Route::middleware(['auth', 'ketua_tim'])->prefix('dashboard/ketua-tim')->name('ketua_tim.')->group(function () {
+Route::middleware(['auth', 'ketua_tim'])->prefix('ketua-tim')->name('ketua_tim.')->group(function () {
 
-    // Pengajuan
+    // Buat Pengajuan
     Route::get('/pengajuan', [KetuaTimController::class, 'pengajuan'])->name('pengajuan');
     Route::post('/pengajuan', [KetuaTimController::class, 'ajukan_pengajuan'])->name('ajukan_pengajuan');
 
-    // Detail
-    Route::get('/pengajuan/show/{pengajuan:id}', [KetuaTimController::class, 'show_pengajuan'])->name('show_pengajuan');
-    Route::post('/document/{path}', [KetuaTimController::class, 'open_document'])->name('open_document');
-
     // Riwayat Pengajuan
-    Route::get('/riwayat-pengajuan', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
+    Route::get('/riwayat-pengajuan/process', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
     Route::get('/riwayat-pengajuan/show/{pengajuan:id}', [KetuaTimController::class, 'show_pengajuan'])->name('show_pengajuan');
 });
 
 
 // PPK
-Route::middleware(['auth', 'ppk'])->prefix('dashboard/ppk')->name('ppk.')->group(function () {
+Route::middleware(['auth', 'ppk'])->prefix('ppk')->name('ppk.')->group(function () {
     // Daftar Berkas
     Route::get('/daftar-berkas', [PPKController::class, 'daftar_berkas'])->name('daftar-berkas');
     // Route::get('/cek-berkas-ketua-tim', [PPKController::class, 'berkas_kt'])->name('berkas-kt');
@@ -61,7 +57,7 @@ Route::middleware(['auth', 'ppk'])->prefix('dashboard/ppk')->name('ppk.')->group
 });
 
 // PBJ
-Route::middleware(['auth', 'pbj'])->prefix('dashboard/pbj')->name('pbj.')->group(function () {
+Route::middleware(['auth', 'pbj'])->prefix('pbj')->name('pbj.')->group(function () {
 
     // Cek Berkas
     Route::get('/daftar-berkas', [PBJController::class, 'daftar_berkas'])->name('daftar_berkas');
@@ -75,10 +71,15 @@ Route::middleware(['auth', 'pbj'])->prefix('dashboard/pbj')->name('pbj.')->group
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan', [PBJController::class, 'riwayat_pengajuan'])->name('riwayat_pengajuan');
     Route::get('/riwayat-pengajuan/show/{pengajuan:id}', [PBJController::class, 'show_pengajuan'])->name('show-pengajuan');
+
+    // Validasi Berkas
+    Route::post('/validasi/:id', [PBJController::class, 'validasi'])->name('validasi');
+
+
 });
 
 // Keuangan
-Route::middleware(['auth', 'keuangan'])->prefix('dashboard/keuangan')->name('keuangan.')->group(function () {
+Route::middleware(['auth', 'keuangan'])->prefix('keuangan')->name('keuangan.')->group(function () {
     // Cek Berkas
     Route::get('/cek-berkas', [KeuanganController::class, 'cek_berkas'])->name('cek_berkas');
 

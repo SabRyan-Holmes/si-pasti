@@ -145,7 +145,7 @@ export default function Pengajuan({ title, auth, flash }) {
                                 }
                                 className="
                                             file:absolute file:right-0
-                                            file:bg-primary file:text-white file:border-0
+                                            file:bg-primary/80 hu file:text-white file:border-0
                                             file:py-1 file:px-3 file:rounded-full
                                             file:shadow-sm file:shadow-blue-500/30
                                             text-gray-600 text-sm
@@ -174,7 +174,7 @@ export default function Pengajuan({ title, auth, flash }) {
                                 }
                                 class="
                                         file:absolute file:right-0
-                                        file:bg-primary file:text-white file:border-0
+                                        file:bg-primary/80 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
                                         file:shadow-sm file:shadow-blue-500/30
                                         text-gray-600 text-sm
@@ -206,7 +206,7 @@ export default function Pengajuan({ title, auth, flash }) {
                                 }
                                 class="
                                         file:absolute file:right-0
-                                        file:bg-primary file:text-white file:border-0
+                                        file:bg-primary/80 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
                                         file:shadow-sm file:shadow-blue-500/30
                                         text-gray-600 text-sm

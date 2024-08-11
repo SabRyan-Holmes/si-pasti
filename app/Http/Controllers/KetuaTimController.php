@@ -75,19 +75,19 @@ class KetuaTimController extends Controller
             $existingDocument = Document::where('kegiatan_id', $kegiatanId)
                 ->where('nama', $prefix . ' - ' . $request->nama_kegiatan)
                 ->where('kategori', $kategori)
-                ->where('submitted_by', Auth()->user()->id)
+                ->where('submitted_by', Auth::user()->id)
                 ->first();
 
             if ($existingDocument) {
                 // Menghapus file sebelumnya
-                Storage::delete('/storage/'. $existingDocument->path);
+                Storage::delete('/storage/' . $existingDocument->path);
 
                 // Mengupdate dokumen yang sudah ada
                 $existingDocument->update([
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
                     'jenis_dokumen' => $jenisDokumen,
-                    'submitted_by' => Auth()->user()->id,
+                    'submitted_by' => Auth::user()->id,
                 ]);
             } else {
                 // Membuat entri dokumen
@@ -98,7 +98,7 @@ class KetuaTimController extends Controller
                     'path' => $filePath,
                     'jenis_dokumen' => $jenisDokumen,
                     'kegiatan_id' => $kegiatanId,
-                    'submitted_by' => Auth()->user()->id,
+                    'submitted_by' => Auth::user()->id,
                 ]);
             }
         }
@@ -117,9 +117,25 @@ class KetuaTimController extends Controller
 
     public function riwayat_pengajuan()
     {
+        // return Inertia::render('KetuaTim/RiwayatPengajuan', [
+        //     'title' => 'Riwayat Pengajuan',
+        //     'pengajuan' => Process::latest()->get()
+        // ]);
+        $pengajuans = Process::latest();
+        $subTitle = "";
+
+        if (request('byDivisi')) {
+            // $category = Pengajuan::firstWhere('Daerah', request('byDaerah'));
+            $subTitle = 'Berdasarkan Divisi : ' . request('byDivisi');
+        }
+
         return Inertia::render('KetuaTim/RiwayatPengajuan', [
-            'title' => 'Riwayat Pengajuan',
-            'pengajuan' => Process::latest()->get()
+            // "title" => "Pengajuan " . $title,
+            "title" => "Riwayat Pengajuan",
+            "subTitle" => $subTitle,
+            "pengajuans" => $pengajuans->filter(request(['search', 'byDivisi']))->paginate(10),
+            "search" => request('search'),
+            "byDivisiReq" => request('byDivisi'),
         ]);
     }
 
@@ -127,5 +143,24 @@ class KetuaTimController extends Controller
     {
         dd($request);
         return response()->file($request->path);
+    }
+
+    public function ajukan_ulang(Request $request)
+    {
+        // dd($request);
+        $rule = [
+            'kegiatan_id' => ['required', 'file', 'mimes:pdf', 'max:15192'],
+            'kak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'form_permintaan' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_permintaan' => ['nullable', 'file',  'mimes:pdf', 'max:15192']
+        ];
+        $request->validate($rule);
+
+        // Logic Store Document
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang', $request->kegiatan_id);
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $request->kegiatan_id);
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $request->kegiatan_id);
+
+        return redirect()->back()->with('message', 'Berkas berhasil Diupload!');
     }
 }

@@ -9,9 +9,11 @@ import { FaEye } from "react-icons/fa";
 import { SecondaryButton } from "@/Components";
 
 export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
+
+
     return (
-        <AuthenticatedLayout user={auth.user} title={title}>
-            <Head title={title}/>
+        <AuthenticatedLayout user={auth.user} title={title} current={route().current()}>
+            <Head title={title} />
             {/* content */}
             <div className="mx-24">
                 <div className="my-6">
@@ -21,19 +23,19 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                             onClick={() => window.history.back()}
                             className="bg-secondary/5 capitalize "
                         >
-                            Kembali{" "}
+                            Kembali
                             <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                         </SecondaryButton>
                     </div>
                     <h4 className="mt-6 font-extrabold">
-                        Nama Kegiatan:{" "}
+                        Nama Kegiatan:
                         <span className="font-normal capitalize">
                             {kegiatan.nama_kegiatan}
                         </span>
                     </h4>
                     <h4 className="mt-2 font-extrabold">
-                        Status Kegiatan:{" "}
-                        <span className="bg-info rounded-md px-2 p-1  uppercase text-sm font-semibold">
+                        Status Kegiatan:
+                        <span className="label-base bg-base-200 uppercase text-sm font-semibold">
                             {pengajuan.status}
                         </span>
                     </h4>
@@ -42,14 +44,14 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                     <h2 className="text-base font-semibold">
                         Status Pengajuan Berkas
                     </h2>
-                    <table className="table table-zebra mt-3">
+                    <table className="table table-bordered mt-3">
                         {/* head */}
                         <thead>
                             <tr className="text-sm ">
                                 <th></th>
                                 <th>Jenis Berkas</th>
                                 <th>Berkas</th>
-                                <th className="text-center">Status Saat Ini</th>
+                                <th className="text-center">Stage Saat Ini</th>
                                 <th className="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -68,17 +70,17 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                                         </span>
                                     </td>
                                     <td className="">
-                                        <div className=" uppercase text-center rounded-lg p-1 bg-info text-slate-700 font-semibold text-xs ">
+                                        <div className="uppercase text-center label-base bg-base-200 text-slate-700 font-semibold text-xs ">
                                             {pengajuan.stage}
                                         </div>
                                     </td>
-                                    <td className="flex justify-center items-center gap-2  ">
+                                    <td className="text-center">
                                         <a
                                             href={`/storage/${data.path}`}
                                             target="_blank"
                                             className="action-btn"
                                         >
-                                            <FaEye className="mr-2 mx-1" />{" "}
+                                            <FaEye className="mr-2 mx-1" />
                                             Lihat
                                         </a>
                                         {pengajuan.status != "diproses" && (
@@ -92,7 +94,7 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                                                     type="file"
                                                     className="hidden"
                                                 />
-                                                <FaFileUpload className="mx-1" />{" "}
+                                                <FaFileUpload className="mx-1" />
                                                 Unggah
                                             </label>
                                         )}

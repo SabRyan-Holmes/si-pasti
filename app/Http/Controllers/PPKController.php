@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
 use Illuminate\Support\Facades\Auth;
 
+
 class PPKController extends Controller
 {
     // PPK
@@ -104,7 +105,7 @@ class PPKController extends Controller
             $existingDocument = Document::where('kegiatan_id', $request->kegiatan_id)
                 ->where('nama', $prefix . ' - ' . $request->nama_kegiatan)
                 ->where('kategori', $kategori)
-                ->where('submitted_by', Auth()->user()->id)
+                ->where('submitted_by', Auth::user()->id)
                 ->first();
 
             if ($existingDocument) {
@@ -116,7 +117,7 @@ class PPKController extends Controller
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
                     'jenis_dokumen' => $jenisDokumen,
-                    'submitted_by' => Auth()->user()->id,
+                    'submitted_by' => Auth::user()->id,
                 ]);
             } else {
                 // Membuat dokumen baru
@@ -127,7 +128,7 @@ class PPKController extends Controller
                     'path' => $filePath,
                     'jenis_dokumen' => $jenisDokumen,
                     'kegiatan_id' => $request->kegiatan_id,
-                    'submitted_by' => Auth()->user()->id,
+                    'submitted_by' => Auth::user()->id,
                 ]);
             }
         }

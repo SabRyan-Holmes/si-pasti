@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head, usePage } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
-
 import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { FaFileUpload } from "react-icons/fa";

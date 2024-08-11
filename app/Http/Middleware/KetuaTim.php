@@ -16,7 +16,7 @@ class KetuaTim
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->name == "Ketua Tim") {
+        if (Auth::user()->divisi == "Ketua Tim") {
             return $next($request);
         }
         abort(401);

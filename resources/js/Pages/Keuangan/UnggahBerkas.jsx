@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head, usePage } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
 
 import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { FaFileUpload } from "react-icons/fa";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
@@ -165,14 +162,11 @@ export default function UnggahBerkas({
                                         type="file"
                                         name="spm"
                                         onChange={(e) =>
-                                            setData(
-                                                "spm",
-                                                e.target.files[0]
-                                            )
+                                            setData("spm", e.target.files[0])
                                         }
                                         class="
                                         file:absolute file:right-0
-                                        file:bg-primary file:text-white file:border-0
+                                        file:bg-primary/75 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
                                         file:shadow-sm file:shadow-blue-500/30
                                         text-gray-600 text-sm
@@ -185,16 +179,14 @@ export default function UnggahBerkas({
                                 />
                             </div>
 
-
-
                             {/* Button */}
                             <div className="w-full mt-4 justify-end flex">
                                 <PrimaryButton
                                     disabled={processing}
                                     type="submit"
-                                    className="bg-success"
+                                    className="bg-hijau"
                                 >
-                                    Ajukan{" "}
+                                    Ajukan
                                     <IoIosSend className="ml-1 w-5 h-5" />
                                 </PrimaryButton>
                             </div>

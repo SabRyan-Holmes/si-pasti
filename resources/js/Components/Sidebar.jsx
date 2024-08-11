@@ -1,73 +1,80 @@
-import { MdAdminPanelSettings } from "react-icons/md";
-import { MdSpaceDashboard } from "react-icons/md";
+import {
+    MdAdminPanelSettings,
+    MdSpaceDashboard,
+    MdSwitchAccount,
+    MdOutlineEventAvailable,
+    MdOutlineDocumentScanner,
+} from "react-icons/md";
 import { FaNotesMedical } from "react-icons/fa6";
-import { MdSwitchAccount } from "react-icons/md";
-import { Link } from "@inertiajs/react";
-import logo from "../../assets/image/logo.png";
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import NavLinkDashboard from "@/Components/NavLinkDashboard";
-import NavLinkCollapse from "./NavLinkCollapse";
-import { CiViewTimeline } from "react-icons/ci";
-import { GrOverview } from "react-icons/gr";
-import { MdOutlineDocumentScanner } from "react-icons/md";
-import { ImFolderUpload } from "react-icons/im";
-import { MdOutlineEventAvailable } from "react-icons/md";
 import { HiDocumentMagnifyingGlass } from "react-icons/hi2";
+import logo from "../../assets/image/logo.png";
+import NavLinkDashboard from "@/Components/NavLinkDashboard";
+
 export default function Sidebar({ divisi, active }) {
-    console.log(divisi);
     return (
-        <section className="drawer-side shadow-2xl">
+        <div className="drawer-side shadow-2xl relative">
             <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-            <ul className="menu p-4 w-80 min-h-full bg-gradient-to-b text-opacity-75 from-slate-950 to bg-cyan-950  text-slate-100 ">
-                {/* Sidebar content heres */}
-                <div className="flex-col justify-center items-center mt-10">
+
+            {/* Smooth Gradient Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-gray-800 to-cyan-950 transform scale-110 rounded-tr-2xl rounded-br-2xl shadow-xl" />
+
+            <ul className="menu p-4 w-80 min-h-full relative z-10 text-slate-100 space-y-4">
+                {/* Sidebar content */}
+                <div className="flex-col justify-center items-center mt-10 relative z-20">
                     {/* App Name */}
                     <strong className="flex justify-center text-2xl text-gradient gradient-bps">
                         SiPasti
                     </strong>
+
                     {/* App Logo */}
                     <img
                         src={logo}
-                        className=" text-primary/70 w-24 h-24 m-3 mx-auto"
+                        className="w-24 h-24 m-3 mx-auto filter drop-shadow-lg relative z-20"
                     />
                 </div>
 
-                <div className="border-b-2 border-yellow-600 mt-4 mb-2 mx-3 " />
+                <div className="relative z-20 h-[2px] mx-3 border-none outline-none rounded-md">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary rounded-md via-hijau to-secondary p-0 opacity-100 h-full w-full transition-colors duration-1000 ease-in-out" />
+                </div>
 
                 {/* Link Dashboard */}
                 <NavLinkDashboard
                     href={route("dashboard")}
                     active={route().current("dashboard")}
+                    className="relative z-20 -mb-4"
                 >
                     <MdSpaceDashboard />
                     Dashboard
                 </NavLinkDashboard>
 
-                {divisi == "Ketua Tim" ? (
+                {divisi === "Ketua Tim" && (
                     <section>
                         <NavLinkDashboard
                             href={route("ketua_tim.pengajuan")}
                             active={route().current("ketua_tim.pengajuan")}
+                            className="relative z-20"
                         >
                             <FaNotesMedical />
-                            Pengajuan
+                            Buat Pengajuan
                         </NavLinkDashboard>
 
                         <NavLinkDashboard
                             href={route("ketua_tim.riwayat_pengajuan")}
-                            active={route().current(
-                                "ketua_tim.riwayat_pengajuan"
-                            )}
+                            active={
+                                route().current("ketua_tim.riwayat_pengajuan") ||
+                                active === "ketua_tim.show_pengajuan" ||
+                                active === "pegawai.edit" ||
+                                active === "pegawai.show"
+                            }
+                            className="relative z-20"
                         >
                             <MdSwitchAccount />
                             Riwayat Pengajuan
                         </NavLinkDashboard>
                     </section>
-                ) : (
-                    ""
                 )}
 
-                {divisi == "PPK" ? (
+                {divisi === "PPK" && (
                     <section>
                         <NavLinkDashboard
                             href={route("ppk.daftar-berkas")}
@@ -75,42 +82,32 @@ export default function Sidebar({ divisi, active }) {
                                 route().current("ppk.daftar-berkas") ||
                                 route().current("pengajuan.show_pbj")
                             }
+                            className="relative z-20"
                         >
                             <HiDocumentMagnifyingGlass />
                             Daftar Berkas
                         </NavLinkDashboard>
 
-                        {/* <NavLinkCollapse
-                            // href={route("dashboard")}
-                            // active={route().current("pengajuan.show_ketua_tim") || route().current("pengajuan.show_pbj") }
-                            submenu={["Pengajuan PBJ", "Pemesanan", "Kuitansi"]}
-                            routes={[
-                                "ppk.unggah-pengajuan-pbj",
-                                "ppk.unggah-pemesanan",
-                                "ppk.unggah-kuitansi",
-                            ]}
-                        >
-                            <ImFolderUpload />
-                            Unggah Berkas
-                        </NavLinkCollapse> */}
-
                         <NavLinkDashboard
                             href={route("ppk.riwayat_pengajuan")}
                             active={route().current("ppk.riwayat_pengajuan")}
+                            className="relative z-20"
                         >
                             <MdSwitchAccount />
                             Riwayat Pengajuan
                         </NavLinkDashboard>
                     </section>
-                ) : (
-                    ""
                 )}
 
-                {divisi == "PBJ" ? (
+                {divisi === "PBJ" && (
                     <section>
                         <NavLinkDashboard
                             href={route("pbj.daftar_berkas")}
-                            active={route().current("pbj.daftar_berkas") || active == 'pbj.show-berkas'}
+                            active={
+                                route().current("pbj.daftar_berkas") ||
+                                active === "pbj.show-berkas"
+                            }
+                            className="relative z-20"
                         >
                             <HiDocumentMagnifyingGlass />
                             Daftar Berkas
@@ -118,23 +115,26 @@ export default function Sidebar({ divisi, active }) {
 
                         <NavLinkDashboard
                             href={route("pbj.riwayat_pengajuan")}
-                            active={route().current("pbj.riwayat_pengajuan")}
+                            active={
+                                route().current("pbj.riwayat_pengajuan") ||
+                                active === "pbj.show-pengajuan"
+                            }
+                            className="relative z-20"
                         >
                             <MdSwitchAccount />
                             Riwayat Pengajuan
                         </NavLinkDashboard>
                     </section>
-                ) : (
-                    ""
                 )}
 
-                {divisi == "Keuangan" && (
+                {divisi === "Keuangan" && (
                     <section>
                         <NavLinkDashboard
                             href={route("keuangan.riwayat_pengajuan")}
                             active={route().current(
                                 "keuangan.riwayat_pengajuan"
                             )}
+                            className="relative z-20"
                         >
                             <MdSwitchAccount />
                             Riwayat Pengajuan
@@ -142,6 +142,9 @@ export default function Sidebar({ divisi, active }) {
                     </section>
                 )}
             </ul>
-        </section>
+
+            {/* Decorative Bottom Shadow */}
+            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900 to-transparent rounded-b-lg shadow-inner" />
+        </div>
     );
 }

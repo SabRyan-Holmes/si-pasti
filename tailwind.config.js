@@ -10,12 +10,16 @@ export default {
         "./resources/views/**/*.blade.php",
         "./resources/js/**/*.jsx",
     ],
+    darkMode: ["class", '[data-theme="bps-theme"]'],
 
     theme: {
         extend: {
             colors: {
                 transparent: "transparent",
                 current: "currentColor",
+                // "primary-darker": "#6366f1",
+                "primary-darker": '#0284c7',
+                secondary: "#fb923c",
                 oren: "#fb923c",
                 hijau: "#22c55e",
                 bermuda: "#78dcca",
@@ -41,9 +45,14 @@ export default {
                 // "2xl": "1320px",
                 // "3xl": "1536px",
             },
-
             fontSize: {
                 xs: "13px",
+            },
+            width: {
+                a4: "210mm",
+            },
+            height: {
+                a4: "297mm",
             },
         },
     },
@@ -52,7 +61,7 @@ export default {
         themes: [
             {
                 bps_theme: {
-                    primary: "#38bdf8",
+                    primary: "#2D95C9",
 
                     secondary: "#fb923c",
                     oren: "#fb923c",
@@ -75,5 +84,5 @@ export default {
         ],
     },
 
-    plugins: [daisyui, forms],
+    plugins: [require("daisyui"), daisyui, forms],
 };

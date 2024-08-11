@@ -23,8 +23,7 @@ class PBJController extends Controller
     }
 
     public function show_berkas(Process $pengajuan)
-    {
-        {
+    { {
             $berkas_pbj = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
                 $q->where('kegiatans.id', $pengajuan->kegiatan->id);
             })->where('kategori', 'Pengajuan PBJ')->get();
@@ -80,6 +79,7 @@ class PBJController extends Controller
 
     public function riwayat_pengajuan()
     {
+
         return Inertia::render('PBJ/RiwayatPengajuan', [
             'title' => 'Riwayat Pengajuan',
             'pengajuan' => Process::latest()->paginate(10)
@@ -90,7 +90,19 @@ class PBJController extends Controller
     {
         $berkas_pbj = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
             $q->where('kegiatans.id', $pengajuan->kegiatan->id);
-        })->where('submitted_by', 3)->get();
+        })->where('kategori', 'Pengajuan PBJ')->get();
+
+        $pengajuan_kontrak = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
+            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
+        })->where('kategori', 'Pengajuan Kontrak')->get();
+
+        $berita_acara = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
+            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
+        })->where('kategori', 'Pengajuan Berita Acara')->get();
+
+        $kuitansi = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
+            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
+        })->where('kategori', 'Pengajuan Kuitansi')->get();
 
         // dd($berkas_pbj);
         return Inertia::render('PBJ/DetailPengajuan', [
@@ -99,8 +111,18 @@ class PBJController extends Controller
             'kegiatan' => $pengajuan->kegiatan,
             'ketuaTim' => $pengajuan->kegiatan->user,
             'berkasPBJ' => $berkas_pbj,
-
-
+            'pengajuanKontrak' => $pengajuan_kontrak,
+            'beritaAcara' => $berita_acara,
+            'kuitansi' => $kuitansi,
         ]);
+    }
+
+    public function validasi(Request $request)
+    {
+        Document::where('id', $request->id)->update([
+            'is_valid' => $request->is_valid
+        ]);
+
+        redirect()->back();
     }
 }

@@ -20,7 +20,7 @@ class PBJ
         //     return response()->json('Opps! You do not have permission to access.');
         // }
         // return $next($request);
-        if (Auth::user()->name == "PBJ") {
+        if (Auth::user()->divisi == "PBJ") {
             return $next($request);
         }
         abort(401);

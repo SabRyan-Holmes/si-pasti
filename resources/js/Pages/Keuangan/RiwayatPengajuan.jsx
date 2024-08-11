@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head } from "@inertiajs/react";
-import AdminDrawer from "@/Components/AdminDrawer";
 import { FaHistory } from "react-icons/fa";
-import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import moment from "moment/min/moment-with-locales";
 import { FaEye } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { FaUpload } from "react-icons/fa";
+import { PrimaryButton } from "@/Components";
 
 export default function RiwayatPengajuan({ title, auth, pengajuan }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -18,7 +16,7 @@ export default function RiwayatPengajuan({ title, auth, pengajuan }) {
         surat_permintaan: false,
     });
     return (
-        <AuthenticatedLayout user={auth.user} title={title}>
+        <AuthenticatedLayout user={auth.user} title={title} current={route().current()}>
             {/* content */}
             <div className="mx-24 ">
                 {/* Breadcumbs */}
