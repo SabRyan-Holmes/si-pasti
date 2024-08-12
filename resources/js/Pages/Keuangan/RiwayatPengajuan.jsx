@@ -51,7 +51,7 @@ export default function RiwayatPengajuan({ title, auth, pengajuan }) {
                             {pengajuan.data?.map((data, i) => (
                                 // <Link
                                 //     as="tr"
-                                //     className="group/item hover:bg-primary/50" href={route('pbj.show_pengajuan', data.kegiatan_id)}
+                                //     className="group/item hover:bg-primary/50" href={route('pbj.show-pengajuan', data.kegiatan_id)}
                                 // >
                                 <tr>
                                     <th>{i + 1}</th>

@@ -1,5 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { BiSolidDownArrowAlt } from "react-icons/bi";
+import ProfileImage from "./ProfileImage";
+
 const Navbar = ({user, title}) => {
     let admin = false
     let name = 'a'
@@ -23,13 +25,24 @@ const Navbar = ({user, title}) => {
                 </label>
             </div>
           <div className="navbar-start">
-            <Link href="/dashboard" method="GET" as="button"><a className="btn btn-ghost normal-case text-xl">{user.name}</a></Link>
+            <button><a className="btn btn-ghost normal-case text-2xl">{title}</a></button>
           </div>
           <div className="navbar-end">
                     <div className="dropdown dropdown-end">
                       <label tabIndex={0} className="">
                         {!user ? <button className="btn btn-ghost mr-8">Login / Register</button> :
-                        <button className="btn btn-ghost mr-8">Logged In as {user.name} <BiSolidDownArrowAlt size="1.5em"></BiSolidDownArrowAlt></button>}
+                        <div className="flex items-center -ml-10 w-36 justify-end gap-2 bg-secondary/10 rounded-md p-2">
+                            <div className="font-semibold flex-cols justify-end">
+                            <span className="block text-slate-600 text-base "> Nama {user.name}</span>
+                            <span className="block text-secondary text-xs text-right">{user.divisi}</span>
+                            </div>
+                            <div >
+                            <ProfileImage name={user.name}/>
+                            </div>
+                        </div>
+                         }
+                        {/* <button className="btn btn-ghost mr-8">Logged In as {user.divisi} <BiSolidDownArrowAlt size="1.5em"></BiSolidDownArrowAlt></button> */}
+
 
                       </label>
                       <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-neutral rounded-box w-52 z-[50] relative text-black">

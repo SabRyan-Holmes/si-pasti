@@ -7,13 +7,13 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { IoIosSend } from "react-icons/io";
+import { Dropdown } from "@/Components";
 
 export default function DetailPengajuan({
     title,
     auth,
     flash,
-    kegiatan,
-    ketuaTim,
+    pengajuan,
     berkasPBJ,
     pengajuanKontrak,
     beritaAcara,
@@ -100,8 +100,8 @@ export default function DetailPengajuan({
 
     const { data, setData, post, processing, errors, reset, clearErrors } =
         useForm({
-            kegiatan_id: kegiatan.id,
-            nama_kegiatan: kegiatan.nama_kegiatan,
+            pengajuan_id: pengajuan.id,
+            nama_kegiatan: pengajuan.nama_kegiatan,
 
             // Pengajuan PBJ
             "rancangan kontrak": null,
@@ -124,25 +124,41 @@ export default function DetailPengajuan({
 
     function submit(e) {
         e.preventDefault(); // Mencegah perilaku default dari form submit
-        post(route("ppk.ajukan-berkas"), {
-            data: data,
-            _token: props.csrf_token,
-            _method: "POST",
-            forceFormData: true,
+        post(
+            route("ppk.ajukan-berkas"),
+            {
+                data: data,
+                _token: props.csrf_token,
+                _method: "POST",
+                forceFormData: true,
 
-            onSuccess: () => {
-                clearErrors();
-                console.log("Submit selesai dari On Success");
+                onSuccess: () => {
+                    clearErrors();
+                    console.log("Submit selesai dari On Success");
 
-                router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
-            },
-            onError: () => {
-                console.log("Gagal submit");
-            },
-            onFinish: () => {
-                console.log("Submit selesai");
-            },
-        });
+                    router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
+                },
+                onError: () => {
+                    console.log("Gagal submit");
+                },
+                onFinish: () => {
+                    console.log("Submit selesai");
+                },
+            }
+            // {
+
+            //     onSuccess: () => {
+            //         clearErrors();
+            //         console.log("Submit selesai dari On Success");
+
+            //         router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
+            //     },
+            //     onError: () => {
+            //         console.log("Gagal submit");
+            //     },
+
+            // }
+        );
     }
 
     const [uploadedFiles, setUploadedFiles] = useState({});
@@ -183,6 +199,7 @@ export default function DetailPengajuan({
 
     console.log("errors :");
     console.log(errors);
+    const ketuaTim = pengajuan.created_by
 
     return (
         <AuthenticatedLayout
@@ -192,39 +209,15 @@ export default function DetailPengajuan({
         >
             <Head title={title} />
             {/* content */}
-            <div className="mx-24">
+            <section className="mx-auto px-7">
                 <div className="my-6">
                     <div className="flex justify-between">
-                        <div className="breadcrumbs my-3 text-sm">
-                            <ul>
-                                <li>
-                                    <a>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            className="mr-1 h-4 w-4 stroke-current"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                                            ></path>
-                                        </svg>
-                                        Daftar Berkas
-                                    </a>
-                                </li>
-                                <li>
-                                    <a></a>
-                                </li>
-                            </ul>
-                        </div>
+                        <strong className="text-2xl">{title}</strong>
                         <SecondaryButton
                             onClick={() => window.history.back()}
                             className="bg-secondary/5 capitalize "
                         >
-                            Kembali{" "}
+                            Kembali
                             <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                         </SecondaryButton>
                     </div>
@@ -232,7 +225,7 @@ export default function DetailPengajuan({
                     <div class="max-w-screen-phone  mt-10">
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>
-                            <span>: {kegiatan.nama_kegiatan}</span>
+                            <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1  font-bold">Ketua TIM</span>
@@ -305,14 +298,58 @@ export default function DetailPengajuan({
 
                                                 <td className="text-center">
                                                     {data.is_valid == null && (
-                                                        <a
-                                                            href={`/storage/${data.path}`}
-                                                            target="_blank"
-                                                            className="action-btn mx-auto"
-                                                        >
-                                                            <FaEye className="mr-2 mx-1" />
-                                                            Lihat
-                                                        </a>
+                                                        <Dropdown disabled>
+                                                            <Dropdown.Trigger>
+                                                                <span className="inline-flex rounded-md">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="inline-flex items-center  py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                    >
+                                                                        Pilih
+                                                                        Status
+                                                                        <svg
+                                                                            className="ms-2 -me-0.5 h-4 w-4"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 20 20"
+                                                                            fill="currentColor"
+                                                                        >
+                                                                            <path
+                                                                                fillRule="evenodd"
+                                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                clipRule="evenodd"
+                                                                            />
+                                                                        </svg>
+                                                                    </button>
+                                                                </span>
+                                                            </Dropdown.Trigger>
+
+                                                            <Dropdown.Content>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: true,
+                                                                    }}
+                                                                >
+                                                                    Valid
+                                                                </Dropdown.Link>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: false,
+                                                                    }}
+                                                                >
+                                                                    Tidak Valid
+                                                                </Dropdown.Link>
+                                                            </Dropdown.Content>
+                                                        </Dropdown>
                                                     )}
 
                                                     {data.is_valid &&
@@ -366,40 +403,61 @@ export default function DetailPengajuan({
                                                     )}
                                                 </td>
                                                 <td className="text-center">
-                                                    <input
-                                                        id={data.jenis_dokumen}
-                                                        type="file"
-                                                        className="hidden"
-                                                        onChange={(e) =>
-                                                            handleFileChange(
-                                                                e,
-                                                                data.jenis_dokumen,
-                                                                getKeyByValue(
-                                                                    requiredBerkasPBJ,
-                                                                    data.jenis_dokumen
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                    <label
-                                                        htmlFor={
-                                                            data.jenis_dokumen
-                                                        }
-                                                        className="action-btn"
-                                                    >
-                                                        <FaFileUpload className="mr-2 mx-1" />
-                                                        {uploadedFiles[
-                                                            data.jenis_dokumen
-                                                        ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
-                                                                Upload
+                                                    <Dropdown>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center hover:cursor-not-allowed py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                >
+                                                                    Pilih Status
+                                                                    <svg
+                                                                        className="ms-2 -me-0.5 h-4 w-4"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 20 20"
+                                                                        fill="currentColor"
+                                                                    >
+                                                                        <path
+                                                                            fillRule="evenodd"
+                                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                            clipRule="evenodd"
+                                                                        />
+                                                                    </svg>
+                                                                </button>
                                                             </span>
-                                                        ) : (
-                                                            <span className="cursor-pointer">
-                                                                Upload
-                                                            </span>
-                                                        )}
-                                                    </label>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
                                                 </td>
                                             </>
                                         )}
@@ -440,13 +498,12 @@ export default function DetailPengajuan({
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* row 1 */}
                                 {berkasPK.map((data, i) => (
                                     <tr>
                                         <th className="text-primary">
                                             {i + 1}
                                         </th>
-                                        <td className="capitalize ">
+                                        <td className="capitalize">
                                             {data.jenis_dokumen}
                                         </td>
                                         {data.nama ? (
@@ -482,16 +539,60 @@ export default function DetailPengajuan({
                                                         )}
                                                 </td>
 
-                                                <td className="text-center  ">
+                                                <td className="text-center">
                                                     {data.is_valid == null && (
-                                                        <a
-                                                            href={`/storage/${data.path}`}
-                                                            target="_blank"
-                                                            className="action-btn"
-                                                        >
-                                                            <FaEye className="mr-2 mx-1" />
-                                                            Lihat
-                                                        </a>
+                                                        <Dropdown >
+                                                            <Dropdown.Trigger>
+                                                                <span className="inline-flex rounded-md">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="inline-flex items-center  py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                    >
+                                                                        Pilih
+                                                                        Status
+                                                                        <svg
+                                                                            className="ms-2 -me-0.5 h-4 w-4"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 20 20"
+                                                                            fill="currentColor"
+                                                                        >
+                                                                            <path
+                                                                                fillRule="evenodd"
+                                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                                clipRule="evenodd"
+                                                                            />
+                                                                        </svg>
+                                                                    </button>
+                                                                </span>
+                                                            </Dropdown.Trigger>
+
+                                                            <Dropdown.Content>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: true,
+                                                                    }}
+                                                                >
+                                                                    Valid
+                                                                </Dropdown.Link>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: false,
+                                                                    }}
+                                                                >
+                                                                    Tidak Valid
+                                                                </Dropdown.Link>
+                                                            </Dropdown.Content>
+                                                        </Dropdown>
                                                     )}
 
                                                     {data.is_valid &&
@@ -544,42 +645,61 @@ export default function DetailPengajuan({
                                                         </div>
                                                     )}
                                                 </td>
-
                                                 <td className="text-center">
-                                                    <input
-                                                        id={data.jenis_dokumen}
-                                                        type="file"
-                                                        className="hidden"
-                                                        onChange={(e) =>
-                                                            handleFileChange(
-                                                                e,
-                                                                data.jenis_dokumen,
-                                                                getKeyByValue(
-                                                                    requiredBerkasPK,
-                                                                    data.jenis_dokumen
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                    <label
-                                                        htmlFor={
-                                                            data.jenis_dokumen
-                                                        }
-                                                        className="action-btn"
-                                                    >
-                                                        <FaFileUpload className="mr-2 mx-1" />
-                                                        {uploadedFiles[
-                                                            data.jenis_dokumen
-                                                        ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
-                                                                Upload
+                                                    <Dropdown>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md">
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center  py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                >
+                                                                    Pilih Status
+                                                                    <svg
+                                                                        className="ms-2 -me-0.5 h-4 w-4"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 20 20"
+                                                                        fill="currentColor"
+                                                                    >
+                                                                        <path
+                                                                            fillRule="evenodd"
+                                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                            clipRule="evenodd"
+                                                                        />
+                                                                    </svg>
+                                                                </button>
                                                             </span>
-                                                        ) : (
-                                                            <span className="cursor-pointer">
-                                                                Upload
-                                                            </span>
-                                                        )}
-                                                    </label>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                // disabled={data.is_valid === false}
+                                                                disabled={true}
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
                                                 </td>
                                             </>
                                         )}
@@ -958,7 +1078,7 @@ export default function DetailPengajuan({
                         </div>
                     </form>
                 </div>
-            </div>
+            </section>
 
             {/* end of content */}
         </AuthenticatedLayout>

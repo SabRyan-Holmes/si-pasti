@@ -45,8 +45,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function kegiatan()
+    public function pengajuan()
     {
-        return $this->hasMany(Kegiatan::class, 'created_by');
+        return $this->hasMany(Pengajuan::class, 'created_by');
     }
 }

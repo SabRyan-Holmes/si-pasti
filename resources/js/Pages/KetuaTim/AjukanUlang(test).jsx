@@ -58,7 +58,7 @@ export default function DetailPengajuan({ title, auth, pengajuan, flash,kegiatan
     function submit(e) {
         e.preventDefault(); // Mencegah perilaku default dari form submit
         post(
-            route("ketua_tim.ajukan-pengajuan"),
+            route("ketua-tim.ajukan-pengajuan"),
             {
                 data: data,
                 _token: props.csrf_token,

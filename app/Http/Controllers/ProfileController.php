@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Process;
+use App\Models\Pengajuan;
 use App\Models\Document;
 use App\Models\Kegiatan;
 use Illuminate\Http\Request;
@@ -66,17 +66,19 @@ class ProfileController extends Controller
     }
 
     public function dashboard() {
-        $process = Process::where('status', 'diproses')->count();
-        $rejected = Process::where('status', 'ditolak')->count();
-        $accepted = Process::where('status', 'selesai')->count();
+        $pengajuan = Pengajuan::where('status', 'diproses')->count();
+        $rejected = Pengajuan::where('status', 'ditolak')->count();
+        $accepted = Pengajuan::where('status', 'selesai')->count();
         return Inertia::render('Dashboard', [
             'title' => 'Dashboard',
             'userCount' => User::all()->count(),
-            'kegiatanCount' => Kegiatan::all()->count(),
+            'divisiCount' => User::select('divisi')->distinct()->count('divisi'),
+            'ketuaTimCount' => User::where('divisi', 'Ketua Tim')->count(),
+            'kegiatanCount' => Pengajuan::all()->count(),
             'documentCount' => Document::all()->count(),
             'rejectedCount' => $rejected,
             'acceptedCount' => $accepted,
-            'processCount' => $process,
+            'processCount' => $pengajuan,
 
         ]);
     }

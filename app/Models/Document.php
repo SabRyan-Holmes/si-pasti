@@ -14,14 +14,15 @@ class Document extends Model
     // Relasi Start
 
 
-    public function kegiatan()
-    {
-        return $this->belongsTo(Kegiatan::class);
-    }
 
     public function submitted_by()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function pengajuan()
+    {
+        return $this->belongsTo(Pengajuan::class, 'pengajuan_id');
     }
 
     // Relasi End

@@ -5,7 +5,6 @@ import { Navbar, Sidebar } from "@/Components";
 export default function Authenticated({
     user,
     title,
-    header,
     children,
     current,
 }) {
@@ -23,7 +22,7 @@ export default function Authenticated({
                     className="drawer-toggle"
                 />
                 <div className="drawer-content flex flex-col bg-neutral h-full">
-                    <Navbar user={user} />
+                    <Navbar user={user} title={title}/>
                     <div className="mx-6 mt-6 h-full bg-white">
                         <main>{children}</main>
                     </div>

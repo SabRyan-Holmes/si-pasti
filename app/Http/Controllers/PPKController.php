@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Process;
-use App\Models\Document;
 use App\Models\Pengajuan;
+use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
@@ -21,33 +20,52 @@ class PPKController extends Controller
 
     public function daftar_berkas()
     {
-        $pengajuans = Process::with(["kegiatan" => function ($q) {
-            $q->where('kegiatans.created_by', "=", "1");
-        }])->get();
+
+        $pengajuans = Pengajuan::latest();
+        $subTitle = "";
+
+
+        if (request('byStatus')) {
+            $subTitle = 'Berdasarkan Status : ' . request('byStatus');
+        }
+
+        if (request('byStage')) {
+            $subTitle = 'Berdasarkan Stage : ' . request('byStage');
+        }
+
         return Inertia::render('PPK/DaftarBerkas', [
-            'title' => 'Cek Berkas Ketua Tim',
-            'pengajuans' => $pengajuans,
+            // "title" => "Pengajuan " . $title,
+            "title" => "Daftar Berkas",
+            "subTitle" => $subTitle,
+            // "pengajuans" => $pengajuans->paginate(10),
+            "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
+            "search" => request('search'),
+            "byStatusReq" => request('byStatus'),
+            "byStageReq" => request('byStage'),
         ]);
     }
 
 
-    public function show_berkas(Process $pengajuan)
+    public function show_berkas(Pengajuan $pengajuan)
     {
-        $berkas_pbj = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
-            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
-        })->where('submitted_by', 3)->get();
+        // $berkas_pbj = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
+        //     $q->where('kegiatans.id', $pengajuan->id);
+        // })->where('submitted_by', 3)->get();
 
-        return Inertia::render('PPK/Detail/CekBerkas', [
+        $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
+        $berkas_ketua_tim = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan Barang')->get();
+
+
+        return Inertia::render('PPK/ShowBerkas', [
             'title' => 'Status Pengadaan Barang',
             'pengajuan' => $pengajuan,
-            'kegiatan' => $pengajuan->kegiatan,
-            'ketuaTim' => $pengajuan->kegiatan->user,
-            'berkas_pbj' => $berkas_pbj
+            'berkasPBJ' => $berkas_pbj,
+            'berkasKT' => $berkas_ketua_tim
 
         ]);
     }
 
-    public function unggah_berkas(Process $pengajuan)
+    public function unggah_berkas(Pengajuan $pengajuan)
     {
 
         // dd($pengajuan);
@@ -61,7 +79,11 @@ class PPKController extends Controller
     public function ajukan_berkas(UnggahBerkasStoreRequest $request)
     {
         // dd($request);
-        $validated = $request->validated();
+        $request->validated();
+        //Pengajuan Ketua Tim /Pengadaan Barang
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang');
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang');
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang');
 
         // Pengajuan PBJ
         $this->storeDocument($request, 'rancangan_kontrak', 'RC', 'Rancangan Kontrak', 'Pengajuan PBJ');
@@ -101,8 +123,8 @@ class PPKController extends Controller
             // Path yang akan disimpan di database
             $filePath = strtolower($prefix) . '-file/' . $fileName;
 
-            // Mencari dokumen yang sudah ada berdasarkan kegiatan_id, nama, dan kategori
-            $existingDocument = Document::where('kegiatan_id', $request->kegiatan_id)
+            // Mencari dokumen yang sudah ada berdasarkan pengajuan_id, nama, dan kategori
+            $existingDocument = Document::where('pengajuan_id', $request->pengajuan_id)
                 ->where('nama', $prefix . ' - ' . $request->nama_kegiatan)
                 ->where('kategori', $kategori)
                 ->where('submitted_by', Auth::user()->id)
@@ -110,7 +132,7 @@ class PPKController extends Controller
 
             if ($existingDocument) {
                 // Menghapus file sebelumnya
-                Storage::delete('/storage/'. $existingDocument->path);
+                Storage::delete('/storage/' . $existingDocument->path);
 
                 // Mengupdate dokumen yang sudah ada
                 $existingDocument->update([
@@ -127,7 +149,7 @@ class PPKController extends Controller
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
                     'jenis_dokumen' => $jenisDokumen,
-                    'kegiatan_id' => $request->kegiatan_id,
+                    'pengajuan_id' => $request->pengajuan_id,
                     'submitted_by' => Auth::user()->id,
                 ]);
             }
@@ -135,96 +157,49 @@ class PPKController extends Controller
     }
 
 
-    public function berkas_kt()
-    {
-        $pengajuans = Process::with(["kegiatan" => function ($q) {
-            $q->where('kegiatans.created_by', "=", "1");
-        }])->get();
-        return Inertia::render('PPK/CekBerkasKT', [
-            'title' => 'Cek Berkas Ketua Tim',
-            'pengajuans' => $pengajuans,
-        ]);
-    }
-
-
-    /**
-     * Display the specified resource.
-     */
-    // public function show_pbj()
-    // {
-    //     $pengajuans = Process::with(["kegiatan" => function ($q) {
-    //         $q->where('kegiatans.created_by', "=", "3");
-    //     }])->get();
-    //     return Inertia::render('PPK/CekBerkasPBJ', [
-    //         'title' => 'Cek Berkas PBJ',
-    //         'pengajuan' => $pengajuans
-    //     ]);
-    // }
-
-    public function pengajuan_pbj(Pengajuan $pengajuan)
-    {
-        return Inertia::render('PPK/PengajuanPBJ', [
-            'title' => 'Unggah Berkas Pengajuan PBJ',
-            'pengajuan' => Pengajuan::all()
-        ]);
-    }
-
-    public function kontrak(Pengajuan $pengajuan)
-    {
-        return Inertia::render('PPK/PengajuanPBJ', [
-            'title' => 'Unggah Berkas Pengajuan PBJ',
-            'pengajuan' => Pengajuan::all()
-        ]);
-    }
-
-    public function unggah_pemesanan(Pengajuan $pengajuan)
-    {
-        return Inertia::render('PPK/Pemesanan', [
-            'title' => 'Unggah Berkas Pengajuan PBJ',
-            'pengajuan' => Pengajuan::all()
-        ]);
-    }
-    public function unggah_pbj(Pengajuan $pengajuan)
-    {
-        return Inertia::render('PPK/Kuitansi', [
-            'title' => 'Unggah Berkas Pengajuan PBJ',
-            'pengajuan' => Pengajuan::all()
-        ]);
-    }
-
 
     public function riwayat_pengajuan()
     {
+
+        $pengajuans = Pengajuan::latest();
+        $subTitle = "";
+
+
+        if (request('byStatus')) {
+            $subTitle = 'Berdasarkan Status : ' . request('byStatus');
+        }
+
+        if (request('byStage')) {
+            $subTitle = 'Berdasarkan Stage : ' . request('byStage');
+        }
+
         return Inertia::render('PPK/RiwayatPengajuan', [
-            'title' => 'Riwayat Pengajuan',
-            'pengajuan' => Process::latest()->get()
+            // "title" => "Pengajuan " . $title,
+            "title" => "Riwayat Pengajuan",
+            "subTitle" => $subTitle,
+            // "pengajuans" => $pengajuans->paginate(10),
+            "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
+            "search" => request('search'),
+            "byStatusReq" => request('byStatus'),
+            "byStageReq" => request('byStage'),
         ]);
     }
 
-    public function show_pengajuan(Process $pengajuan)
+    public function show_pengajuan(Pengajuan $pengajuan)
     {
-        $berkas_pbj = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
-            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
-        })->where('kategori', 'Pengajuan PBJ')->get();
+        $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
 
-        $pengajuan_kontrak = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
-            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
-        })->where('kategori', 'Pengajuan Kontrak')->get();
+        $pengajuan_kontrak = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kontrak')->get();
 
-        $berita_acara = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
-            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
-        })->where('kategori', 'Pengajuan Berita Acara')->get();
+        $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
 
-        $kuitansi = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
-            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
-        })->where('kategori', 'Pengajuan Kuitansi')->get();
+        $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
 
         // dd($berkas_pbj);
         return Inertia::render('PPK/DetailPengajuan', [
             'title' => 'Detail Riwayat Pengajuan',
             'pengajuan' => $pengajuan,
-            'kegiatan' => $pengajuan->kegiatan,
-            'ketuaTim' => $pengajuan->kegiatan->user,
+            'ketuaTim' => $pengajuan->created_by,
             'berkasPBJ' => $berkas_pbj,
             'pengajuanKontrak' => $pengajuan_kontrak,
             'beritaAcara' => $berita_acara,

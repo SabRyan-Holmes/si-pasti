@@ -69,19 +69,27 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
     );
 };
 
-const DropdownLink = ({ className = '', children, ...props }) => {
+const DropdownLink = ({ className = '', children, disabled = false, ...props }) => {
     return (
         <Link
             {...props}
             className={
-                'block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out ' +
-                className
+                `block w-full px-4 py-2 text-start text-sm leading-5
+                ${disabled ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'}
+                transition duration-150 ease-in-out ` + className
             }
+            onClick={e => {
+                if (disabled) {
+                    e.preventDefault();
+                }
+            }}
+            aria-disabled={disabled}
         >
             {children}
         </Link>
     );
 };
+
 
 Dropdown.Trigger = Trigger;
 Dropdown.Content = Content;

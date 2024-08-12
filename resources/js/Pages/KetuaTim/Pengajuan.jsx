@@ -2,10 +2,18 @@ import React, { useEffect, useState } from "react";
 import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
 
-import { InputError, InputLabel, TextInput, PrimaryButton } from "@/Components";
+import {
+    InputError,
+    InputLabel,
+    TextInput,
+    PrimaryButton,
+    SecondaryButton,
+} from "@/Components";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { IoIosSend } from "react-icons/io";
+import { HiDocumentPlus } from "react-icons/hi2";
+import { RiArrowGoBackFill } from "react-icons/ri";
 
 export default function Pengajuan({ title, auth, flash }) {
     const props = usePage().props;
@@ -27,7 +35,7 @@ export default function Pengajuan({ title, auth, flash }) {
 
     function submit(e) {
         e.preventDefault();
-        post(route("ketua_tim.ajukan_pengajuan"), {
+        post(route("ketua-tim.ajukan_pengajuan"), {
             data: data,
             _token: props.csrf_token,
             _method: "POST",
@@ -46,30 +54,6 @@ export default function Pengajuan({ title, auth, flash }) {
         });
     }
 
-    // post(
-    //     route("ppk.ajukan-berkas"),
-    //     {
-    //         data,
-    //         _token: props.csrf_token,
-    //         _method: "POST",
-    //         forceFormData: true,
-    //     },
-    //     {
-    //         onSuccess: () => {
-    //             clearErrors();
-    //             console.log("Submit selesai dari On Success");
-
-    //             router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
-    //         },
-    //         onError: () => {
-    //             console.log("Gagal submit");
-    //         },
-    //         onFinish: () => {
-    //             console.log("Submit selesai");
-    //         },
-    //     }
-    // );
-
     useEffect(() => {
         if (flash.message) {
             Swal.fire({
@@ -81,9 +65,9 @@ export default function Pengajuan({ title, auth, flash }) {
                 confirmButtonColor: "#2D95C9",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    location.reload()
+                    location.reload();
                 }
-              });
+            });
         }
     }, [flash.message]);
 
@@ -93,9 +77,32 @@ export default function Pengajuan({ title, auth, flash }) {
         <AuthenticatedLayout user={auth.user} title={title}>
             <Head title={"Pengajuan"} />
             {/* content */}
-            <div className="mx-24">
-                <strong className="text-2xl text-center w-full mx-auto flex justify-center mb-16">
-                    {title}
+            <section className="phone:h-screen laptop:h-full max-w-screen-laptop mx-auto px-7">
+                {/* Breadcumbs */}
+                <div className="flex justify-between items-center">
+                    <div className="breadcrumbs my-3 text-sm">
+                        <ul>
+                            <li>
+                                <a>
+                                    <HiDocumentPlus className="mr-2 w-4 h-4" />
+                                    Buat Pengajuan
+                                </a>
+                            </li>
+                            <li>
+                                <a>Pengajuan Permintaan Pengadaan Barang</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <SecondaryButton
+                        onClick={() => window.history.back()}
+                        className="bg-secondary/5 capitalize"
+                    >
+                        Kembali
+                        <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
+                    </SecondaryButton>
+                </div>
+                <strong className="text-2xl text-center w-full mx-auto flex justify-center my-9">
+                    Pengajuan Permintaan Pengadaan Barang
                 </strong>
 
                 <form
@@ -230,7 +237,7 @@ export default function Pengajuan({ title, auth, flash }) {
                         </PrimaryButton>
                     </div>
                 </form>
-            </div>
+            </section>
 
             {/* end of content */}
         </AuthenticatedLayout>

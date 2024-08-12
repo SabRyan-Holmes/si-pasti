@@ -13,7 +13,7 @@ export default function DetailPengajuan({
     title,
     auth,
     flash,
-    kegiatan,
+    pengajuan,
     ketuaTim,
     berkasPBJ,
     pengajuanKontrak,
@@ -101,8 +101,8 @@ export default function DetailPengajuan({
 
     const { data, setData, post, processing, errors, reset, clearErrors } =
         useForm({
-            kegiatan_id: kegiatan.id,
-            nama_kegiatan: kegiatan.nama_kegiatan,
+            pengajuan_id: pengajuan.id,
+            nama_kegiatan: pengajuan.nama_kegiatan,
 
             // Pengajuan PBJ
             "rancangan kontrak": null,
@@ -225,7 +225,7 @@ export default function DetailPengajuan({
                     <div class="max-w-screen-phone  mt-10">
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>
-                            <span>: {kegiatan.nama_kegiatan}</span>
+                            <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1  font-bold">Ketua TIM</span>

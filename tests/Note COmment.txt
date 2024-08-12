@@ -1,5 +1,5 @@
 
-        // router.post(route("ketua_tim.ajukan_pengajuan"),  {
+        // router.post(route("ketua-tim.ajukan_pengajuan"),  {
         //     _token: props.csrf_token,
         //     data: data,
         //     _method: "POST",

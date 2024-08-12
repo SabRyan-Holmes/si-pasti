@@ -38,7 +38,7 @@ export default function UnggahBerkas({
     function submit(e) {
         e.preventDefault();
         // post(
-        //     route("ketua_tim.ajukan_pengajuan", data, {
+        //     route("ketua-tim.ajukan_pengajuan", data, {
         //         _token: props.csrf_token,
         //         _method: "POST",
         //         preserveScroll: true,

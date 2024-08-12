@@ -8,7 +8,7 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
 import { SecondaryButton } from "@/Components";
 
-export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
+export default function DetailPengajuan({ title, auth, pengajuan }) {
 
 
     return (
@@ -30,7 +30,7 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                     <h4 className="mt-6 font-extrabold">
                         Nama Kegiatan:
                         <span className="font-normal capitalize">
-                            {kegiatan.nama_kegiatan}
+                            {pengajuan.nama_kegiatan}
                         </span>
                     </h4>
                     <h4 className="mt-2 font-extrabold">
@@ -40,6 +40,7 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                         </span>
                     </h4>
                 </div>
+
                 <div className="overflow-x-auto mt-16">
                     <h2 className="text-base font-semibold">
                         Status Pengajuan Berkas
@@ -57,7 +58,7 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                         </thead>
                         <tbody>
                             {/* row 1 */}
-                            {kegiatan.documents.map((data, i) => (
+                            {pengajuan.documents.map((data, i) => (
                                 <tr>
                                     <th className="text-primary">{i + 1}</th>
                                     <td className="capitalize">
@@ -75,13 +76,14 @@ export default function DetailPengajuan({ title, auth, pengajuan, kegiatan }) {
                                         </div>
                                     </td>
                                     <td className="text-center">
+
                                         <a
                                             href={`/storage/${data.path}`}
                                             target="_blank"
-                                            className="action-btn"
+                                            className="group/button action-btn text-hijau/75  text-center font-medium  group-hover/item:text-white items-center justify-center  mx-auto action-btn border-hijau/20 hover:bg-hijau hover:text-white"
                                         >
-                                            <FaEye className="mr-2 mx-1" />
                                             Lihat
+                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
                                         </a>
                                         {pengajuan.status != "diproses" && (
                                             <label

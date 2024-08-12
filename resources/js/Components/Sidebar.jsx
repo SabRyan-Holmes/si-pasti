@@ -6,7 +6,12 @@ import {
     MdOutlineDocumentScanner,
 } from "react-icons/md";
 import { FaNotesMedical } from "react-icons/fa6";
-import { HiDocumentMagnifyingGlass } from "react-icons/hi2";
+import {
+    HiDocumentPlus,
+    HiDocumentDuplicate,
+    HiDocumentMagnifyingGlass,
+    HiClipboardDocumentList,
+} from "react-icons/hi2";
 import logo from "../../assets/image/logo.png";
 import NavLinkDashboard from "@/Components/NavLinkDashboard";
 
@@ -50,25 +55,27 @@ export default function Sidebar({ divisi, active }) {
                 {divisi === "Ketua Tim" && (
                     <section>
                         <NavLinkDashboard
-                            href={route("ketua_tim.pengajuan")}
-                            active={route().current("ketua_tim.pengajuan")}
+                            href={route("ketua-tim.pengajuan")}
+                            active={route().current("ketua-tim.pengajuan")}
                             className="relative z-20"
                         >
-                            <FaNotesMedical />
+                            <HiDocumentPlus />
                             Buat Pengajuan
                         </NavLinkDashboard>
 
                         <NavLinkDashboard
-                            href={route("ketua_tim.riwayat_pengajuan")}
+                            href={route("ketua-tim.riwayat-pengajuan")}
                             active={
-                                route().current("ketua_tim.riwayat_pengajuan") ||
-                                active === "ketua_tim.show_pengajuan" ||
+                                route().current(
+                                    "ketua-tim.riwayat-pengajuan"
+                                ) ||
+                                active === "ketua-tim.show-pengajuan" ||
                                 active === "pegawai.edit" ||
                                 active === "pegawai.show"
                             }
                             className="relative z-20"
                         >
-                            <MdSwitchAccount />
+                            <HiDocumentDuplicate />
                             Riwayat Pengajuan
                         </NavLinkDashboard>
                     </section>
@@ -80,20 +87,20 @@ export default function Sidebar({ divisi, active }) {
                             href={route("ppk.daftar-berkas")}
                             active={
                                 route().current("ppk.daftar-berkas") ||
-                                route().current("pengajuan.show_pbj")
+                                route().current("ppk.show-berkas")
                             }
                             className="relative z-20"
                         >
-                            <HiDocumentMagnifyingGlass />
+                            <HiClipboardDocumentList />
                             Daftar Berkas
                         </NavLinkDashboard>
 
                         <NavLinkDashboard
-                            href={route("ppk.riwayat_pengajuan")}
-                            active={route().current("ppk.riwayat_pengajuan")}
+                            href={route("ppk.riwayat-pengajuan")}
+                            active={route().current("ppk.riwayat-pengajuan")}
                             className="relative z-20"
                         >
-                            <MdSwitchAccount />
+                            <HiDocumentDuplicate />
                             Riwayat Pengajuan
                         </NavLinkDashboard>
                     </section>
@@ -102,14 +109,14 @@ export default function Sidebar({ divisi, active }) {
                 {divisi === "PBJ" && (
                     <section>
                         <NavLinkDashboard
-                            href={route("pbj.daftar_berkas")}
+                            href={route("pbj.daftar-berkas")}
                             active={
-                                route().current("pbj.daftar_berkas") ||
+                                route().current("pbj.daftar-berkas") ||
                                 active === "pbj.show-berkas"
                             }
                             className="relative z-20"
                         >
-                            <HiDocumentMagnifyingGlass />
+                            <HiClipboardDocumentList />
                             Daftar Berkas
                         </NavLinkDashboard>
 
@@ -121,7 +128,7 @@ export default function Sidebar({ divisi, active }) {
                             }
                             className="relative z-20"
                         >
-                            <MdSwitchAccount />
+                            <HiDocumentDuplicate />
                             Riwayat Pengajuan
                         </NavLinkDashboard>
                     </section>
@@ -136,7 +143,7 @@ export default function Sidebar({ divisi, active }) {
                             )}
                             className="relative z-20"
                         >
-                            <MdSwitchAccount />
+                            <HiDocumentDuplicate />
                             Riwayat Pengajuan
                         </NavLinkDashboard>
                     </section>

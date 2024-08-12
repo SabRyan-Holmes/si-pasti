@@ -11,6 +11,7 @@ import NavLink from "./NavLink";
 import NavLinkCollapse from "./NavLinkCollapse";
 import NavLinkDashboard from "./NavLinkDashboard";
 import PrimaryButton from "./PrimaryButton";
+import ProfileImage from "./ProfileImage";
 import ResponsiveNavLink from "./ResponsiveNavLink";
 import SecondaryButton from "./SecondaryButton";
 import Sidebar from "./Sidebar";
@@ -34,4 +35,5 @@ export {
     SecondaryButton,
     Sidebar,
     TextInput,
+    ProfileImage
 };

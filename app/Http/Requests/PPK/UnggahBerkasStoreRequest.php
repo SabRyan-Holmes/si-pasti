@@ -22,7 +22,13 @@ class UnggahBerkasStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'kegiatan_id' => ['required', 'integer'],
+            'nama_kegiatan' => ['required', 'integer'],
+
+            // Pengajuan Dari Ketua Tim
+            'kak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'form_permintaan' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_permintaan' => ['nullable', 'file',  'mimes:pdf', 'max:15192'],
+
             // Pengajuan PBJ
             'rancangan_kontrak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
             'spekteknis' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],

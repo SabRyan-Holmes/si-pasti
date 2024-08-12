@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Process;
+use App\Models\Pengajuan;
 use App\Models\Document;
 use App\Models\Kegiatan;
-use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -16,10 +15,10 @@ use App\Http\Requests\PengajuanStoreRequest;
 
 class KetuaTimController extends Controller
 {
-    public function pengajuan()
+    public function create_pengajuan()
     {
         return Inertia::render('KetuaTim/Pengajuan', [
-            'title' => 'Pengajuan Permintaan Pengadaan Barang',
+            'title' => 'Buat Pengajuan',
         ]);
     }
 
@@ -30,34 +29,31 @@ class KetuaTimController extends Controller
 
 
         // Store Kegiatan
-        $new_kegiatan = Kegiatan::create([
+        // $new_kegiatan = Kegiatan::create([
+        //     'nama_kegiatan' => $validated['nama_kegiatan'],
+        //     'status' => 'diproses',
+        //     'created_by' => Auth::user()->id, // Relasi dgn Tabel User(divisi)
+        // ]);
+
+        // Store Pengajuan/Pengajuan
+        $new_pengajuan = Pengajuan::create([
             'nama_kegiatan' => $validated['nama_kegiatan'],
-            'status' => 'diproses',
-            'created_by' => Auth::user()->id, // Relasi dgn Tabel User(divisi)
-        ]);
-
-
-        // Logic Store Document
-        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang', $new_kegiatan->id);
-        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_kegiatan->id);
-        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_kegiatan->id);
-
-
-        // Store Process/Pengajuan
-        Process::create([
-            'kegiatan_id' => $new_kegiatan->id,
+            'created_by' => Auth::user()->id,
             'status' => 'diproses',
             'stage' => 'diajukan ketua tim',
             'start_date' => now(),
             'end_date' => null,
-
         ]);
 
-        // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
-        return Redirect::route('ketua_tim.pengajuan')->with('message', 'Pengajuan berhasil diajukan!');
+        // Logic Store Document
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang', $new_pengajuan->id);
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_pengajuan->id);
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_pengajuan->id);
+
+        return redirect()->back()->with('message', 'Pengajuan berhasil diajukan!');
     }
 
-    private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori, $kegiatanId)
+    private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori, $pengajuanId)
     {
         if ($request->file($fileKey)) {
             // Membuat nama file
@@ -71,8 +67,8 @@ class KetuaTimController extends Controller
             $filePath = strtolower($prefix) . '-file/' . $fileName;
 
 
-            // Mencari dokumen yang sudah ada berdasarkan kegiatan_id, nama, dan kategori
-            $existingDocument = Document::where('kegiatan_id', $kegiatanId)
+            // Mencari dokumen yang sudah ada berdasarkan pengajuan_id, nama, dan kategori
+            $existingDocument = Document::where('pengajuan_id', $pengajuanId)
                 ->where('nama', $prefix . ' - ' . $request->nama_kegiatan)
                 ->where('kategori', $kategori)
                 ->where('submitted_by', Auth::user()->id)
@@ -97,45 +93,47 @@ class KetuaTimController extends Controller
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
                     'jenis_dokumen' => $jenisDokumen,
-                    'kegiatan_id' => $kegiatanId,
+                    'pengajuan_id' => $pengajuanId,
                     'submitted_by' => Auth::user()->id,
                 ]);
             }
         }
     }
 
-    public function show_pengajuan(Process $pengajuan)
+    public function show_pengajuan(Pengajuan $pengajuan)
     {
 
         return Inertia::render('KetuaTim/DetailPengajuan', [
             'title' => 'Status Pengadaan Barang',
             'pengajuan' => $pengajuan,
-            'kegiatan' => $pengajuan->kegiatan,
 
         ]);
     }
 
     public function riwayat_pengajuan()
     {
-        // return Inertia::render('KetuaTim/RiwayatPengajuan', [
-        //     'title' => 'Riwayat Pengajuan',
-        //     'pengajuan' => Process::latest()->get()
-        // ]);
-        $pengajuans = Process::latest();
+
+        $pengajuans = Pengajuan::latest();
         $subTitle = "";
 
-        if (request('byDivisi')) {
-            // $category = Pengajuan::firstWhere('Daerah', request('byDaerah'));
-            $subTitle = 'Berdasarkan Divisi : ' . request('byDivisi');
+
+        if (request('byStatus')) {
+            $subTitle = 'Berdasarkan Status : ' . request('byStatus');
+        }
+
+        if (request('byStage')) {
+            $subTitle = 'Berdasarkan Stage : ' . request('byStage');
         }
 
         return Inertia::render('KetuaTim/RiwayatPengajuan', [
             // "title" => "Pengajuan " . $title,
             "title" => "Riwayat Pengajuan",
             "subTitle" => $subTitle,
-            "pengajuans" => $pengajuans->filter(request(['search', 'byDivisi']))->paginate(10),
+            // "pengajuans" => $pengajuans->paginate(10),
+            "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
             "search" => request('search'),
-            "byDivisiReq" => request('byDivisi'),
+            "byStatusReq" => request('byStatus'),
+            "byStageReq" => request('byStage'),
         ]);
     }
 

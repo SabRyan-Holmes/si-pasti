@@ -118,26 +118,28 @@ table.table-bordered {
     border-collapse: collapse;
     line-height: 1rem;
     overflow: hidden;
-    @apply border-slate-600
+    @apply border-slate-600;
 }
 
+table.table-bordered > thead {
+    @apply text-white font-medium text-sm bg-primary  rounded-xl border border-secondary/15;
+}
 
 table.table-bordered > thead > tr > th {
-    @apply border border-white
+    @apply border border-white;
 }
 table.table-bordered > thead > tr > th {
-    @apply border border-secondary/15
+    @apply border border-orange-50/30;
 }
 
 table.table-bordered > tbody > tr > td {
-    @apply border border-secondary/15
+    @apply border border-secondary/20;
 }
 table.table-bordered > tbody > tr > th {
-    @apply border border-secondary/15
+    @apply border border-secondary/20;
 }
 
-
-.box-footer{
+.box-footer {
     border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
     border-top-width: 1px;
@@ -145,22 +147,36 @@ table.table-bordered > tbody > tr > th {
     padding-bottom: 0.75rem;
     padding-left: 1rem;
     padding-right: 1rem;
-  }
-
-
+}
 
 .label-warning {
-    @apply rounded-md bg-rose-500/90 uppercase p-1 mx-3 text-xs font-semibold text-center
+    @apply rounded-md bg-rose-500/90 uppercase p-1 mx-3 text-xs font-semibold text-center;
 }
 
 .label-secondary {
-    @apply rounded-md bg-secondary/90 uppercase p-1 mx-3 text-xs font-semibold text-center
+    @apply rounded-md bg-secondary/90 uppercase p-1 mx-3 text-xs font-semibold text-center;
 }
 
 .label-success {
-    @apply rounded-md bg-success uppercase p-1 mx-3 text-xs font-semibold text-center
+    @apply rounded-md bg-success uppercase p-1 mx-3 text-xs font-semibold text-center;
 }
 
 .label-base {
-    @apply rounded-md uppercase p-1 mx-3 text-xs font-semibold text-center
+    @apply rounded-md uppercase p-1 mx-3 text-xs font-semibold text-center text-slate-500;
 }
+
+
+.user-profile-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: brown;
+    color: #ffffff;
+    font-size: 30px;
+    border-radius: 50%;
+    font-weight: 800;
+
+
+  }

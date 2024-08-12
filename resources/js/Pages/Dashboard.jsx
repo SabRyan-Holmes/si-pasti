@@ -8,12 +8,14 @@ import { MdEventRepeat } from "react-icons/md";
 import { MdEventBusy } from "react-icons/md";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-export default function AdminPage({
+export default function Dashboard({
     title,
     auth,
     userCount,
     kegiatanCount,
     documentCount,
+    ketuaTimCount,
+    divisiCount,
     processCount,
     rejectedCount,
     acceptedCount
@@ -22,7 +24,7 @@ export default function AdminPage({
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
             {/* content */}
-            <div class="grid bg-white grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-3 sm:px-8 capitalize">
+            <section class="grid bg-white grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-3 sm:px-8 capitalize">
                 <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
                     <div class="p-4 bg-primary">
                         <IconContext.Provider
@@ -48,7 +50,7 @@ export default function AdminPage({
                     </div>
                     <div class="px-4 text-gray-700">
                         <h3 class="text-sm tracking-wider">
-                            Total Jumlah Dokumen
+                            Total Jumlah Berkas
                         </h3>
                         <p class="text-3xl">{documentCount}</p>
                     </div>
@@ -114,7 +116,7 @@ export default function AdminPage({
                         <p class="text-3xl">{rejectedCount}</p>
                     </div>
                 </div>
-            </div>
+            </section>
             {/* end of content               */}
         </AuthenticatedLayout>
     );

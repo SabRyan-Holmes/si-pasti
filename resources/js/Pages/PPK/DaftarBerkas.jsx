@@ -1,166 +1,345 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/Components/Navbar";
-import { Link, Head } from "@inertiajs/react";
-import { FiEye } from "react-icons/fi";
+import { useForm, Link, Head, router } from "@inertiajs/react";
 import moment from "moment/min/moment-with-locales";
+import { FiEye } from "react-icons/fi";
 import { RiFolderUploadFill } from "react-icons/ri";
-import { Sidebar } from "@/Components";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import ReactPaginate from "react-paginate";
+import { TiArrowRight, TiArrowLeft } from "react-icons/ti";
+import { HiDocumentDuplicate } from "react-icons/hi2";
+import { FaEye } from "react-icons/fa6";
+import { FaRegFolder } from "react-icons/fa";
+import { InputLabel } from "@/Components";
+import { HiDocumentSearch } from "react-icons/hi";
 
-export default function DaftarBerkas({ title, auth, pengajuans }) {
+export default function DaftarBerkas({
+    title,
+    auth,
+    pengajuans,
+    flash,
+    search,
+    byStatusReq: initialStatus,
+    byStageReq: initialStage,
+}) {
     moment.locale("id");
 
+    const [byStatus, setByStatus] = useState(initialStatus || "");
+    const [byStage, setByStage] = useState(initialStage || "");
 
-    console.log("current route : ", route().current());
+    const handlePageClick = (event) => {
+        const selectedPage = event.selected + 1;
+        const newOffset = (selectedPage - 1) * pengajuans.per_page;
+
+        router.get(
+            route("ppk.daftar-berkas"),
+            { page: selectedPage },
+            {
+                replace: true,
+                preserveState: true,
+                onSuccess: () => {
+                    setItemOffset(newOffset);
+                },
+            }
+        );
+    };
+
+    useEffect(() => {
+        if (byStatus) {
+            router.get(
+                route("ppk.daftar-berkas"),
+                { byStatus, search },
+                { replace: true, preserveState: true }
+            );
+        }
+    }, [byStatus, byStage, search]);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const searchValue = e.target.search.value;
+
+        router.get(
+            route("ppk.daftar-berkas"),
+            { byStatus, search: searchValue },
+            { replace: true, preserveState: true }
+        );
+    };
+
+    useEffect(() => {
+        if (byStatus || byStage) {
+            router.get(
+                route("ppk.daftar-berkas"),
+                { byStatus, byStage, search },
+                { replace: true, preserveState: true }
+            );
+        } else if (byStatus == "" && byStage == "") {
+            router.get(
+                route("ppk.daftar-berkas"),
+                {},
+                { replace: true, preserveState: true }
+            );
+        }
+    }, [byStatus, byStage]);
+
     return (
-        <div className="h-full">
+        <AuthenticatedLayout user={auth.user} title={title}>
             <Head title={title} />
+            {/* content */}
+            <section className="phone:h-screen laptop:h-full max-w-screen-laptop mx-auto px-7 ">
+                {/* Breadcumbs */}
+                <div className="breadcrumbs my-3 text-sm">
+                    <ul>
+                        <li>
+                            <a>
+                                <FaRegFolder className="mr-2 w-4 h-4" />
+                                Daftar Berkas
+                            </a>
+                        </li>
+                        <li>
+                            <a></a>
+                        </li>
+                    </ul>
+                </div>
 
-            <div className="drawer lg:drawer-open h-full">
-                <input
-                    id="my-drawer-2"
-                    type="checkbox"
-                    className="drawer-toggle"
-                />
-                <div className="drawer-content flex flex-col bg-neutral h-full">
-                    <Navbar user={auth.user} />
-                    <div className="mx-6 mt-6 h-full bg-white">
-                        {/* content */}
-                        <div className="mx-24 ">
-                            {/* Breadcumbs */}
-                            <div className="breadcrumbs my-3 text-sm">
-                                <ul>
-                                    <li>
-                                        <a>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                className="mr-1 h-4 w-4 stroke-current"
+                {pengajuans.data.length ? (
+                    <>
+                        <form
+                            className="w-full flex justify-between items-center "
+                            onSubmit={handleSearch}
+                        >
+                            <div className="flex gap-3 my-3 items-center  w-fit justify-start">
+                                <div className="w-48">
+                                    <InputLabel
+                                        value="Status"
+                                        Htmlfor="byStatus"
+                                        className="max-w-sm text-lg  ml-1"
+                                    />
+                                    <select
+                                        className="select w-full max-w-xs text-sm border capitalize border-gradient selection:text-accent  disabled:text-accent"
+                                        name="byStatus"
+                                        defaultValue={byStatus}
+                                        onChange={(e) =>
+                                            setByStatus(e.target.value)
+                                        }
+                                    >
+                                        <option value="">Semua Status</option>
+                                        <option>Diproses</option>
+                                        <option>Selesai</option>
+                                        <option>Ditolak</option>
+                                    </select>
+                                </div>
+
+                                <div className="w-48">
+                                    <InputLabel
+                                        value="Stage"
+                                        Htmlfor="byStage"
+                                        className="max-w-sm text-lg  ml-1"
+                                    />
+                                    <select
+                                        className="select w-full max-w-xs text-sm border capitalize border-gradient selection:text-accent  disabled:text-accent"
+                                        name="byStage"
+                                        defaultValue={byStage}
+                                        onChange={(e) =>
+                                            setByStage(e.target.value)
+                                        }
+                                    >
+                                        <option value="">Semua Stage</option>
+                                        <option>diajukan ketua tim </option>
+                                        <option>diproses ppk</option>
+                                        <option>dipesan pbj</option>
+                                        <option>pesanan selesai</option>
+                                        <option>pembayaran</option>
+                                        <option>diproses keuangan</option>
+                                        <option>selesai</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="w-[21rem]">
+                                <InputLabel
+                                    value="Nama Kegiatan"
+                                    Htmlfor="search"
+                                    className="max-w-sm text-lg ml-1"
+                                />
+
+                                <label
+                                    htmlFor="search"
+                                    className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+                                >
+                                    Search
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <HiDocumentSearch className="w-6 h-6 fill-primary" />
+                                    </div>
+                                    <input
+                                        type="search"
+                                        id="search"
+                                        defaultValue={search}
+                                        name="search"
+                                        className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
+                                        placeholder="Cari nama ketua tim/nama kegiatan.."
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="text-white bg-primary-darker absolute end-2 bottom-[6px] hover:bg-primary/85 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    >
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <div className="overflow-auto pt-3 rounded-xl ">
+                            <table className="table-bordered text-xs table overflow-auto rounded-xl ">
+                                <thead className="text-white font-medium text-sm bg-primary  rounded-xl border border-secondary/15">
+                                    <tr>
+                                        <th></th>
+                                        <th>Nama Ketua Tim</th>
+                                        <th>Name Kegiatan</th>
+                                        <th className="text-center">
+                                            Tanggal Pengajuan
+                                        </th>
+                                        <th className="text-center">
+                                            Tanggal Disetujui
+                                        </th>
+                                        <th className="text-center">Status</th>
+                                        <th className="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="border-secondary/15">
+                                    {pengajuans.data?.map((data, i) => {
+                                        const ketua_tim = data.created_by;
+                                        return (
+                                            <tr
+                                                key={i}
+                                                className="group/item hover:bg-secondary/50 hover:cursor-pointer"
                                             >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                                                ></path>
-                                            </svg>
-                                            Daftar Berkas
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a></a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="my-10 overflow-x-auto">
-                                <table className="table ">
-                                    {/* head */}
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Ketua Tim</th>
-                                            <th>Kegiatan</th>
-                                            <th>Tanggal Pengajuan</th>
-                                            <th className="text-center">
-                                                Status
-                                            </th>
-                                            <th className="text-center">
-                                                Aksi
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {/* row 1 */}
-                                        {pengajuans.map((pengajuan, i) => {
-                                            let kegiatan = pengajuan.kegiatan;
-                                            let ketua_tim = kegiatan.user;
-
-                                            return (
-                                                <tr>
-                                                    <th>{pengajuan.id}</th>
-                                                    <td>
-                                                        Namas {ketua_tim.name}
-                                                    </td>
-                                                    <td>
-                                                        {kegiatan.nama_kegiatan}
-                                                    </td>
-                                                    <td>
-                                                        {moment(
-                                                            pengajuan.start_date
-                                                        ).format("LL")}
-                                                    </td>
-                                                    <td>
-                                                        {pengajuan.status ==
-                                                            "diproses" && (
-                                                            <div className="label-base bg-base-200 ">
-                                                                {
-                                                                    pengajuan.status
-                                                                }
-                                                            </div>
+                                                <th>{i + 1}</th>
+                                                <td className="capitalize">
+                                                    {ketua_tim.name}
+                                                </td>
+                                                <td className="capitalize">
+                                                    {data.nama_kegiatan}
+                                                </td>
+                                                <td className="text-center">
+                                                    {moment(
+                                                        data.created_at
+                                                    ).format("LL")}
+                                                </td>
+                                                <td className="text-center">
+                                                    {data.status ==
+                                                    "selesai" ? (
+                                                        <span>
+                                                            {moment(
+                                                                data.updated_at
+                                                            ).format("LL")}
+                                                        </span>
+                                                    ) : (
+                                                        <span>_</span>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    <div className="label-base bg-base-200/70 text-center text-slate-500 ">
+                                                        {data.status}
+                                                    </div>
+                                                </td>
+                                                <td className="text-center whitespace-nowrap text-nowrap">
+                                                    <Link
+                                                        as="a"
+                                                        href={route(
+                                                            "ppk.show-berkas",
+                                                            data.id
                                                         )}
-
-                                                        {pengajuan.status ==
-                                                            "selesai" && (
-                                                            <div className="uppercase text-center rounded-lg p-1 bg-success/70 text-slate-700 font-semibold text-xs ">
-                                                                {
-                                                                    pengajuan.status
-                                                                }
-                                                            </div>
+                                                        className="group/button inline-block  text-center font-medium group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75  items-center justify-center gap-2 mx-auto action-btn border-hijau/20 hover:bg-hijau hover:text-white "
+                                                    >
+                                                        <span>Lihat</span>
+                                                        <FaEye className="fill-hijau/75 group-hover/item:fill-white" />
+                                                    </Link>
+                                                    <span className="inline-block mx-1"></span>
+                                                    <Link
+                                                        as="a"
+                                                        href={route(
+                                                            "ppk.unggah-berkas",
+                                                            data.id
                                                         )}
-
-                                                        {pengajuan.status ==
-                                                            "ditolak" && (
-                                                            <div className="uppercase text-center rounded-lg p-1 bg-warning/70 text-slate-700 font-semibold text-xs ">
-                                                                {
-                                                                    pengajuan.status
-                                                                }
-                                                            </div>
-                                                        )}
-                                                    </td>
-                                                    <td className="flex justify-around items-center gap-3 ">
-                                                        {/* Button View */}
-                                                        <Link
-                                                            href={route(
-                                                                "ppk.show-berkas-kt",
-                                                                pengajuan.id
-                                                            )}
-                                                            className=" action-btn bg-success/5 scale-125 border-success/50"
-                                                        >
-                                                            <span className="text-xs font-medium text-slate-500 scale-[0.8] ">
-                                                                Cek Berkas
-                                                            </span>
-                                                            <FiEye className="stroke-success" />
-                                                        </Link>
-                                                        {/* Button Upload */}
-                                                        <Link
-                                                            href={route(
-                                                                "ppk.unggah-berkas",
-                                                                pengajuan.id
-                                                            )}
-                                                            className=" action-btn scale-125 border-secondary/30 bg-secondary/5"
-                                                        >
-                                                            <span className="text-xs font-medium text-slate-500 scale-[0.8]">
-                                                                Unggah{" "}
-                                                            </span>
-                                                            <RiFolderUploadFill className="fill-secondary/60" />
-                                                        </Link>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
+                                                        className="group/button inline-block text-center font-medium group-hover/item:bg-secondary group-hover/item:text-white text-secondary  items-center justify-center gap-2 mx-auto action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                                    >
+                                                        <span>Unggah</span>
+                                                        <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
 
-                        {/* end of content */}
+                        {/* Pagination */}
+                        <div className="box-footer mb-8 text-sm">
+                            <div className="sm:flex items-center justify-between">
+                                <div className="flex items-center text-xs">
+                                    showing {pengajuans.data.length} Entries
+                                    <TiArrowRight className="5 h-5" />
+                                </div>
+                                <ReactPaginate
+                                    breakLabel={<span>...</span>}
+                                    nextLabel={
+                                        pengajuans.next_page_url && (
+                                            <a
+                                                className="group/next dark:text-white/70 border text-primary hover:text-white  py-1 px-2 leading-none inline-flex items-center gap-2 rounded-md hover:border hover:bg-primary/75 font-semibold border-primary"
+                                                href={pengajuans.next_page_url}
+                                                onClick={() => setNum(num + 1)}
+                                            >
+                                                <span className="sr-only">
+                                                    Next
+                                                </span>
+                                                <span aria-hidden="true">
+                                                    Next
+                                                </span>
+                                                <MdOutlineKeyboardDoubleArrowRight className="-ml-1 w-4 h-4 fill-primary group-hover/next:fill-white" />
+                                            </a>
+                                        )
+                                    }
+                                    onPageChange={handlePageClick}
+                                    pageRangeDisplayed={1}
+                                    pageCount={pengajuans.last_page}
+                                    previousLabel={
+                                        pengajuans.prev_page_url && (
+                                            <a
+                                                className="group/next dark:text-white/70 border text-primary hover:text-white  py-1 px-2 leading-none inline-flex items-center gap-2 rounded-md hover:border hover:bg-primary/75 font-semibold border-primary"
+                                                href={pengajuans.next_page_url}
+                                                onClick={() => setNum(num + 1)}
+                                            >
+                                                <MdOutlineKeyboardDoubleArrowLeft className="-mr-1 w-4 h-4 fill-primary group-hover/next:fill-white" />
+                                                <span className="sr-only">
+                                                    Prev
+                                                </span>
+                                                <span aria-hidden="true">
+                                                    Prev
+                                                </span>
+                                            </a>
+                                        )
+                                    }
+                                    renderOnZeroPageCount={null}
+                                    containerClassName={
+                                        "flex items-center text-center justify-center mt-8 mb-4 gap-4 "
+                                    }
+                                    pageClassName="border border-solid border-primary text-center hover:bg-primary hover:text-base-100 w-6 h-6 flex items-center text-primary justify-center rounded-md"
+                                    activeClassName="bg-primary text-white"
+                                    className="justify-end flex gap-2"
+                                />
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex justify-center items-center h-96 ">
+                        <strong className="text-2xl my-auto">
+                            Belum Ada Pengajuan Terbaru!!
+                        </strong>
                     </div>
-                </div>
-                <Sidebar
-                    active={route().current("ppk.show-berkas-kt")}
-                    divisi={auth.user.name}
-                ></Sidebar>
-            </div>
-        </div>
+                )}
+            </section>
+        </AuthenticatedLayout>
     );
 }

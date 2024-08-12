@@ -18,7 +18,7 @@ export default {
                 transparent: "transparent",
                 current: "currentColor",
                 // "primary-darker": "#6366f1",
-                "primary-darker": '#0284c7',
+                "primary-darker": "#0284c7",
                 secondary: "#fb923c",
                 oren: "#fb923c",
                 hijau: "#22c55e",
@@ -46,7 +46,7 @@ export default {
                 // "3xl": "1536px",
             },
             fontSize: {
-                xs: "13px",
+                xs: "12px",
             },
             width: {
                 a4: "210mm",
