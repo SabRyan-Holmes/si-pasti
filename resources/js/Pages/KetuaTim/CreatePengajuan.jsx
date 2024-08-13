@@ -8,6 +8,7 @@ import {
     TextInput,
     PrimaryButton,
     SecondaryButton,
+    Dropdown,
 } from "@/Components";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -15,27 +16,20 @@ import { IoIosSend } from "react-icons/io";
 import { HiDocumentPlus } from "react-icons/hi2";
 import { RiArrowGoBackFill } from "react-icons/ri";
 
-export default function Pengajuan({ title, auth, flash }) {
+export default function CreatePengajuan({ title, auth, flash }) {
     const props = usePage().props;
-    const {
-        data,
-        setData,
-        post,
-        processing,
-        errors,
-        reset,
-        clearErrors,
-        recentlySuccessful,
-    } = useForm({
-        nama_kegiatan: "",
-        kak: null,
-        form_permintaan: null,
-        surat_permintaan: null,
-    });
+    const { data, setData, post, processing, errors, reset, clearErrors } =
+        useForm({
+            nama_tim: "",
+            nama_kegiatan: "",
+            kak: null,
+            form_permintaan: null,
+            surat_permintaan: null,
+        });
 
     function submit(e) {
         e.preventDefault();
-        post(route("ketua-tim.ajukan_pengajuan"), {
+        post(route("ketua-tim.ajukan-pengajuan"), {
             data: data,
             _token: props.csrf_token,
             _method: "POST",
@@ -48,9 +42,6 @@ export default function Pengajuan({ title, auth, flash }) {
             onError: () => {
                 console.log("Gagal submit");
             },
-            // onFinish: () => {
-            //     location.reload()
-            // },
         });
     }
 
@@ -71,13 +62,14 @@ export default function Pengajuan({ title, auth, flash }) {
         }
     }, [flash.message]);
 
+    console.log("data");
     console.log(data);
 
+    const namaTim = auth.user.nama_tim;
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
-            <Head title={"Pengajuan"} />
             {/* content */}
-            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
+            <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
                 {/* Breadcumbs */}
                 <div className="flex items-center justify-between">
                     <div className="my-3 text-sm breadcrumbs">
@@ -89,7 +81,7 @@ export default function Pengajuan({ title, auth, flash }) {
                                 </a>
                             </li>
                             <li>
-                                <a>Pengajuan Permintaan Pengadaan Barang</a>
+                                <a>Pengajuan Permintaan Pengadaan</a>
                             </li>
                         </ul>
                     </div>
@@ -102,7 +94,7 @@ export default function Pengajuan({ title, auth, flash }) {
                     </SecondaryButton>
                 </div>
                 <strong className="flex justify-center w-full mx-auto text-2xl text-center my-9">
-                    Pengajuan Permintaan Pengadaan Barang
+                    Pengajuan Permintaan Pengadaan
                 </strong>
 
                 <form
@@ -111,12 +103,31 @@ export default function Pengajuan({ title, auth, flash }) {
                     encType="multipart/form-data"
                     className="w-full max-w-2xl mx-auto my-4 "
                 >
+                    {/* Nama Tim */}
+                    <div className="my-3">
+                        <InputLabel htmlFor="nama_kegiatan" value="Nama Tim" />
+                        <select
+                            className="w-full px-2 my-2 rounded-md border-gradient"
+                            onChange={(e) =>
+                                setData("nama_tim", e.target.value)
+                            }
+                            defaultValue={""}
+                        >
+                            <option value={""}>Pilih Nama Tim</option>
+                            {namaTim.map((tim, i) => (
+                                <option>{tim.nama_tim}</option>
+                            ))}
+                        </select>
+                        <InputError
+                            message={errors.nama_tim}
+                            className="mt-2"
+                        />
+                    </div>
                     {/* Nama Kegiatan */}
-                    <div className="my-4">
+                    <div className="my-3">
                         <InputLabel
                             htmlFor="nama_kegiatan"
                             value="Nama Kegiatan"
-                            className="my-4"
                         />
                         <TextInput
                             type="text"
@@ -124,7 +135,7 @@ export default function Pengajuan({ title, auth, flash }) {
                             id="nama_kegiatan"
                             placeholder="Masukkan nama kegiatan"
                             isFocused={true}
-                            className="w-full mb-2 bg-white input input-bordered input-primary"
+                            className="w-full mt-1 mb-2 bg-white border "
                             onChange={(e) =>
                                 setData("nama_kegiatan", e.target.value)
                             }
@@ -150,7 +161,7 @@ export default function Pengajuan({ title, auth, flash }) {
                                 onChange={(e) =>
                                     setData("kak", e.target.files[0])
                                 }
-                                className="text-sm text-gray-600  file:absolute file:right-0 file:bg-primary/80 hu file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
+                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/80 hu file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
                             />
                         </div>
                         <InputError message={errors.kak} className="mt-2" />

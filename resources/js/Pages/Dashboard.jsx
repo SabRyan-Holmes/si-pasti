@@ -30,7 +30,7 @@ export default function Dashboard({
                         <IconContext.Provider
                             value={{ color: "white", size: "50px" }}
                         >
-                            <MdEvent className="h-full w-12" />
+                            <MdEvent className="w-12 h-full" />
                         </IconContext.Provider>
                     </div>
                     <div class="px-4 text-gray-700">
@@ -45,7 +45,7 @@ export default function Dashboard({
                         <IconContext.Provider
                             value={{ color: "white", size: "50px" }}
                         >
-                            <HiDocumentDuplicate className="h-full w-12" />
+                            <HiDocumentDuplicate className="w-12 h-full" />
                         </IconContext.Provider>
                     </div>
                     <div class="px-4 text-gray-700">
@@ -60,7 +60,7 @@ export default function Dashboard({
                         <IconContext.Provider
                             value={{ color: "white", size: "50px" }}
                         >
-                            <FaUserTie className="h-full w-12" />
+                            <FaUserTie className="w-12 h-full" />
                         </IconContext.Provider>
                     </div>
                     <div class="px-4 text-gray-700">
@@ -70,11 +70,11 @@ export default function Dashboard({
                 </div>
 
                 <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                    <div class="p-4 bg-success">
+                    <div class="p-4 bg-hijau">
                         <IconContext.Provider
                             value={{ color: "white", size: "50px" }}
                         >
-                            <MdEventAvailable className="h-full w-12" />
+                            <MdEventAvailable className="w-12 h-full" />
                         </IconContext.Provider>
                     </div>
                     <div class="px-4 text-gray-700">
@@ -90,7 +90,7 @@ export default function Dashboard({
                         <IconContext.Provider
                             value={{ color: "white", size: "50px" }}
                         >
-                            <MdEventRepeat className="h-full w-12" />
+                            <MdEventRepeat className="w-12 h-full" />
                         </IconContext.Provider>
                     </div>
                     <div class="px-4 text-gray-700">
@@ -106,7 +106,7 @@ export default function Dashboard({
                         <IconContext.Provider
                             value={{ color: "white", size: "50px" }}
                         >
-                            <MdEventBusy className="h-full w-12" />
+                            <MdEventBusy className="w-12 h-full" />
                         </IconContext.Provider>
                     </div>
                     <div class="px-4 text-gray-700">

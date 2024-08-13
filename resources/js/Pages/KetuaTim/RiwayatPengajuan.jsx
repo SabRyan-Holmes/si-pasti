@@ -103,7 +103,6 @@ export default function RiwayatPengajuan({
             {/* content */}
 
             <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
-
                 {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
                         <form
@@ -193,7 +192,7 @@ export default function RiwayatPengajuan({
                             </div>
                         </form>
                         <div className="pt-3 overflow-auto rounded-xl ">
-                            <table className="table overflow-auto text-xs table-bordered rounded-xl ">
+                            <table className="table overflow-hidden text-xs table-bordered rounded-xl ">
                                 <thead className="bg-primary">
                                     <tr>
                                         <th></th>
@@ -203,38 +202,48 @@ export default function RiwayatPengajuan({
                                             Tanggal Pengajuan
                                         </th>
                                         <th className="text-center">
-                                            Tanggal Disetujui
+                                            Tanggal Selesai
                                         </th>
                                         <th className="text-center">Status</th>
                                         <th className="text-center">Stage</th>
                                     </tr>
                                 </thead>
-                                <tbody className="border-secondary/15">
+                                <tbody className="border-secondary/15 text-slate-600">
                                     {pengajuans.data?.map((data, i) => {
                                         const ketua_tim = data.created_by;
+                                        let name = ketua_tim.name.split(' / ')[0];
+                                        let gelar = ketua_tim.name.split(' / ')[1];
+
                                         return (
                                             <Link
                                                 as="tr"
                                                 href={route(
                                                     "ketua-tim.show-pengajuan",
-                                                    data.id
+                                                    data.nama_kegiatan
                                                 )}
                                                 key={i}
                                                 className="group/item hover:bg-secondary/50 hover:cursor-pointer"
                                             >
                                                 <th>{i + 1}</th>
-                                                <td className="capitalize">
-                                                    {ketua_tim.name}
+                                                <td>
+                                                    <div className="flex-row items-center gap-3">
+                                                        <span className="font-bold">
+                                                            {name} {gelar}
+                                                        </span>
+                                                        <span className="block text-sm opacity-50 text-nowrap ">
+                                                        {data.nama_tim}
+                                                        </span>
+                                                    </div>
                                                 </td>
-                                                <td className="capitalize">
+                                                <td className="font-medium capitalize">
                                                     {data.nama_kegiatan}
                                                 </td>
-                                                <td className="text-center">
+                                                <td className="text-sm font-medium text-center">
                                                     {moment(
                                                         data.created_at
                                                     ).format("LL")}
                                                 </td>
-                                                <td className="text-center">
+                                                <td className="font-medium text-center">
                                                     {data.status ==
                                                     "selesai" ? (
                                                         <span>
@@ -251,8 +260,8 @@ export default function RiwayatPengajuan({
                                                         {data.status}
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <div className="text-xs text-center label-base bg-base-200 ">
+                                                <td className="p-0 m-0">
+                                                    <div className="text-xs text-center text-nowrap label-base bg-base-200 ">
                                                         {data.stage}
                                                     </div>
                                                 </td>

@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('processes', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_tim');
             $table->string('nama_kegiatan');
-            // $table->unsignedBigInteger('kegiatan_id');
-            // $table->foreign('kegiatan_id')->references('id')->on('kegiatans')->onDelete('cascade');
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['diproses',  'ditolak', 'selesai']);

@@ -7,26 +7,47 @@ import { FaFileUpload } from "react-icons/fa";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEye } from "react-icons/fa";
 import { SecondaryButton } from "@/Components";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { TiDocumentText } from "react-icons/ti";
 
-export default function DetailPengajuan({ title, auth, pengajuan }) {
+export default function ShowPengajuan({ title, auth, pengajuan }) {
 
 
     return (
         <AuthenticatedLayout user={auth.user} title={title} current={route().current()}>
-            <Head title={title} />
             {/* content */}
-            <div className="mx-24">
+            <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop ">
                 <div className="my-6">
-                    <div className="flex justify-between">
-                        <strong className="text-2xl">{title}</strong>
-                        <SecondaryButton
-                            onClick={() => window.history.back()}
-                            className="bg-secondary/5 capitalize "
-                        >
-                            Kembali
-                            <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
-                        </SecondaryButton>
+                <div className="flex items-center justify-between ">
+                    {/* Breadcumbs */}
+                    <div className="my-3 text-sm capitalize breadcrumbs">
+                        <ul>
+                            <li>
+                                <a href={route("ppk.daftar-berkas")}>
+                                    <IoDocumentTextOutline className="w-4 h-4 mr-2" />
+                                    Riwayat Pengajuan
+                                </a>
+                            </li>
+                            <li>
+                                <a>
+                                    <TiDocumentText className="w-4 h-4 mr-1" />
+                                    {pengajuan.nama_kegiatan}
+                                </a>
+                            </li>
+                            <li>
+                                <a>{title}</a>
+                            </li>
+                        </ul>
                     </div>
+
+                    <SecondaryButton
+                        onClick={() => window.history.back()}
+                        className="capitalize bg-secondary/5 "
+                    >
+                        Kembali
+                        <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
+                    </SecondaryButton>
+                </div>
                     <h4 className="mt-6 font-extrabold">
                         Nama Kegiatan:
                         <span className="font-normal capitalize">
@@ -35,19 +56,19 @@ export default function DetailPengajuan({ title, auth, pengajuan }) {
                     </h4>
                     <h4 className="mt-2 font-extrabold">
                         Status Kegiatan:
-                        <span className="label-base bg-base-200 uppercase text-sm font-semibold">
+                        <span className="text-sm font-semibold uppercase label-base bg-base-200">
                             {pengajuan.status}
                         </span>
                     </h4>
                 </div>
 
-                <div className="overflow-x-auto mt-16">
+                <main className="mt-10 overflow-x-auto ">
                     <h2 className="text-base font-semibold">
                         Status Pengajuan Berkas
                     </h2>
-                    <table className="table table-bordered mt-3">
+                    <table className="table mt-3 table-bordered">
                         {/* head */}
-                        <thead>
+                        <thead className="bg-secondary">
                             <tr className="text-sm ">
                                 <th></th>
                                 <th>Jenis Berkas</th>
@@ -64,14 +85,14 @@ export default function DetailPengajuan({ title, auth, pengajuan }) {
                                     <td className="capitalize">
                                         {data.jenis_dokumen}
                                     </td>
-                                    <td className="capitalize text-xs">
+                                    <td className="text-xs capitalize">
                                         {data.nama}.
                                         <span className="lowercase">
                                             {data.tipe_file}
                                         </span>
                                     </td>
                                     <td className="">
-                                        <div className="uppercase text-center label-base bg-base-200 text-slate-700 font-semibold text-xs ">
+                                        <div className="text-xs font-semibold text-center uppercase label-base bg-base-200 text-slate-700 ">
                                             {pengajuan.stage}
                                         </div>
                                     </td>
@@ -80,7 +101,7 @@ export default function DetailPengajuan({ title, auth, pengajuan }) {
                                         <a
                                             href={`/storage/${data.path}`}
                                             target="_blank"
-                                            className="group/button action-btn text-hijau/75  text-center font-medium  group-hover/item:text-white items-center justify-center  mx-auto action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                            className="items-center justify-center mx-auto font-medium text-center group/button action-btn text-hijau/75 group-hover/item:text-white border-hijau/20 hover:bg-hijau hover:text-white"
                                         >
                                             Lihat
                                             <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
@@ -88,7 +109,7 @@ export default function DetailPengajuan({ title, auth, pengajuan }) {
                                         {pengajuan.status != "diproses" && (
                                             <label
                                                 for="dokumen"
-                                                className="action-btn mx-2 text-left text-xs"
+                                                className="mx-2 text-xs text-left action-btn"
                                             >
                                                 <input
                                                     id="dokumen"
@@ -107,13 +128,13 @@ export default function DetailPengajuan({ title, auth, pengajuan }) {
                     </table>
 
                     {/* Button */}
-                    {/* <div className="w-full mt-4 justify-end flex">
+                    {/* <div className="flex justify-end w-full mt-4">
                         <PrimaryButton type="submit" className="">
                             Kirim Berkas
                         </PrimaryButton>
                     </div> */}
-                </div>
-            </div>
+                </main>
+            </section>
 
             {/* end of content */}
         </AuthenticatedLayout>

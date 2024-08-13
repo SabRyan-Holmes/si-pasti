@@ -4,17 +4,14 @@ import moment from "moment/min/moment-with-locales";
 import {
     MdOutlineKeyboardDoubleArrowLeft,
     MdOutlineKeyboardDoubleArrowRight,
-    MdPersonSearch,
 } from "react-icons/md";
-import { FaEye } from "react-icons/fa";
-import { FaEdit } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { TiArrowRight } from "react-icons/ti";
-import { Link, router, useForm } from "@inertiajs/react";
-import Swal from "sweetalert2";
-import { InputLabel, PrimaryButton } from "@/Components";
+import { Link, router } from "@inertiajs/react";
+import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
 import { FaRegFolder } from "react-icons/fa6";
+import { FaHistory } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
 export default function RiwayatPengajuan({
@@ -26,6 +23,9 @@ export default function RiwayatPengajuan({
     byStageReq: initialStage,
 }) {
     moment.locale("id");
+
+    const [byStatus, setByStatus] = useState(initialStatus || "");
+    const [byStage, setByStage] = useState(initialStage || "");
 
     const handlePageClick = (event) => {
         const selectedPage = event.selected + 1;
@@ -43,9 +43,6 @@ export default function RiwayatPengajuan({
             }
         );
     };
-
-    const [byStatus, setByStatus] = useState(initialStatus || "");
-    const [byStage, setByStage] = useState(initialStage || "");
 
     useEffect(() => {
         if (byStatus) {
@@ -89,20 +86,24 @@ export default function RiwayatPengajuan({
             {/* content */}
 
             <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
-                {/* Breadcumbs */}
-                <div className="my-3 text-sm breadcrumbs">
-                    <ul>
-                        <li>
-                            <a href={route('ppk.riwayat-pengajuan')}>
-                            <IoDocumentTextOutline className="w-4 h-4 mr-2"/>
-                                {title}
-                            </a>
-                        </li>
-                        <li>
-                            <a></a>
-                        </li>
-                    </ul>
+            <div className="flex items-center justify-between ">
+                    {/* Breadcumbs */}
+                    <div className="my-3 text-sm capitalize breadcrumbs">
+                        <ul>
+                            <li>
+                                <a href={route("ppk.riwayat-pengajuan")}>
+                                    <IoDocumentTextOutline className="w-4 h-4 mr-2" />
+                                    Riwayat Pengajuan
+                                </a>
+                            </li>
+                            <li>
+                                <a>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
                 {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
                         <form
@@ -192,7 +193,7 @@ export default function RiwayatPengajuan({
                             </div>
                         </form>
                         <div className="pt-3 overflow-auto rounded-xl ">
-                            <table className="table overflow-auto text-xs table-bordered rounded-xl ">
+                            <table className="table overflow-hidden text-xs table-bordered rounded-xl ">
                                 <thead className="bg-primary">
                                     <tr>
                                         <th></th>
@@ -202,38 +203,50 @@ export default function RiwayatPengajuan({
                                             Tanggal Pengajuan
                                         </th>
                                         <th className="text-center">
-                                            Tanggal Disetujui
+                                            Tanggal Selesai
                                         </th>
                                         <th className="text-center">Status</th>
                                         <th className="text-center">Stage</th>
                                     </tr>
                                 </thead>
-                                <tbody className="border-secondary/15">
+                                <tbody className="border-secondary/15 text-slate-600">
                                     {pengajuans.data?.map((data, i) => {
-                                        const ketuaTim = data.created_by;
+                                        const ketua_tim = data.created_by;
+                                        let name =
+                                            ketua_tim.name.split(" / ")[0];
+                                        let gelar =
+                                            ketua_tim.name.split(" / ")[1];
+
                                         return (
                                             <Link
                                                 as="tr"
                                                 href={route(
                                                     "ppk.show-pengajuan",
-                                                    data.id
+                                                    data.nama_kegiatan
                                                 )}
                                                 key={i}
                                                 className="group/item hover:bg-secondary/50 hover:cursor-pointer"
                                             >
                                                 <th>{i + 1}</th>
-                                                <td className="capitalize">
-                                                    {ketuaTim.name}
+                                                <td>
+                                                    <div className="flex-row items-center gap-3">
+                                                        <span className="font-bold">
+                                                            {name} {gelar}
+                                                        </span>
+                                                        <span className="block text-sm opacity-50 text-nowrap ">
+                                                            {data.nama_tim}
+                                                        </span>
+                                                    </div>
                                                 </td>
-                                                <td className="capitalize">
+                                                <td className="font-medium capitalize">
                                                     {data.nama_kegiatan}
                                                 </td>
-                                                <td className="text-center">
+                                                <td className="font-medium text-center">
                                                     {moment(
                                                         data.created_at
                                                     ).format("LL")}
                                                 </td>
-                                                <td className="text-center">
+                                                <td className="font-medium text-center">
                                                     {data.status ==
                                                     "selesai" ? (
                                                         <span>
@@ -250,8 +263,8 @@ export default function RiwayatPengajuan({
                                                         {data.status}
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <div className="text-xs text-center label-base bg-base-200 ">
+                                                <td className="p-0 m-0">
+                                                    <div className="text-xs text-center text-nowrap label-base bg-base-200 ">
                                                         {data.stage}
                                                     </div>
                                                 </td>

@@ -26,105 +26,27 @@ class UnggahBerkasStoreRequest extends FormRequest
             'nama_kegiatan' => ['required', 'string'],
 
             // Pengajuan Dari Ketua Tim
-            'kak' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without_all:form_permintaan,surat_permintaan'
-            ],
-            'form_permintaan' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without_all:kak,surat_permintaan'
-            ],
-            'surat_permintaan' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without_all:kak,form_permintaan'
-            ],
+            'kak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'form_permintaan' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_permintaan' => ['nullable', 'file',  'mimes:pdf', 'max:15192'],
 
             // Pengajuan PBJ
-            'rancangan_kontrak' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without_all:spekteknis,rab,sppp'
-            ],
-            'spekteknis' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without_all:rancangan_kontrak,rab,sppp'
-            ],
-            'rab' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without_all:rancangan_kontrak,spekteknis,sppp'
-            ],
-            'sppp' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without_all:rancangan_kontrak,spekteknis,rab'
-            ],
+            'rancangan_kontrak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'spekteknis' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'rab' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'sppp' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
 
             // Pengajuan Kontrak
-            'sppbj' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without:surat_kontrak'
-            ],
-            'surat_kontrak' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without:sppbj'
-            ],
+            'sppbj' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_kontrak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
 
             // Pengajuan Berita Acara
-            'bast' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without:bap'
-            ],
-            'bap' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without:bast'
-            ],
+            'bast' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'bap' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
 
             // Pengajuan Kuitansi
-            'kuitansi' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without:surat_pesanan'
-            ],
-            'surat_pesanan' => [
-                'nullable',
-                'file',
-                'mimes:pdf',
-                'max:15192',
-                'required_without:kuitansi'
-            ],
+            'kuitansi' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_pesanan' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
         ];
     }
 

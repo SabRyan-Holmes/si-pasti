@@ -8,7 +8,7 @@ import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { IoIosArrowDown, IoIosSend } from "react-icons/io";
 import { Dropdown } from "@/Components";
-import { FaRegFolder } from "react-icons/fa6";
+import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
 
 export default function ShowBerkas({
     title,
@@ -185,7 +185,8 @@ export default function ShowBerkas({
     console.log("errors :");
     console.log(errors);
     const ketuaTim = pengajuan.created_by;
-
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -208,7 +209,7 @@ export default function ShowBerkas({
                                 </li>
                                 <li>
                                     <a>
-                                        <FaRegFolder className="w-4 h-4 mr-2" />
+                                        <FaRegFolderOpen className="w-4 h-4 mr-2" />
                                         {pengajuan.nama_kegiatan}
                                     </a>
                                 </li>
@@ -226,225 +227,126 @@ export default function ShowBerkas({
                         </SecondaryButton>
                     </div>
 
-                    <div class="max-w-screen-phone  mt-10">
+                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>
                             <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1  font-bold">Ketua TIM</span>
-                            <span>: {ketuaTim.name}</span>
+                            <span class="mr-1 font-bold">Ketua TIM</span>
+                            <span>
+                                : {nama} {gelar}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Tim</span>
+                            <span>: {pengajuan.nama_tim}</span>
                         </div>
                     </div>
                 </div>
-                <div className="mt-16 mb-20 overflow-x-auto">
+                <div className="pb-16 mt-10 overflow-x-auto">
                     <h2 className="text-base font-semibold">
-                        Berkas Pengajuan PBJ
+                    Berkas Pengajuan PBJ
                     </h2>
-                    {/* Tabel Berkas Pengajuan PBJ Start */}
-                    <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
-                            {/* head */}
-                            <thead className="bg-secondary">
-                                <tr className="text-sm ">
-                                    <th width="5%"></th>
-                                    <th width="30%">Nama Berkas</th>
-                                    <th width="35%">Berkas</th>
-                                    <th width="15%" className="text-center">
-                                        Status Saat Ini
-                                    </th>
-                                    <th width="15%" className="text-center">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {documentsPBJ.map((data, i) => (
-                                    <tr>
-                                        <th className="text-primary">
-                                            {i + 1}
-                                        </th>
-                                        <td className="capitalize">
-                                            {data.jenis_dokumen}
-                                        </td>
-                                        {data.nama ? (
-                                            <>
-                                                <td className="text-xs capitalize ">
-                                                    {data.nama}.
-                                                    <span className="lowercase">
-                                                        {data.tipe_file}
-                                                    </span>
-                                                </td>
+                    {/* Tabel Berkas Ketua Tim Start */}
+                    <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
+                        {/* head */}
+                        <thead className="bg-secondary">
+                            <tr className="text-sm ">
+                                <th width="5%"></th>
+                                <th width="30%">Nama Berkas</th>
+                                <th width="35%">Berkas</th>
+                                <th width="15%" className="text-center">
+                                    Status Saat Ini
+                                </th>
+                                <th width="15%" className="text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {documentsPBJ.map((data, i) => (
+                                <tr>
+                                    <th className="text-primary">{i + 1}</th>
+                                    <td className="capitalize">
+                                        {data.jenis_dokumen}
+                                    </td>
+                                    {data.nama ? (
+                                        <>
+                                            <td className="text-sm capitalize">
+                                                <div className="relative group">
+                                                    <a
+                                                        href={`/storage/${data.path}`}
+                                                        target="_blank"
+                                                        className="underline hover:text-primary text-primary decoration-primary"
+                                                    >
+                                                        {data.nama}.
+                                                        <span className="lowercase">
+                                                            {data.tipe_file}
+                                                        </span>
+                                                    </a>
 
-                                                <td className="text-center">
-                                                    {data.is_valid === null && (
-                                                        <div className="label-base bg-secondary/15">
-                                                            Diproses
-                                                        </div>
-                                                    )}
+                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                        {/* Tombol "Lihat" */}
 
-                                                    {data.is_valid == true && (
-                                                        <div className="label-success">
-                                                            Valid
-                                                        </div>
-                                                    )}
-
-                                                    {data.is_valid == false && (
-                                                        <div className="label-warning">
-                                                            Tidak Valid
-                                                        </div>
-                                                    )}
-                                                </td>
-
-                                                <td className="text-center">
-                                                    {data.is_valid === null && (
-                                                        <Dropdown>
-                                                            <Dropdown.Trigger>
-                                                                <span className="inline-flex rounded-md">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/item hover:text-primary focus:outline-none"
-                                                                    >
-                                                                        Pilih
-                                                                        Status
-                                                                        <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-primary" />
-                                                                    </button>
-                                                                </span>
-                                                            </Dropdown.Trigger>
-
-                                                            <Dropdown.Content>
-                                                                <Dropdown.Link
-                                                                    method="post"
-                                                                    href={route(
-                                                                        "pbj.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: true,
-                                                                    }}
-                                                                >
-                                                                    <span className="text-hijau">
-                                                                        Valid
-                                                                    </span>
-                                                                </Dropdown.Link>
-                                                                <Dropdown.Link
-                                                                    method="post"
-                                                                    href={route(
-                                                                        "pbj.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: false,
-                                                                    }}
-                                                                >
-                                                                    <span className="text-error">
-                                                                        Tidak
-                                                                        Valid
-                                                                    </span>
-                                                                </Dropdown.Link>
-                                                            </Dropdown.Content>
-                                                        </Dropdown>
-                                                    )}
-
-                                                    {data.is_valid == true && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
-                                                            className="transition-all group/button action-btn text-hijau hover:scale-105"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
                                                         >
                                                             Lihat
-                                                            <FaEye className="mx-1 fill-hijau" />
+                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
                                                         </a>
-                                                    )}
 
-                                                    {data.is_valid == false && (
-                                                          <>
-                                                          {/* Input Hidden Upload Ulang */}
-                                                          <input
-                                                              id={data.jenis_dokumen}
-                                                              type="file"
-                                                              className="hidden"
-                                                              onChange={(e) =>
-                                                                  handleFileChange(
-                                                                      e,
-                                                                      data.jenis_dokumen,
-                                                                      getKeyByValue(
-                                                                          requiredBerkasPBJ,
-                                                                          data.jenis_dokumen
-                                                                      )
-                                                                  )
-                                                              }
-                                                          />
+                                                        {/* Tombol "Download" */}
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            download={data.nama}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Unduh
+                                                            <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                                          <label
-                                                              htmlFor={
-                                                                  data.jenis_dokumen
-                                                              }
-                                                              className="action-btn"
-                                                          >
-                                                             <FaEdit className="mx-1 mr-2" />
+                                            <td className="text-center">
+                                                {data.is_valid === null && (
+                                                    <div className="label-base bg-secondary/15">
+                                                        Diproses
+                                                    </div>
+                                                )}
 
-                                                              {uploadedFiles[
-                                                                  data.jenis_dokumen
-                                                              ] ? (
-                                                                  <span className="max-w-xs truncate bg-accent">
-                                                                      Upload
-                                                                  </span>
-                                                              ) : (
-                                                                  <span className="cursor-pointer">
-                                                                      Upload
-                                                                  </span>
-                                                              )}
-                                                          </label>
-                                                      </>
-                                                        // <a
-                                                        //     // href={`/storage/${data.path}`}
-                                                        //     className="transition-all group/button action-btn text-secondary hover:scale-105"
-                                                        // >
-                                                        //     <FaEdit className="mx-1 mr-2" />
-                                                        //     Edit
-                                                        // </a>
-                                                    )}
-                                                </td>
-                                            </>
-                                        ) : (
-                                            <>
-                                                {/* Kalo Belum Diupload Sama seklai */}
+                                                {data.is_valid == true && (
+                                                    <div className="label-success">
+                                                        Valid
+                                                    </div>
+                                                )}
 
-                                                <td
-                                                    colSpan={2}
-                                                    className="text-center"
-                                                >
-                                                    {uploadedFiles[
-                                                        data.jenis_dokumen
-                                                    ] ? (
-                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
-                                                            {
-                                                                uploadedFiles[
-                                                                    data
-                                                                        .jenis_dokumen
-                                                                ]
-                                                            }
-                                                        </span>
-                                                    ) : (
-                                                        <div className="label-base bg-base-200">
-                                                            Berkas Belum
-                                                            Diajukan
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className="text-center">
-                                                    <Dropdown disabled={false}>
+                                                {data.is_valid == false && (
+                                                    <div className="label-warning">
+                                                        Tidak Valid
+                                                    </div>
+                                                )}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center gap-2">
+                                                    <Dropdown>
                                                         <Dropdown.Trigger>
-                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                            <span className="inline-flex rounded-md text-nowrap">
                                                                 <button
                                                                     type="button"
-                                                                    className={
-                                                                        "inline-flex text-nowrap items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md cursor-not-allowed hover:text-gray-700 focus:outline-none"
-                                                                    }
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/button hover:text-secondary hover:text-gray-700 focus:outline-none"
                                                                 >
-                                                                    Pilih Status
-                                                                    <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                    <span>
+                                                                        Pilih
+                                                                        Status
+                                                                    </span>
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/button:fill-secondary/60" />
                                                                 </button>
                                                             </span>
                                                         </Dropdown.Trigger>
@@ -453,227 +355,72 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "pbj.validasi"
+                                                                    "ppk.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
                                                                     is_valid: true,
                                                                 }}
-                                                                disabled={true}
                                                             >
-                                                                Valid
+                                                                <span className="text-hijau">
+                                                                    Valid
+                                                                </span>
                                                             </Dropdown.Link>
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "pbj.validasi"
+                                                                    "ppk.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
                                                                     is_valid: false,
                                                                 }}
-                                                                disabled={true}
                                                             >
-                                                                Tidak Valid
+                                                                <span className="text-error">
+                                                                    Tidak Valid
+                                                                </span>
                                                             </Dropdown.Link>
                                                         </Dropdown.Content>
                                                     </Dropdown>
-                                                </td>
-                                            </>
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {/* Button */}
-                        <div className="flex justify-end w-full mt-4">
-                            <button
-                                type="submit"
-                                className="uppercase button-correct"
-                            >
-                                Kirim Ulang
-                                <IoIosSend />
-                            </button>
-                        </div>
-                    </form>
+                                                </div>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* Kalo Belum Diupload Sama seklai */}
 
-                    <h2 className="mt-2 text-base font-semibold ">
-                        Berkas Berkas Pemesanan
-                    </h2>
-                    {/* Tabel Berkas Pemesanan */}
-                    <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
-                            {/* head */}
-                            <thead className="bg-secondary">
-                                <tr className="text-sm ">
-                                    <th width="5%"></th>
-                                    <th width="30%">Nama Berkas</th>
-                                    <th width="35%">Berkas</th>
-                                    <th width="15%" className="text-center">
-                                        Status Saat Ini
-                                    </th>
-                                    <th width="15%" className="text-center">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {berkasPK.map((data, i) => (
-                                    <tr>
-                                        <th className="text-primary">
-                                            {i + 1}
-                                        </th>
-                                        <td className="capitalize">
-                                            {data.jenis_dokumen}
-                                        </td>
-                                        {data.nama ? (
-                                            <>
-                                                <td className="text-xs capitalize ">
-                                                    {data.nama}.
-                                                    <span className="lowercase">
-                                                        {data.tipe_file}
-                                                    </span>
-                                                </td>
-
-                                                <td className="text-center">
-                                                    {data.is_valid === null && (
-                                                        <div className="label-base bg-secondary/15">
-                                                            Diproses
-                                                        </div>
-                                                    )}
-
-                                                    {data.is_valid == true && (
-                                                        <div className="label-success">
-                                                            Valid
-                                                        </div>
-                                                    )}
-
-                                                    {data.is_valid == false && (
-                                                        <div className="label-warning">
-                                                            Tidak Valid
-                                                        </div>
-                                                    )}
-                                                </td>
-
-                                                <td className="text-center">
-                                                    {data.is_valid === null && (
-                                                        <Dropdown>
-                                                            <Dropdown.Trigger>
-                                                                <span className="inline-flex rounded-md">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/item hover:text-primary focus:outline-none"
-                                                                    >
-                                                                        Pilih
-                                                                        Status
-                                                                        <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-primary" />
-                                                                    </button>
-                                                                </span>
-                                                            </Dropdown.Trigger>
-
-                                                            <Dropdown.Content>
-                                                                <Dropdown.Link
-                                                                    method="post"
-                                                                    href={route(
-                                                                        "pbj.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: true,
-                                                                    }}
-                                                                >
-                                                                    <span className="text-hijau">
-                                                                        Valid
-                                                                    </span>
-                                                                </Dropdown.Link>
-                                                                <Dropdown.Link
-                                                                    method="post"
-                                                                    href={route(
-                                                                        "pbj.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: false,
-                                                                    }}
-                                                                >
-                                                                    <span className="text-error">
-                                                                        Tidak
-                                                                        Valid
-                                                                    </span>
-                                                                </Dropdown.Link>
-                                                            </Dropdown.Content>
-                                                        </Dropdown>
-                                                    )}
-
-                                                    {data.is_valid == true && (
-                                                        <a
-                                                            href={`/storage/${data.path}`}
-                                                            target="_blank"
-                                                            className="transition-all group/button action-btn text-hijau hover:scale-105"
-                                                        >
-                                                            Lihat
-                                                            <FaEye className="mx-1 fill-hijau" />
-                                                        </a>
-                                                    )}
-
-                                                    {data.is_valid == false && (
-                                                        <a
-                                                            // href={`/storage/${data.path}`}
-                                                            className="transition-all group/button action-btn text-secondary hover:scale-105"
-                                                        >
-                                                            <FaEdit className="mx-1 mr-2" />
-                                                            Edit
-                                                        </a>
-                                                    )}
-                                                </td>
-                                            </>
-                                        ) : (
-                                            <>
-                                                {/* Kalo Belum Diupload Sama seklai */}
-
-                                                <td
-                                                    colSpan={2}
-                                                    className="text-center"
-                                                >
-                                                    {uploadedFiles[
-                                                        data.jenis_dokumen
-                                                    ] ? (
-                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
-                                                            {
-                                                                uploadedFiles[
-                                                                    data
-                                                                        .jenis_dokumen
-                                                                ]
-                                                            }
-                                                        </span>
-                                                    ) : (
-                                                        <div className="label-base bg-base-200">
-                                                            Berkas Belum
-                                                            Diajukan
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className="text-center">
-                                                    <Dropdown
-                                                        disabled={
+                                            <td
+                                                colSpan={2}
+                                                className="text-center cursor-not-allowed"
+                                            >
+                                                {uploadedFiles[
+                                                    data.jenis_dokumen
+                                                ] ? (
+                                                    <span className="text-sm font-medium text-center capitalize text-secondary">
+                                                        {
                                                             uploadedFiles[
                                                                 data
                                                                     .jenis_dokumen
                                                             ]
-                                                                ? false
-                                                                : true
                                                         }
-                                                    >
+                                                    </span>
+                                                ) : (
+                                                    <div className="label-base bg-base-200">
+                                                        Berkas Belum Diajukan
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center">
+                                                    <Dropdown disabled>
                                                         <Dropdown.Trigger>
                                                             <span className="inline-flex rounded-md hover:cursor-not-allowed">
                                                                 <button
                                                                     type="button"
-                                                                    className={
-                                                                        "inline-flex text-nowrap items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md cursor-not-allowed hover:text-gray-700 focus:outline-none"
-                                                                    }
+                                                                    className="z-auto inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:cursor-not-allowed hover:text-gray-700 focus:outline-none"
                                                                 >
                                                                     Pilih Status
-                                                                    <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60" />
                                                                 </button>
                                                             </span>
                                                         </Dropdown.Trigger>
@@ -682,7 +429,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "pbj.validasi"
+                                                                    "ppk.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -695,7 +442,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "pbj.validasi"
+                                                                    "ppk.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -707,383 +454,1114 @@ export default function ShowBerkas({
                                                             </Dropdown.Link>
                                                         </Dropdown.Content>
                                                     </Dropdown>
-                                                </td>
-                                            </>
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {/* Button */}
-                        <div className="flex justify-end w-full mt-4">
-                            <button
-                                type="submit"
-                                className="uppercase button-correct"
-                            >
-                                Kirim Ulang
-                                <IoIosSend />
-                            </button>
-                        </div>
-                    </form>
-
-                    <h2 className="mt-2 text-base font-semibold">
-                        Berkas Berita Acara
-                    </h2>
-
-                    {/* Tabel Berkas Berita Acara */}
-                    <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
-                            {/* head */}
-                            <thead className="bg-secondary">
-                                <tr className="text-sm ">
-                                    <th width="5%"></th>
-                                    <th width="30%">Nama Berkas</th>
-                                    <th width="35%">Berkas</th>
-                                    <th width="15%" className="text-center">
-                                        Status Saat Ini
-                                    </th>
-                                    <th width="15%" className="text-center">
-                                        Aksi
-                                    </th>
+                                                </div>
+                                            </td>
+                                        </>
+                                    )}
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {/* row 1 */}
-                                {berkasBA.map((data, i) => (
-                                    <tr>
-                                        <th className="text-primary">
-                                            {i + 1}
-                                        </th>
-                                        <td className="capitalize ">
-                                            {data.jenis_dokumen}
-                                        </td>
-                                        {data.nama ? (
-                                            <>
-                                                <td className="text-xs capitalize ">
-                                                    {data.nama}.
-                                                    <span className="lowercase">
-                                                        {data.tipe_file}
-                                                    </span>
-                                                </td>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
 
-                                                <td className="text-center">
-                                                    {data.is_valid === null && (
-                                                        <div className="label-base bg-secondary/15">
-                                                            Diproses
-                                                        </div>
-                                                    )}
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                    Berkas Pemesanan/ Kontrak
+                    </h2>
+                    {/* Tabel Berkas Ketua Tim Start */}
+                    <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
+                        {/* head */}
+                        <thead className="bg-secondary">
+                            <tr className="text-sm ">
+                                <th width="5%"></th>
+                                <th width="30%">Nama Berkas</th>
+                                <th width="35%">Berkas</th>
+                                <th width="15%" className="text-center">
+                                    Status Saat Ini
+                                </th>
+                                <th width="15%" className="text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {berkasPK.map((data, i) => (
+                                <tr>
+                                    <th className="text-primary">{i + 1}</th>
+                                    <td className="capitalize">
+                                        {data.jenis_dokumen}
+                                    </td>
+                                    {data.nama ? (
+                                        <>
+                                            <td className="text-sm capitalize">
+                                                <div className="relative group">
+                                                    <a
+                                                        href={`/storage/${data.path}`}
+                                                        target="_blank"
+                                                        className="underline hover:text-primary text-primary decoration-primary"
+                                                    >
+                                                        {data.nama}.
+                                                        <span className="lowercase">
+                                                            {data.tipe_file}
+                                                        </span>
+                                                    </a>
 
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-success">
-                                                                Valid
-                                                            </div>
-                                                        )}
+                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                        {/* Tombol "Lihat" */}
 
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-warning">
-                                                                Tidak Valid
-                                                            </div>
-                                                        )}
-                                                </td>
-
-                                                <td className="text-center ">
-                                                    {data.is_valid == null && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
-                                                            className="action-btn"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
                                                         >
-                                                            <FaEye className="mx-1 mr-2" />
                                                             Lihat
+                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
                                                         </a>
-                                                    )}
 
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                href={`/storage/${data.path}`}
-                                                                target="_blank"
-                                                                className="action-btn"
-                                                            >
-                                                                <FaEye className="mx-1 mr-2" />
-                                                                Lihat
-                                                            </a>
-                                                        )}
+                                                        {/* Tombol "Download" */}
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            download={data.nama}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Unduh
+                                                            <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                // href={`/storage/${data.path}`}
-                                                                className="action-btn"
-                                                            >
-                                                                <FaEdit className="mx-1 mr-2" />
-                                                                Edit
-                                                            </a>
-                                                        )}
-                                                </td>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <td
-                                                    colSpan={2}
-                                                    className="text-center"
-                                                >
-                                                    {uploadedFiles[
-                                                        data.jenis_dokumen
-                                                    ] ? (
-                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
-                                                            {
-                                                                uploadedFiles[
-                                                                    data
-                                                                        .jenis_dokumen
-                                                                ]
-                                                            }
-                                                        </span>
-                                                    ) : (
-                                                        <div className="label-base bg-base-200">
-                                                            Berkas Belum
-                                                            Diajukan
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className="text-center">
-                                                    <input
-                                                        id={data.jenis_dokumen}
-                                                        type="file"
-                                                        className="hidden"
-                                                        onChange={(e) =>
-                                                            handleFileChange(
-                                                                e,
-                                                                data.jenis_dokumen,
-                                                                getKeyByValue(
-                                                                    requiredBerkasBA,
-                                                                    data.jenis_dokumen
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                    <label
-                                                        htmlFor={
-                                                            data.jenis_dokumen
-                                                        }
-                                                        className="action-btn"
-                                                    >
-                                                        <FaFileUpload className="mx-1 mr-2" />
-                                                        {uploadedFiles[
-                                                            data.jenis_dokumen
-                                                        ] ? (
-                                                            <span className="max-w-xs truncate bg-accent">
-                                                                Upload
+                                            <td className="text-center">
+                                                {data.is_valid === null && (
+                                                    <div className="label-base bg-secondary/15">
+                                                        Diproses
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == true && (
+                                                    <div className="label-success">
+                                                        Valid
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == false && (
+                                                    <div className="label-warning">
+                                                        Tidak Valid
+                                                    </div>
+                                                )}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center gap-2">
+                                                    <Dropdown>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md text-nowrap">
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/button hover:text-secondary hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    <span>
+                                                                        Pilih
+                                                                        Status
+                                                                    </span>
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/button:fill-secondary/60" />
+                                                                </button>
                                                             </span>
-                                                        ) : (
-                                                            <span className="cursor-pointer">
-                                                                Upload
-                                                            </span>
-                                                        )}
-                                                    </label>
-                                                </td>
-                                            </>
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {/* Button */}
-                        <div className="flex justify-end w-full mt-4">
-                            <button
-                                type="submit"
-                                className="uppercase button-correct"
-                            >
-                                Kirim Ulang
-                                <IoIosSend />
-                            </button>
-                        </div>
-                    </form>
+                                                        </Dropdown.Trigger>
 
-                    <h2 className="mt-2 text-base font-semibold">
-                        Berkas Kuitansi
-                    </h2>
-                    {/* Tabel Berkas Kuitansi */}
-                    <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
-                            {/* head */}
-                            <thead className="bg-secondary">
-                                <tr className="text-sm ">
-                                    <th width="5%"></th>
-                                    <th width="30%">Nama Berkas</th>
-                                    <th width="35%">Berkas</th>
-                                    <th width="15%" className="text-center">
-                                        Status Saat Ini
-                                    </th>
-                                    <th width="15%" className="text-center">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* row 1 */}
-                                {berkasKuitansi.map((data, i) => (
-                                    <tr>
-                                        <th className="text-primary">
-                                            {i + 1}
-                                        </th>
-                                        <td className="capitalize ">
-                                            {data.jenis_dokumen}
-                                        </td>
-                                        {data.nama ? (
-                                            <>
-                                                <td className="text-xs capitalize ">
-                                                    {data.nama}.
-                                                    <span className="lowercase">
-                                                        {data.tipe_file}
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                            >
+                                                                <span className="text-hijau">
+                                                                    Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                            >
+                                                                <span className="text-error">
+                                                                    Tidak Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* Kalo Belum Diupload Sama seklai */}
+
+                                            <td
+                                                colSpan={2}
+                                                className="text-center cursor-not-allowed"
+                                            >
+                                                {uploadedFiles[
+                                                    data.jenis_dokumen
+                                                ] ? (
+                                                    <span className="text-sm font-medium text-center capitalize text-secondary">
+                                                        {
+                                                            uploadedFiles[
+                                                                data
+                                                                    .jenis_dokumen
+                                                            ]
+                                                        }
                                                     </span>
-                                                </td>
+                                                ) : (
+                                                    <div className="label-base bg-base-200">
+                                                        Berkas Belum Diajukan
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center">
+                                                    <Dropdown disabled>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className="z-auto inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:cursor-not-allowed hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    Pilih Status
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                </button>
+                                                            </span>
+                                                        </Dropdown.Trigger>
 
-                                                <td className="text-center">
-                                                    {data.is_valid === null && (
-                                                        <div className="label-base bg-secondary/15">
-                                                            Diproses
-                                                        </div>
-                                                    )}
-
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-success">
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
                                                                 Valid
-                                                            </div>
-                                                        )}
-
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-warning">
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+                                                            >
                                                                 Tidak Valid
-                                                            </div>
-                                                        )}
-                                                </td>
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
 
-                                                <td className="text-center ">
-                                                    {data.is_valid == null && (
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                    Berkas Berita Acara
+                    </h2>
+                    {/* Tabel Berkas Ketua Tim Start */}
+                    <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
+                        {/* head */}
+                        <thead className="bg-secondary">
+                            <tr className="text-sm ">
+                                <th width="5%"></th>
+                                <th width="30%">Nama Berkas</th>
+                                <th width="35%">Berkas</th>
+                                <th width="15%" className="text-center">
+                                    Status Saat Ini
+                                </th>
+                                <th width="15%" className="text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {berkasBA.map((data, i) => (
+                                <tr>
+                                    <th className="text-primary">{i + 1}</th>
+                                    <td className="capitalize">
+                                        {data.jenis_dokumen}
+                                    </td>
+                                    {data.nama ? (
+                                        <>
+                                            <td className="text-sm capitalize">
+                                                <div className="relative group">
+                                                    <a
+                                                        href={`/storage/${data.path}`}
+                                                        target="_blank"
+                                                        className="underline hover:text-primary text-primary decoration-primary"
+                                                    >
+                                                        {data.nama}.
+                                                        <span className="lowercase">
+                                                            {data.tipe_file}
+                                                        </span>
+                                                    </a>
+
+                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                        {/* Tombol "Lihat" */}
+
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
-                                                            className="action-btn"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
                                                         >
-                                                            <FaEye className="mx-1 mr-2" />
                                                             Lihat
+                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
                                                         </a>
-                                                    )}
 
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                href={`/storage/${data.path}`}
-                                                                target="_blank"
-                                                                className="action-btn"
-                                                            >
-                                                                <FaEye className="mx-1 mr-2" />
-                                                                Lihat
-                                                            </a>
-                                                        )}
+                                                        {/* Tombol "Download" */}
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            download={data.nama}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Unduh
+                                                            <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                // href={`/storage/${data.path}`}
-                                                                className="action-btn"
+                                            <td className="text-center">
+                                                {data.is_valid === null && (
+                                                    <div className="label-base bg-secondary/15">
+                                                        Diproses
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == true && (
+                                                    <div className="label-success">
+                                                        Valid
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == false && (
+                                                    <div className="label-warning">
+                                                        Tidak Valid
+                                                    </div>
+                                                )}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center gap-2">
+                                                    <Dropdown>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md text-nowrap">
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/button hover:text-secondary hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    <span>
+                                                                        Pilih
+                                                                        Status
+                                                                    </span>
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/button:fill-secondary/60" />
+                                                                </button>
+                                                            </span>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
                                                             >
-                                                                <FaEdit className="mx-1 mr-2" />
-                                                                Edit
-                                                            </a>
-                                                        )}
-                                                </td>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <td
-                                                    colSpan={2}
-                                                    className="text-center"
-                                                >
-                                                    {uploadedFiles[
-                                                        data.jenis_dokumen
-                                                    ] ? (
-                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
-                                                            {
-                                                                uploadedFiles[
-                                                                    data
-                                                                        .jenis_dokumen
-                                                                ]
-                                                            }
-                                                        </span>
-                                                    ) : (
-                                                        <div className="label-base bg-base-200">
-                                                            Berkas Belum
-                                                            Diajukan
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className="text-center">
-                                                    <input
-                                                        id={data.jenis_dokumen}
-                                                        type="file"
-                                                        className="hidden"
-                                                        onChange={(e) =>
-                                                            handleFileChange(
-                                                                e,
-                                                                data.jenis_dokumen,
-                                                                getKeyByValue(
-                                                                    requiredKuitansi,
-                                                                    data.jenis_dokumen
-                                                                )
-                                                            )
+                                                                <span className="text-hijau">
+                                                                    Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                            >
+                                                                <span className="text-error">
+                                                                    Tidak Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* Kalo Belum Diupload Sama seklai */}
+
+                                            <td
+                                                colSpan={2}
+                                                className="text-center cursor-not-allowed"
+                                            >
+                                                {uploadedFiles[
+                                                    data.jenis_dokumen
+                                                ] ? (
+                                                    <span className="text-sm font-medium text-center capitalize text-secondary">
+                                                        {
+                                                            uploadedFiles[
+                                                                data
+                                                                    .jenis_dokumen
+                                                            ]
                                                         }
-                                                    />
-                                                    <label
-                                                        htmlFor={
-                                                            data.jenis_dokumen
-                                                        }
-                                                        className="action-btn"
+                                                    </span>
+                                                ) : (
+                                                    <div className="label-base bg-base-200">
+                                                        Berkas Belum Diajukan
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center">
+                                                    <Dropdown disabled>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className="z-auto inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:cursor-not-allowed hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    Pilih Status
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                </button>
+                                                            </span>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                    Berkas Pemesanan/ Kontrak
+                    </h2>
+                    {/* Tabel Berkas Ketua Tim Start */}
+                    <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
+                        {/* head */}
+                        <thead className="bg-secondary">
+                            <tr className="text-sm ">
+                                <th width="5%"></th>
+                                <th width="30%">Nama Berkas</th>
+                                <th width="35%">Berkas</th>
+                                <th width="15%" className="text-center">
+                                    Status Saat Ini
+                                </th>
+                                <th width="15%" className="text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {berkasPK.map((data, i) => (
+                                <tr>
+                                    <th className="text-primary">{i + 1}</th>
+                                    <td className="capitalize">
+                                        {data.jenis_dokumen}
+                                    </td>
+                                    {data.nama ? (
+                                        <>
+                                            <td className="text-sm capitalize">
+                                                <div className="relative group">
+                                                    <a
+                                                        href={`/storage/${data.path}`}
+                                                        target="_blank"
+                                                        className="underline hover:text-primary text-primary decoration-primary"
                                                     >
-                                                        <FaFileUpload className="mx-1 mr-2" />
-                                                        {uploadedFiles[
-                                                            data.jenis_dokumen
-                                                        ] ? (
-                                                            <span className="max-w-xs truncate bg-accent">
-                                                                Upload
+                                                        {data.nama}.
+                                                        <span className="lowercase">
+                                                            {data.tipe_file}
+                                                        </span>
+                                                    </a>
+
+                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                        {/* Tombol "Lihat" */}
+
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Lihat
+                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+
+                                                        {/* Tombol "Download" */}
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            download={data.nama}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Unduh
+                                                            <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="text-center">
+                                                {data.is_valid === null && (
+                                                    <div className="label-base bg-secondary/15">
+                                                        Diproses
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == true && (
+                                                    <div className="label-success">
+                                                        Valid
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == false && (
+                                                    <div className="label-warning">
+                                                        Tidak Valid
+                                                    </div>
+                                                )}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center gap-2">
+                                                    <Dropdown>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md text-nowrap">
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/button hover:text-secondary hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    <span>
+                                                                        Pilih
+                                                                        Status
+                                                                    </span>
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/button:fill-secondary/60" />
+                                                                </button>
                                                             </span>
-                                                        ) : (
-                                                            <span className="cursor-pointer">
-                                                                Upload
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                            >
+                                                                <span className="text-hijau">
+                                                                    Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                            >
+                                                                <span className="text-error">
+                                                                    Tidak Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* Kalo Belum Diupload Sama seklai */}
+
+                                            <td
+                                                colSpan={2}
+                                                className="text-center cursor-not-allowed"
+                                            >
+                                                {uploadedFiles[
+                                                    data.jenis_dokumen
+                                                ] ? (
+                                                    <span className="text-sm font-medium text-center capitalize text-secondary">
+                                                        {
+                                                            uploadedFiles[
+                                                                data
+                                                                    .jenis_dokumen
+                                                            ]
+                                                        }
+                                                    </span>
+                                                ) : (
+                                                    <div className="label-base bg-base-200">
+                                                        Berkas Belum Diajukan
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center">
+                                                    <Dropdown disabled>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className="z-auto inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:cursor-not-allowed hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    Pilih Status
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                </button>
                                                             </span>
-                                                        )}
-                                                    </label>
-                                                </td>
-                                            </>
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {/* Button */}
-                        <div className="flex justify-end w-full mt-4">
-                            <button
-                                type="submit"
-                                className="uppercase button-correct"
-                            >
-                                Kirim Ulang
-                                <IoIosSend />
-                            </button>
-                        </div>
-                    </form>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                    Berkas Kuitansi
+                    </h2>
+                    {/* Tabel Berkas Ketua Tim Start */}
+                    <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
+                        {/* head */}
+                        <thead className="bg-secondary">
+                            <tr className="text-sm ">
+                                <th width="5%"></th>
+                                <th width="30%">Nama Berkas</th>
+                                <th width="35%">Berkas</th>
+                                <th width="15%" className="text-center">
+                                    Status Saat Ini
+                                </th>
+                                <th width="15%" className="text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {berkasKuitansi.map((data, i) => (
+                                <tr>
+                                    <th className="text-primary">{i + 1}</th>
+                                    <td className="capitalize">
+                                        {data.jenis_dokumen}
+                                    </td>
+                                    {data.nama ? (
+                                        <>
+                                            <td className="text-sm capitalize">
+                                                <div className="relative group">
+                                                    <a
+                                                        href={`/storage/${data.path}`}
+                                                        target="_blank"
+                                                        className="underline hover:text-primary text-primary decoration-primary"
+                                                    >
+                                                        {data.nama}.
+                                                        <span className="lowercase">
+                                                            {data.tipe_file}
+                                                        </span>
+                                                    </a>
+
+                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                        {/* Tombol "Lihat" */}
+
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Lihat
+                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+
+                                                        {/* Tombol "Download" */}
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            download={data.nama}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Unduh
+                                                            <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="text-center">
+                                                {data.is_valid === null && (
+                                                    <div className="label-base bg-secondary/15">
+                                                        Diproses
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == true && (
+                                                    <div className="label-success">
+                                                        Valid
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == false && (
+                                                    <div className="label-warning">
+                                                        Tidak Valid
+                                                    </div>
+                                                )}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center gap-2">
+                                                    <Dropdown>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md text-nowrap">
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/button hover:text-secondary hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    <span>
+                                                                        Pilih
+                                                                        Status
+                                                                    </span>
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/button:fill-secondary/60" />
+                                                                </button>
+                                                            </span>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                            >
+                                                                <span className="text-hijau">
+                                                                    Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                            >
+                                                                <span className="text-error">
+                                                                    Tidak Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* Kalo Belum Diupload Sama seklai */}
+
+                                            <td
+                                                colSpan={2}
+                                                className="text-center cursor-not-allowed"
+                                            >
+                                                {uploadedFiles[
+                                                    data.jenis_dokumen
+                                                ] ? (
+                                                    <span className="text-sm font-medium text-center capitalize text-secondary">
+                                                        {
+                                                            uploadedFiles[
+                                                                data
+                                                                    .jenis_dokumen
+                                                            ]
+                                                        }
+                                                    </span>
+                                                ) : (
+                                                    <div className="label-base bg-base-200">
+                                                        Berkas Belum Diajukan
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center">
+                                                    <Dropdown disabled>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className="z-auto inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:cursor-not-allowed hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    Pilih Status
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                </button>
+                                                            </span>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                    Berkas Pembayaran
+                    </h2>
+                    {/* Tabel Berkas Ketua Tim Start */}
+                    <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
+                        {/* head */}
+                        <thead className="bg-secondary">
+                            <tr className="text-sm ">
+                                <th width="5%"></th>
+                                <th width="30%">Nama Berkas</th>
+                                <th width="35%">Berkas</th>
+                                <th width="15%" className="text-center">
+                                    Status Saat Ini
+                                </th>
+                                <th width="15%" className="text-center">
+                                    Aksi
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {berkasKuitansi.map((data, i) => (
+                                <tr>
+                                    <th className="text-primary">{i + 1}</th>
+                                    <td className="capitalize">
+                                        {data.jenis_dokumen}
+                                    </td>
+                                    {data.nama ? (
+                                        <>
+                                            <td className="text-sm capitalize">
+                                                <div className="relative group">
+                                                    <a
+                                                        href={`/storage/${data.path}`}
+                                                        target="_blank"
+                                                        className="underline hover:text-primary text-primary decoration-primary"
+                                                    >
+                                                        {data.nama}.
+                                                        <span className="lowercase">
+                                                            {data.tipe_file}
+                                                        </span>
+                                                    </a>
+
+                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                        {/* Tombol "Lihat" */}
+
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Lihat
+                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+
+                                                        {/* Tombol "Download" */}
+                                                        <a
+                                                            href={`/storage/${data.path}`}
+                                                            download={data.nama}
+                                                            target="_blank"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Unduh
+                                                            <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="text-center">
+                                                {data.is_valid === null && (
+                                                    <div className="label-base bg-secondary/15">
+                                                        Diproses
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == true && (
+                                                    <div className="label-success">
+                                                        Valid
+                                                    </div>
+                                                )}
+
+                                                {data.is_valid == false && (
+                                                    <div className="label-warning">
+                                                        Tidak Valid
+                                                    </div>
+                                                )}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center gap-2">
+                                                    <Dropdown>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md text-nowrap">
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/button hover:text-secondary hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    <span>
+                                                                        Pilih
+                                                                        Status
+                                                                    </span>
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/button:fill-secondary/60" />
+                                                                </button>
+                                                            </span>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                            >
+                                                                <span className="text-hijau">
+                                                                    Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                            >
+                                                                <span className="text-error">
+                                                                    Tidak Valid
+                                                                </span>
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* Kalo Belum Diupload Sama seklai */}
+
+                                            <td
+                                                colSpan={2}
+                                                className="text-center cursor-not-allowed"
+                                            >
+                                                {uploadedFiles[
+                                                    data.jenis_dokumen
+                                                ] ? (
+                                                    <span className="text-sm font-medium text-center capitalize text-secondary">
+                                                        {
+                                                            uploadedFiles[
+                                                                data
+                                                                    .jenis_dokumen
+                                                            ]
+                                                        }
+                                                    </span>
+                                                ) : (
+                                                    <div className="label-base bg-base-200">
+                                                        Berkas Belum Diajukan
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td className="text-center">
+                                                <div className="inline-flex items-center">
+                                                    <Dropdown disabled>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className="z-auto inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:cursor-not-allowed hover:text-gray-700 focus:outline-none"
+                                                                >
+                                                                    Pilih Status
+                                                                    <IoIosArrowDown className="w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                </button>
+                                                            </span>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "ppk.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
+                                                </div>
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </section>
 

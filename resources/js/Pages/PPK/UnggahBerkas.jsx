@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Link, Head, usePage } from "@inertiajs/react";
+import { useForm, Head, usePage } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -10,7 +10,6 @@ import {
     InputLabel,
     PrimaryButton,
     SecondaryButton,
-    Sidebar,
 } from "@/Components";
 
 export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
@@ -53,9 +52,9 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                 clearErrors();
             },
             onFinish: () => {
-                setTimeout(function () {
-                    location.reload();
-                }, 2000);
+                // setTimeout(function () {
+                //     location.reload();
+                // }, 5000);
             },
         });
     }
@@ -68,7 +67,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 4000,
         timerProgressBar: true,
         didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
@@ -86,20 +85,20 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
     }, [flash.message]);
 
     // TODO : Validasi saat upload berkas belum jalann dgn baik kalo berkas ny bener2 dikosongin
-    useEffect(() => {
-        if (Object.values(errors)[0]) {
-            Toast.fire({
-                icon: "warning",
-                title: Object.values(errors)[0],
-            });
-        }
-    }, [errors]);
+    // useEffect(() => {
+    //     if (Object.values(errors)[0]) {
+    //         Toast.fire({
+    //             icon: "warning",
+    //             title: Object.values(errors)[0],
+    //         });
+    //     }
+    // }, [errors]);
 
     const ketuaTim = pengajuan.created_by;
     console.log("errors");
     console.log(errors);
     return (
-        <AuthenticatedLayout user={auth.user} title={title}>
+        <AuthenticatedLayout user={auth.user} title={title} current={route().current()}>
             <Head title={title} />
             {/* content */}
             <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">

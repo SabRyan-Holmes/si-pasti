@@ -16,6 +16,8 @@ const Navbar = ({user, title}) => {
       admin = true
     }
 
+    let nameOnly = user.name.split(' / ')[0];
+
     return (
       <div className="">
         <hr className="h-1 bg-base" />
@@ -34,12 +36,15 @@ const Navbar = ({user, title}) => {
                         {!user ? <button className="mr-8 btn btn-ghost">Login / Register</button> :
                         <div className="flex items-center justify-end gap-2 p-2 transition-all group/item w-60 hover:shadow-md hover:bg-base-100/10 rounded-xl hover:cursor-pointer">
                             <div className="mr-1 font-semibold text-nowrap">
-                            <span className="block text-sm text-slate-600 "> Nama {user.name}</span>
-                            <span className="block text-xs text-right text-secondary">{user.divisi}</span>
+                            <span className="block text-sm text-slate-600 ">{nameOnly}</span>
+                            <span className={"block text-xs text-right " + (user.divisi == 'Ketua Tim' ? 'text-primary' : 'text-secondary')}>{user.divisi}</span>
                             </div>
-                            <div className="avatar">
-                                <ProfileImage name={user.name}/>
-                            </div>
+                            {
+                                user.profile ?
+                                <img src={user.profile} alt="pp" className="w-6 h-6 rounded-full avatar"  />
+                                :
+                                <ProfileImage name={nameOnly}/>
+                            }
                             <IoIosArrowDown className='w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60' />
                         </div>
                          }

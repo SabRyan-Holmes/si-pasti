@@ -101,7 +101,7 @@ export default function DaftarBerkas({
                     </ul>
                 </div>
 
-                {pengajuans.data.length || search || byStage || byStatus ? (
+                {pengajuans.data.length ? (
                     <>
                         <form
                             className="flex items-center justify-between w-full "
@@ -190,7 +190,7 @@ export default function DaftarBerkas({
                             </div>
                         </form>
                         <div className="pt-3 overflow-auto rounded-xl ">
-                            <table className="table overflow-auto text-xs table-bordered rounded-xl ">
+                            <table className="table overflow-hidden text-xs table-bordered rounded-xl ">
                                 <thead className="text-sm font-medium text-white border bg-primary rounded-xl border-secondary/15">
                                     <tr>
                                         <th></th>
@@ -209,24 +209,36 @@ export default function DaftarBerkas({
                                 <tbody className="border-secondary/15">
                                     {pengajuans.data?.map((data, i) => {
                                         const ketua_tim = data.created_by;
+                                        let name =
+                                            ketua_tim.name.split(" / ")[0];
+                                        let gelar =
+                                            ketua_tim.name.split(" / ")[1];
+
                                         return (
                                             <tr
                                                 key={i}
-                                                className="group/item hover:bg-secondary/50 hover:cursor-pointer"
+                                                className="group/item hover:bg-secondary/50 "
                                             >
                                                 <th>{i + 1}</th>
-                                                <td className="capitalize">
-                                                    {ketua_tim.name}
+                                                <td>
+                                                    <div className="flex-row items-center gap-3">
+                                                        <span className="font-bold">
+                                                            {name} {gelar}
+                                                        </span>
+                                                        <span className="block text-xs opacity-50 text-nowrap ">
+                                                            {data.nama_tim}
+                                                        </span>
+                                                    </div>
                                                 </td>
-                                                <td className="capitalize">
+                                                <td className="font-medium capitalize">
                                                     {data.nama_kegiatan}
                                                 </td>
-                                                <td className="text-center">
+                                                <td className="text-sm text-center">
                                                     {moment(
                                                         data.created_at
                                                     ).format("LL")}
                                                 </td>
-                                                <td className="text-center">
+                                                <td className="font-medium text-center">
                                                     {data.status ==
                                                     "selesai" ? (
                                                         <span>
@@ -239,7 +251,7 @@ export default function DaftarBerkas({
                                                     )}
                                                 </td>
                                                 <td>
-                                                    <div className="text-center label-base bg-base-200/70 text-slate-500 ">
+                                                    <div className="text-center label-base bg-base-200 ">
                                                         {data.status}
                                                     </div>
                                                 </td>

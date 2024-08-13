@@ -87,7 +87,8 @@ export default function Sidebar({ divisi, active }) {
                             href={route("ppk.daftar-berkas")}
                             active={
                                 route().current("ppk.daftar-berkas") ||
-                                route().current("ppk.show-berkas")
+                                route().current("ppk.show-berkas") ||
+                                active === "ppk.unggah-berkas"
                             }
                             className="relative z-20"
                         >

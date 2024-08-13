@@ -117,12 +117,11 @@ table.table-bordered {
     width: 100%;
     border-collapse: collapse;
     line-height: 1rem;
-    overflow: hidden;
     @apply border-slate-600;
 }
 
 table.table-bordered > thead {
-    @apply text-sm font-medium text-white border rounded-xl border-secondary/15;
+    @apply overflow-hidden text-sm font-medium text-white border rounded-xl border-secondary/15;
 }
 
 table.table-bordered > thead > tr > th {
@@ -150,7 +149,7 @@ table.table-bordered > tbody > tr > th {
 }
 
 .label-warning {
-    @apply p-1 mx-3 text-xs font-semibold text-center uppercase rounded-md bg-error/65 text-slate-700/80;
+    @apply p-1 mx-3 text-xs font-semibold text-center uppercase rounded-md bg-error/60 text-slate-700/80;
 }
 
 .label-secondary {
@@ -172,9 +171,9 @@ table.table-bordered > tbody > tr > th {
     width: 30px;
     height: 30px;
     color: #ffffff;
-    font-size: 18px;
+    font-size: 15px;
     border-radius: 50%;
     font-weight: 800;
 
-    @apply bg-amber-600;
+    @apply bg-primary;
 }

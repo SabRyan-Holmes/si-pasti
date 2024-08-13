@@ -28,7 +28,7 @@ Route::middleware(['auth', 'ketua_tim'])->prefix('ketua-tim')->name('ketua-tim.'
 
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan/pengajuan', [KetuaTimController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
-    Route::get('/riwayat-pengajuan/show/{pengajuan:id}', [KetuaTimController::class, 'show_pengajuan'])->name('show-pengajuan');
+    Route::get('/riwayat-pengajuan/show/{pengajuan:nama_kegiatan}', [KetuaTimController::class, 'show_pengajuan'])->name('show-pengajuan');
 });
 
 
@@ -44,7 +44,7 @@ Route::middleware(['auth', 'ppk'])->prefix('ppk')->name('ppk.')->group(function 
 
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan/pengajuan', [PPKController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
-    Route::get('/riwayat-pengajuan/show/{pengajuan:id}', [PPKController::class, 'show_pengajuan'])->name('show-pengajuan');
+    Route::get('/riwayat-pengajuan/show/{pengajuan:nama_kegiatan}', [PPKController::class, 'show_pengajuan'])->name('show-pengajuan');
     Route::post('/unggah-berkas-ulang', [PPKController::class, 'ajukan_berkas_ulang'])->name('ajukan-berkas-ulang');
 
     // Validasi Berkas

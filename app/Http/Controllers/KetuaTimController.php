@@ -17,7 +17,7 @@ class KetuaTimController extends Controller
 {
     public function create_pengajuan()
     {
-        return Inertia::render('KetuaTim/Pengajuan', [
+        return Inertia::render('KetuaTim/CreatePengajuan', [
             'title' => 'Buat Pengajuan',
         ]);
     }
@@ -26,18 +26,10 @@ class KetuaTimController extends Controller
     {
         // dd($request);
         $validated = $request->validated();
-
-
-        // Store Kegiatan
-        // $new_kegiatan = Kegiatan::create([
-        //     'nama_kegiatan' => $validated['nama_kegiatan'],
-        //     'status' => 'diproses',
-        //     'created_by' => Auth::user()->id, // Relasi dgn Tabel User(divisi)
-        // ]);
-
         // Store Pengajuan/Pengajuan
         $new_pengajuan = Pengajuan::create([
             'nama_kegiatan' => $validated['nama_kegiatan'],
+            'nama_tim' => $validated['nama_tim'],
             'created_by' => Auth::user()->id,
             'status' => 'diproses',
             'stage' => 'diajukan ketua tim',
@@ -103,8 +95,8 @@ class KetuaTimController extends Controller
     public function show_pengajuan(Pengajuan $pengajuan)
     {
 
-        return Inertia::render('KetuaTim/DetailPengajuan', [
-            'title' => 'Status Pengadaan Barang',
+        return Inertia::render('KetuaTim/ShowPengajuan', [
+            'title' => 'Status Pengadaan',
             'pengajuan' => $pengajuan,
 
         ]);

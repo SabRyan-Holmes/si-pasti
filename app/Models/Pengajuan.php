@@ -28,7 +28,8 @@ class Pengajuan extends Model
         // Search By Nama Kegiatan & Nama/NIP Ketua Tim
         $query->when($filters['search'] ?? false, function ($query, $search) {
             $query->where('nama_kegiatan', 'like', '%' . $search . '%')
-                ->orWhereHas('created_by', function ($q) use ($search) {
+            ->orWhere('nama_tim', 'like', '%' . $search . '%')
+            ->orWhereHas('created_by', function ($q) use ($search) {
                     $q->where('name', 'like', '%' . $search . '%');
                 });
         });

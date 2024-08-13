@@ -13,6 +13,7 @@ export default function Login({ status, canResetPassword }) {
         email: '',
         password: '',
         remember: false,
+        login: '',
     });
 
     useEffect(() => {
@@ -27,34 +28,35 @@ export default function Login({ status, canResetPassword }) {
         post(route('login'));
     };
 
+    console.log(errors)
     return (
         <GuestLayout>
             <Head title="Log in" />
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+            {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
 
-            <strong className='mb-1 text-lg w-30 text-center flex justify-center uppercase text-gradient gradient-bps'>SiPasti </strong>
+            <strong className='flex justify-center mb-1 text-lg text-center uppercase w-30 text-gradient gradient-bps'>SiPasti </strong>
             <div className='flex justify-center'>
                 <Link href="/">
-                    <ApplicationLogo className="mx-auto w-8 h-8 fill-current text-gray-500 " />
+                    <ApplicationLogo className="w-8 h-8 mx-auto text-gray-500 fill-current " />
                 </Link>
             </div>
-            <form onSubmit={submit} className='mt-6 mx-2' >
+            <form onSubmit={submit} className='mx-2 mt-6' >
                 <div>
-                    <InputLabel htmlFor="email" value="Email/NIP" />
+                    <InputLabel htmlFor="login" value="Email/NIP" />
 
                     <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full h-11"
+                        id="login"
+                        type="text"
+                        name="login"
+                        value={data.login}
+                        className="block w-full mt-1 h-11"
                         placeholder="Masukkan Email/NIP"
                         isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
+                        onChange={(e) => setData('login', e.target.value)}
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.login} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
@@ -65,7 +67,7 @@ export default function Login({ status, canResetPassword }) {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full h-11"
+                        className="block w-full mt-1 h-11"
                         placeholder="Masukkan password"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
@@ -81,7 +83,7 @@ export default function Login({ status, canResetPassword }) {
                             checked={data.remember}
                             onChange={(e) => setData('remember', e.target.checked)}
                         />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                        <span className="text-sm text-gray-600 ms-2 dark:text-gray-400">Remember me</span>
                     </label>
                 </div>
 
@@ -89,7 +91,7 @@ export default function Login({ status, canResetPassword }) {
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            className="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                         >
                             Forgot your password?
                         </Link>

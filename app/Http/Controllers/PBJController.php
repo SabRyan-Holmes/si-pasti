@@ -47,6 +47,7 @@ class PBJController extends Controller
         $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
 
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
+        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
 
         // dd($berkas_pbj);
         return Inertia::render('PBJ/ShowBerkas', [

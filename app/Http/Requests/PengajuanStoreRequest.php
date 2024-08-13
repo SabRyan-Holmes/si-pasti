@@ -22,6 +22,7 @@ class PengajuanStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'nama_tim' => ['required', 'string', 'max:100'],
             'nama_kegiatan' => ['required', 'string', 'max:100'],
             'kak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
             'form_permintaan' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],

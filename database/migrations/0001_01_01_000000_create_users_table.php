@@ -14,13 +14,22 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->string('username')->unique()->nullable();
+            $table->string('nip')->unique();
+            $table->string('email')->unique()->nullable();
             $table->enum('divisi', ['Ketua Tim', 'PPK', 'PBJ', 'Keuangan']);
 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->timestamps();
+        });
+
+        // Tabel nama tim
+        Schema::create('nama_tims', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('nama_tim');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -46,6 +55,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('nama_tims');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

@@ -28,13 +28,22 @@
 
 
 //Agar di showBerkas/Show pengajuan nama kegiatan dan ketuaTim lebih rapi
-<div class="mt-10 capitalize max-w-screen-phone">
+
+  let nama = ketuaTim.name.split(' / ')[0];
+    let gelar = ketuaTim.name.split(' / ')[1];
+
+
+ <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>
                             <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Ketua TIM</span>
-                            <span>: {ketuaTim.name}</span>
+                            <span class="mr-1 font-bold">Ketua TIM /NIP</span>
+                            <span>: {nama} {gelar} / {ketuaTim.nip}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Tim</span>
+                            <span>: {pengajuan.nama_tim}</span>
                         </div>
                     </div>

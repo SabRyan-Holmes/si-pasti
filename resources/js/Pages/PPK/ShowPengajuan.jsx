@@ -200,7 +200,7 @@ export default function ShowPengajuan({
         >
             <Head title={title} />
             {/* content */}
-            <section className="mx-auto px-7 phone:h-screen laptop:h-full max-w-screen-laptop ">
+            <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop ">
                 <div className="flex items-center justify-between ">
                     {/* Breadcumbs */}
                     <div className="my-3 text-sm capitalize breadcrumbs">
@@ -231,14 +231,14 @@ export default function ShowPengajuan({
                     </SecondaryButton>
                 </div>
 
-                <main className="px-7">
-                    <div class="max-w-screen-phone  mt-10">
+                <main>
+                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>
                             <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1  font-bold">Ketua TIM</span>
+                            <span class="mr-1 font-bold">Ketua TIM</span>
                             <span>: {ketuaTim.name}</span>
                         </div>
                     </div>
