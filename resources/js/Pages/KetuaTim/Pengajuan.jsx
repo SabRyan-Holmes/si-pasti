@@ -77,14 +77,14 @@ export default function Pengajuan({ title, auth, flash }) {
         <AuthenticatedLayout user={auth.user} title={title}>
             <Head title={"Pengajuan"} />
             {/* content */}
-            <section className="phone:h-screen laptop:h-full max-w-screen-laptop mx-auto px-7">
+            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
                 {/* Breadcumbs */}
-                <div className="flex justify-between items-center">
-                    <div className="breadcrumbs my-3 text-sm">
+                <div className="flex items-center justify-between">
+                    <div className="my-3 text-sm breadcrumbs">
                         <ul>
                             <li>
                                 <a>
-                                    <HiDocumentPlus className="mr-2 w-4 h-4" />
+                                    <HiDocumentPlus className="w-4 h-4 mr-2" />
                                     Buat Pengajuan
                                 </a>
                             </li>
@@ -95,13 +95,13 @@ export default function Pengajuan({ title, auth, flash }) {
                     </div>
                     <SecondaryButton
                         onClick={() => window.history.back()}
-                        className="bg-secondary/5 capitalize"
+                        className="capitalize bg-secondary/5"
                     >
                         Kembali
                         <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                     </SecondaryButton>
                 </div>
-                <strong className="text-2xl text-center w-full mx-auto flex justify-center my-9">
+                <strong className="flex justify-center w-full mx-auto text-2xl text-center my-9">
                     Pengajuan Permintaan Pengadaan Barang
                 </strong>
 
@@ -124,7 +124,7 @@ export default function Pengajuan({ title, auth, flash }) {
                             id="nama_kegiatan"
                             placeholder="Masukkan nama kegiatan"
                             isFocused={true}
-                            className="bg-white mb-2 input input-bordered input-primary w-full"
+                            className="w-full mb-2 bg-white input input-bordered input-primary"
                             onChange={(e) =>
                                 setData("nama_kegiatan", e.target.value)
                             }
@@ -150,13 +150,7 @@ export default function Pengajuan({ title, auth, flash }) {
                                 onChange={(e) =>
                                     setData("kak", e.target.files[0])
                                 }
-                                className="
-                                            file:absolute file:right-0
-                                            file:bg-primary/80 hu file:text-white file:border-0
-                                            file:py-1 file:px-3 file:rounded-full
-                                            file:shadow-sm file:shadow-blue-500/30
-                                            text-gray-600 text-sm
-                                    "
+                                className="text-sm text-gray-600  file:absolute file:right-0 file:bg-primary/80 hu file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
                             />
                         </div>
                         <InputError message={errors.kak} className="mt-2" />
@@ -227,14 +221,14 @@ export default function Pengajuan({ title, auth, flash }) {
                     </div>
 
                     {/* Button */}
-                    <div className="w-full mt-4 justify-end flex">
-                        <PrimaryButton
+                    <div className="flex justify-end w-full mt-4">
+                        <button
                             disabled={processing}
                             type="submit"
-                            className="bg-hijau"
+                            className="uppercase bg-hijau button-correct"
                         >
-                            Ajukan <IoIosSend className="ml-1 w-5 h-5" />
-                        </PrimaryButton>
+                            Ajukan <IoIosSend className="w-5 h-5 ml-1" />
+                        </button>
                     </div>
                 </form>
             </section>

@@ -25,3 +25,16 @@
 
         //     },
         // });
+
+
+//Agar di showBerkas/Show pengajuan nama kegiatan dan ketuaTim lebih rapi
+<div class="mt-10 capitalize max-w-screen-phone">
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Kegiatan</span>
+                            <span>: {pengajuan.nama_kegiatan}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Ketua TIM</span>
+                            <span>: {ketuaTim.name}</span>
+                        </div>
+                    </div>

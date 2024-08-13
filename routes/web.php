@@ -39,14 +39,16 @@ Route::middleware(['auth', 'ppk'])->prefix('ppk')->name('ppk.')->group(function 
     Route::get('/show-berkas/{pengajuan:id}', [PPKController::class, 'show_berkas'])->name('show-berkas');
 
     // Unggah Berkas
-    Route::get('/unggah-berkas/{pengajuan:id}', [PPKController::class, 'unggah_berkas'])->name('unggah-berkas');
+    Route::get('/unggah-berkas/{pengajuan:nama_kegiatan}', [PPKController::class, 'unggah_berkas'])->name('unggah-berkas');
     Route::post('/unggah-berkas', [PPKController::class, 'ajukan_berkas'])->name('ajukan-berkas');
-
-
 
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan/pengajuan', [PPKController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
     Route::get('/riwayat-pengajuan/show/{pengajuan:id}', [PPKController::class, 'show_pengajuan'])->name('show-pengajuan');
+    Route::post('/unggah-berkas-ulang', [PPKController::class, 'ajukan_berkas_ulang'])->name('ajukan-berkas-ulang');
+
+    // Validasi Berkas
+    Route::post('/validasi/:id', [PPKController::class, 'validasi'])->name('validasi');
 });
 
 // PBJ

@@ -13,13 +13,27 @@ class PBJController extends Controller
 {
     public function daftar_berkas()
     {
-        $pengajuans = Pengajuan::whereHas("created_by", function ($q) {
-            $q->where('divisi', "Ketua Tim");
-        });
+        $pengajuans = Pengajuan::latest();
+        $subTitle = "";
+
+
+        if (request('byStatus')) {
+            $subTitle = 'Berdasarkan Status : ' . request('byStatus');
+        }
+
+        if (request('byStage')) {
+            $subTitle = 'Berdasarkan Stage : ' . request('byStage');
+        }
 
         return Inertia::render('PBJ/DaftarBerkas', [
-            'title' => 'Cek Berkas Ketua Tim',
-            'pengajuans' => $pengajuans->paginate(10),
+            // "title" => "Pengajuan " . $title,
+            "title" => "Daftar Berkas",
+            "subTitle" => $subTitle,
+            // "pengajuans" => $pengajuans->paginate(10),
+            "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
+            "search" => request('search'),
+            "byStatusReq" => request('byStatus'),
+            "byStageReq" => request('byStage'),
         ]);
     }
 
@@ -35,7 +49,7 @@ class PBJController extends Controller
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
 
         // dd($berkas_pbj);
-        return Inertia::render('PBJ/CekBerkas', [
+        return Inertia::render('PBJ/ShowBerkas', [
             'title' => 'Detail Berkas',
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,
@@ -63,10 +77,10 @@ class PBJController extends Controller
     {
 
         $rule = [
-                'pengajuan_id' => ['required', 'integer'],
-                'nama_kegiatan' => ['required', 'string', 'max:100'],
-                'ban' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
-                'bahp' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'pengajuan_id' => ['required', 'integer'],
+            'nama_kegiatan' => ['required', 'string', 'max:100'],
+            'ban' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'bahp' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
         ];
 
         $validated = $request->validate($rule);
@@ -122,12 +136,31 @@ class PBJController extends Controller
             }
         }
     }
+
     public function riwayat_pengajuan()
     {
 
+        $pengajuans = Pengajuan::latest();
+        $subTitle = "";
+
+
+        if (request('byStatus')) {
+            $subTitle = 'Berdasarkan Status : ' . request('byStatus');
+        }
+
+        if (request('byStage')) {
+            $subTitle = 'Berdasarkan Stage : ' . request('byStage');
+        }
+
         return Inertia::render('PBJ/RiwayatPengajuan', [
-            'title' => 'Riwayat Pengajuan',
-            'pengajuans' => Pengajuan::latest()->paginate(10)
+            // "title" => "Pengajuan " . $title,
+            "title" => "Riwayat Pengajuan",
+            "subTitle" => $subTitle,
+            // "pengajuans" => $pengajuans->paginate(10),
+            "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
+            "search" => request('search'),
+            "byStatusReq" => request('byStatus'),
+            "byStageReq" => request('byStage'),
         ]);
     }
 
@@ -142,7 +175,7 @@ class PBJController extends Controller
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
 
         // dd($berkas_pbj);
-        return Inertia::render('PBJ/DetailPengajuan', [
+        return Inertia::render('PBJ/ShowPengajuan', [
             'title' => 'Detail Riwayat Pengajuan',
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,

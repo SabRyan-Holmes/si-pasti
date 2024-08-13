@@ -102,23 +102,23 @@ export default function RiwayatPengajuan({
         <AuthenticatedLayout user={auth.user} title={title}>
             {/* content */}
 
-            <section className="phone:h-screen laptop:h-full max-w-screen-laptop mx-auto px-7">
+            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
 
                 {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
                         <form
-                            className="w-full flex justify-between items-center "
+                            className="flex items-center justify-between w-full "
                             onSubmit={handleSearch}
                         >
-                            <div className="flex gap-3 my-3 items-center  w-fit justify-start">
+                            <div className="flex items-center justify-start gap-3 my-3 w-fit">
                                 <div className="w-48">
                                     <InputLabel
                                         value="Status"
                                         Htmlfor="byStatus"
-                                        className="max-w-sm text-lg  ml-1"
+                                        className="max-w-sm ml-1 text-lg"
                                     />
                                     <select
-                                        className="select w-full max-w-xs text-sm border capitalize border-gradient selection:text-accent  disabled:text-accent"
+                                        className="w-full max-w-xs text-sm capitalize border select border-gradient selection:text-accent disabled:text-accent"
                                         name="byStatus"
                                         defaultValue={byStatus}
                                         onChange={(e) =>
@@ -136,10 +136,10 @@ export default function RiwayatPengajuan({
                                     <InputLabel
                                         value="Stage"
                                         Htmlfor="byStage"
-                                        className="max-w-sm text-lg  ml-1"
+                                        className="max-w-sm ml-1 text-lg"
                                     />
                                     <select
-                                        className="select w-full max-w-xs text-sm border capitalize border-gradient selection:text-accent  disabled:text-accent"
+                                        className="w-full max-w-xs text-sm capitalize border select border-gradient selection:text-accent disabled:text-accent"
                                         name="byStage"
                                         defaultValue={byStage}
                                         onChange={(e) =>
@@ -162,7 +162,7 @@ export default function RiwayatPengajuan({
                                 <InputLabel
                                     value="Nama Kegiatan"
                                     Htmlfor="search"
-                                    className="max-w-sm text-lg ml-1"
+                                    className="max-w-sm ml-1 text-lg"
                                 />
 
                                 <label
@@ -172,7 +172,7 @@ export default function RiwayatPengajuan({
                                     Search
                                 </label>
                                 <div className="relative">
-                                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <div className="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
                                         <HiDocumentSearch className="w-6 h-6 fill-primary" />
                                     </div>
                                     <input
@@ -192,9 +192,9 @@ export default function RiwayatPengajuan({
                                 </div>
                             </div>
                         </form>
-                        <div className="overflow-auto pt-3 rounded-xl ">
-                            <table className="table-bordered text-xs table overflow-auto rounded-xl ">
-                                <thead>
+                        <div className="pt-3 overflow-auto rounded-xl ">
+                            <table className="table overflow-auto text-xs table-bordered rounded-xl ">
+                                <thead className="bg-primary">
                                     <tr>
                                         <th></th>
                                         <th>Nama Ketua Tim</th>
@@ -247,12 +247,12 @@ export default function RiwayatPengajuan({
                                                     )}
                                                 </td>
                                                 <td>
-                                                    <div className="label-base bg-base-200 text-center ">
+                                                    <div className="text-center label-base bg-base-200 ">
                                                         {data.status}
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div className="label-base bg-base-200 text-center text-xs ">
+                                                    <div className="text-xs text-center label-base bg-base-200 ">
                                                         {data.stage}
                                                     </div>
                                                 </td>
@@ -264,8 +264,8 @@ export default function RiwayatPengajuan({
                         </div>
 
                         {/* Pagination */}
-                        <div className="box-footer mb-8 text-sm">
-                            <div className="sm:flex items-center justify-between">
+                        <div className="mb-8 text-sm box-footer">
+                            <div className="items-center justify-between sm:flex">
                                 <div className="flex items-center text-xs">
                                     showing {pengajuans.data.length} Entries{" "}
                                     <TiArrowRight className="w-5 h-5" />
@@ -275,7 +275,7 @@ export default function RiwayatPengajuan({
                                     nextLabel={
                                         pengajuans.next_page_url && (
                                             <a
-                                                className="group/next dark:text-white/70 border text-primary hover:text-white  py-1 px-2 leading-none inline-flex items-center gap-2 rounded-md hover:border hover:bg-primary/75 font-semibold border-primary"
+                                                className="inline-flex items-center gap-2 px-2 py-1 font-semibold leading-none border rounded-md group/next dark:text-white/70 text-primary hover:text-white hover:border hover:bg-primary/75 border-primary"
                                                 href={pengajuans.next_page_url}
                                                 onClick={() => setNum(num + 1)}
                                             >
@@ -285,7 +285,7 @@ export default function RiwayatPengajuan({
                                                 <span aria-hidden="true">
                                                     Next
                                                 </span>
-                                                <MdOutlineKeyboardDoubleArrowRight className="-ml-1 w-4 h-4 fill-primary group-hover/next:fill-white" />
+                                                <MdOutlineKeyboardDoubleArrowRight className="w-4 h-4 -ml-1 fill-primary group-hover/next:fill-white" />
                                             </a>
                                         )
                                     }
@@ -295,11 +295,11 @@ export default function RiwayatPengajuan({
                                     previousLabel={
                                         pengajuans.prev_page_url && (
                                             <a
-                                                className="group/next dark:text-white/70 border text-primary hover:text-white  py-1 px-2 leading-none inline-flex items-center gap-2 rounded-md hover:border hover:bg-primary/75 font-semibold border-primary"
+                                                className="inline-flex items-center gap-2 px-2 py-1 font-semibold leading-none border rounded-md group/next dark:text-white/70 text-primary hover:text-white hover:border hover:bg-primary/75 border-primary"
                                                 href={pengajuans.next_page_url}
                                                 onClick={() => setNum(num + 1)}
                                             >
-                                                <MdOutlineKeyboardDoubleArrowLeft className="-mr-1 w-4 h-4 fill-primary group-hover/next:fill-white" />
+                                                <MdOutlineKeyboardDoubleArrowLeft className="w-4 h-4 -mr-1 fill-primary group-hover/next:fill-white" />
                                                 <span className="sr-only">
                                                     Prev
                                                 </span>
@@ -315,14 +315,14 @@ export default function RiwayatPengajuan({
                                     }
                                     pageClassName="border border-solid border-primary text-center hover:bg-primary hover:text-base-100 w-6 h-6 flex items-center text-primary justify-center rounded-md"
                                     activeClassName="bg-primary text-white"
-                                    className="justify-end flex gap-2"
+                                    className="flex justify-end gap-2"
                                 />
                             </div>
                         </div>
                     </>
                 ) : (
-                    <div className="flex justify-center items-center h-96 ">
-                        <strong className="text-2xl my-auto">
+                    <div className="flex items-center justify-center h-96 ">
+                        <strong className="my-auto text-2xl">
                             Belum Ada Pengajuan Terbaru!!
                         </strong>
                     </div>

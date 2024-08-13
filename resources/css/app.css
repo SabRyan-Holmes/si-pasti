@@ -20,11 +20,11 @@ input[type="number"] {
 }
 
 .btn-glass {
-    @apply btn glass bg-orange-400 text-orange-800 mt-3  hover:bg-primary hover:scale-105 text-lg;
+    @apply mt-3 text-lg text-orange-800 bg-orange-400 btn glass hover:bg-primary hover:scale-105;
 }
 
 .btn-glass2 {
-    @apply btn glass bg-gradient-to-br from-orange-300 via-emerald-400/40 text-orange-800 mt-3  hover:bg-secondary hover:scale-105 text-lg;
+    @apply mt-3 text-lg text-orange-800 btn glass bg-gradient-to-br from-orange-300 via-emerald-400/40 hover:bg-secondary hover:scale-105;
 }
 
 .progress-bar {
@@ -33,11 +33,11 @@ input[type="number"] {
 }
 
 .gradient-base {
-    @apply bg-gradient-to-b from-orange-50 to-secondary opacity-100;
+    @apply opacity-100 bg-gradient-to-b from-orange-50 to-secondary;
 }
 
 .gradient-white-base {
-    @apply bg-gradient-to-b from-orange-50 to-white opacity-100;
+    @apply opacity-100 bg-gradient-to-b from-orange-50 to-white;
 }
 
 .gradient-primary {
@@ -45,7 +45,7 @@ input[type="number"] {
 }
 
 .gradient-sidebar {
-    @apply bg-gradient-to-b from-primary/50 to-secondary opacity-100;
+    @apply opacity-100 bg-gradient-to-b from-primary/50 to-secondary;
 }
 
 .gradient-bps {
@@ -53,15 +53,15 @@ input[type="number"] {
 }
 
 .text-gradient {
-    @apply bg-clip-text text-transparent;
+    @apply text-transparent bg-clip-text;
 }
 
 .button-glass {
-    @apply bg-red-400  btn glass scale-75 items-center border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
+    @apply items-center text-lg font-semibold text-white transition duration-150 ease-in-out scale-75 bg-red-400 border border-transparent rounded-md btn glass hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
 }
 
 .border-card {
-    @apply border-t-secondary border-l-secondary border-r-primary/45 border-b-primary/45 focus:border-none focus:border-primary border focus:ring-yellow-600;
+    @apply border border-t-secondary border-l-secondary border-r-primary/45 border-b-primary/45 focus:border-none focus:border-primary focus:ring-yellow-600;
 }
 
 .border-gradient {
@@ -69,7 +69,7 @@ input[type="number"] {
 }
 
 .large-primary-button {
-    @apply mx-auto w-full py-2 rounded-lg mb-4 glass bg-primary text-secondary hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
+    @apply w-full py-2 mx-auto mb-4 transition duration-150 ease-in-out rounded-lg glass bg-primary text-secondary hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
 }
 .main-container {
     background-color: rgb(46 56 77 / 30%);
@@ -109,7 +109,7 @@ input[type="number"] {
 }
 
 .action-btn {
-    @apply rounded-lg inline-flex items-center justify-center border mx-auto shadow-md p-1 px-2;
+    @apply inline-flex items-center justify-center p-1 px-2 mx-auto border rounded-lg shadow-md;
 }
 
 table.table-bordered {
@@ -122,7 +122,7 @@ table.table-bordered {
 }
 
 table.table-bordered > thead {
-    @apply text-white font-medium text-sm bg-primary  rounded-xl border border-secondary/15;
+    @apply text-sm font-medium text-white border rounded-xl border-secondary/15;
 }
 
 table.table-bordered > thead > tr > th {
@@ -150,33 +150,31 @@ table.table-bordered > tbody > tr > th {
 }
 
 .label-warning {
-    @apply rounded-md bg-rose-500/90 uppercase p-1 mx-3 text-xs font-semibold text-center;
+    @apply p-1 mx-3 text-xs font-semibold text-center uppercase rounded-md bg-error/65 text-slate-700/80;
 }
 
 .label-secondary {
-    @apply rounded-md bg-secondary/90 uppercase p-1 mx-3 text-xs font-semibold text-center;
+    @apply p-1 mx-3 text-xs font-semibold text-center uppercase rounded-md bg-secondary/90 text-slate-700/80;
 }
 
 .label-success {
-    @apply rounded-md bg-success uppercase p-1 mx-3 text-xs font-semibold text-center;
+    @apply p-1 mx-3 text-xs font-semibold text-center uppercase rounded-md bg-success/70 text-slate-700/80;
 }
 
 .label-base {
-    @apply rounded-md uppercase p-1 mx-3 text-xs font-semibold text-center text-slate-500;
+    @apply p-1 mx-3 text-xs font-semibold text-center uppercase rounded-md text-slate-500;
 }
-
 
 .user-profile-image {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
-    background-color: brown;
+    width: 30px;
+    height: 30px;
     color: #ffffff;
-    font-size: 30px;
+    font-size: 18px;
     border-radius: 50%;
     font-weight: 800;
 
-
-  }
+    @apply bg-amber-600;
+}

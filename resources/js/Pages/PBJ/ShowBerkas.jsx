@@ -6,14 +6,15 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
-import { IoIosSend } from "react-icons/io";
+import { IoIosArrowDown, IoIosSend } from "react-icons/io";
+import { Dropdown } from "@/Components";
+import { FaRegFolder } from "react-icons/fa6";
 
-export default function DetailPengajuan({
+export default function ShowBerkas({
     title,
     auth,
     flash,
     pengajuan,
-    ketuaTim,
     berkasPBJ,
     pengajuanKontrak,
     beritaAcara,
@@ -124,41 +125,25 @@ export default function DetailPengajuan({
 
     function submit(e) {
         e.preventDefault(); // Mencegah perilaku default dari form submit
-        post(
-            route("ppk.ajukan-berkas"),
-            {
-                data: data,
-                _token: props.csrf_token,
-                _method: "POST",
-                forceFormData: true,
+        post(route("pbj.ajukan-berkas"), {
+            data: data,
+            _token: props.csrf_token,
+            _method: "POST",
+            forceFormData: true,
 
-                onSuccess: () => {
-                    clearErrors();
-                    console.log("Submit selesai dari On Success");
+            onSuccess: () => {
+                clearErrors();
+                console.log("Submit selesai dari On Success");
 
-                    router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
-                },
-                onError: () => {
-                    console.log("Gagal submit");
-                },
-                onFinish: () => {
-                    console.log("Submit selesai");
-                },
-            }
-            // {
-
-            //     onSuccess: () => {
-            //         clearErrors();
-            //         console.log("Submit selesai dari On Success");
-
-            //         router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
-            //     },
-            //     onError: () => {
-            //         console.log("Gagal submit");
-            //     },
-
-            // }
-        );
+                router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
+            },
+            onError: () => {
+                console.log("Gagal submit");
+            },
+            onFinish: () => {
+                console.log("Submit selesai");
+            },
+        });
     }
 
     const [uploadedFiles, setUploadedFiles] = useState({});
@@ -199,20 +184,44 @@ export default function DetailPengajuan({
 
     console.log("errors :");
     console.log(errors);
+    const ketuaTim = pengajuan.created_by;
 
     return (
-        <AuthenticatedLayout user={auth.user} title={title}>
+        <AuthenticatedLayout
+            user={auth.user}
+            title={title}
+            current={route().current()}
+        >
             <Head title={title} />
             {/* content */}
-            <div className="mx-24">
+            <section className="mx-auto px-7">
                 <div className="my-6">
-                    <div className="flex justify-between">
-                        <strong className="text-2xl">{title}</strong>
+                    <div className="flex items-center justify-between ">
+                        {/* Breadcumbs */}
+                        <div className="my-3 text-sm capitalize breadcrumbs">
+                            <ul>
+                                <li>
+                                    <a href={route("pbj.daftar-berkas")}>
+                                        <FaRegFolder className="w-4 h-4 mr-2" />
+                                        Daftar Berkas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <FaRegFolder className="w-4 h-4 mr-2" />
+                                        {pengajuan.nama_kegiatan}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>{title}</a>
+                                </li>
+                            </ul>
+                        </div>
                         <SecondaryButton
                             onClick={() => window.history.back()}
-                            className="bg-secondary/5 capitalize "
+                            className="capitalize bg-secondary/5 "
                         >
-                            Kembali{" "}
+                            Kembali
                             <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                         </SecondaryButton>
                     </div>
@@ -228,15 +237,15 @@ export default function DetailPengajuan({
                         </div>
                     </div>
                 </div>
-                <div className="overflow-x-auto mt-16 mb-20">
+                <div className="mt-16 mb-20 overflow-x-auto">
                     <h2 className="text-base font-semibold">
                         Berkas Pengajuan PBJ
                     </h2>
                     {/* Tabel Berkas Pengajuan PBJ Start */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -260,7 +269,7 @@ export default function DetailPengajuan({
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -269,68 +278,139 @@ export default function DetailPengajuan({
 
                                                 <td className="text-center">
                                                     {data.is_valid === null && (
-                                                        <div className="label-secondary">
+                                                        <div className="label-base bg-secondary/15">
                                                             Diproses
                                                         </div>
                                                     )}
 
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-success">
-                                                                Valid
-                                                            </div>
-                                                        )}
+                                                    {data.is_valid == true && (
+                                                        <div className="label-success">
+                                                            Valid
+                                                        </div>
+                                                    )}
 
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-warning">
-                                                                Tidak Valid
-                                                            </div>
-                                                        )}
+                                                    {data.is_valid == false && (
+                                                        <div className="label-warning">
+                                                            Tidak Valid
+                                                        </div>
+                                                    )}
                                                 </td>
 
                                                 <td className="text-center">
-                                                    {data.is_valid == null && (
+                                                    {data.is_valid === null && (
+                                                        <Dropdown>
+                                                            <Dropdown.Trigger>
+                                                                <span className="inline-flex rounded-md">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/item hover:text-primary focus:outline-none"
+                                                                    >
+                                                                        Pilih
+                                                                        Status
+                                                                        <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-primary" />
+                                                                    </button>
+                                                                </span>
+                                                            </Dropdown.Trigger>
+
+                                                            <Dropdown.Content>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: true,
+                                                                    }}
+                                                                >
+                                                                    <span className="text-hijau">
+                                                                        Valid
+                                                                    </span>
+                                                                </Dropdown.Link>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: false,
+                                                                    }}
+                                                                >
+                                                                    <span className="text-error">
+                                                                        Tidak
+                                                                        Valid
+                                                                    </span>
+                                                                </Dropdown.Link>
+                                                            </Dropdown.Content>
+                                                        </Dropdown>
+                                                    )}
+
+                                                    {data.is_valid == true && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
-                                                            className="action-btn mx-auto"
+                                                            className="transition-all group/button action-btn text-hijau hover:scale-105"
                                                         >
-                                                            <FaEye className="mr-2 mx-1" />
                                                             Lihat
+                                                            <FaEye className="mx-1 fill-hijau" />
                                                         </a>
                                                     )}
 
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                href={`/storage/${data.path}`}
-                                                                target="_blank"
-                                                                className="action-btn"
-                                                            >
-                                                                <FaEye className="mr-2 mx-1" />
-                                                                Lihat
-                                                            </a>
-                                                        )}
+                                                    {data.is_valid == false && (
+                                                          <>
+                                                          {/* Input Hidden Upload Ulang */}
+                                                          <input
+                                                              id={data.jenis_dokumen}
+                                                              type="file"
+                                                              className="hidden"
+                                                              onChange={(e) =>
+                                                                  handleFileChange(
+                                                                      e,
+                                                                      data.jenis_dokumen,
+                                                                      getKeyByValue(
+                                                                          requiredBerkasPBJ,
+                                                                          data.jenis_dokumen
+                                                                      )
+                                                                  )
+                                                              }
+                                                          />
 
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                // href={`/storage/${data.path}`}
-                                                                className="action-btn"
-                                                            >
-                                                                <FaEdit className="mr-2 mx-1" />
-                                                                Edit
-                                                            </a>
-                                                        )}
+                                                          <label
+                                                              htmlFor={
+                                                                  data.jenis_dokumen
+                                                              }
+                                                              className="action-btn"
+                                                          >
+                                                             <FaEdit className="mx-1 mr-2" />
+
+                                                              {uploadedFiles[
+                                                                  data.jenis_dokumen
+                                                              ] ? (
+                                                                  <span className="max-w-xs truncate bg-accent">
+                                                                      Upload
+                                                                  </span>
+                                                              ) : (
+                                                                  <span className="cursor-pointer">
+                                                                      Upload
+                                                                  </span>
+                                                              )}
+                                                          </label>
+                                                      </>
+                                                        // <a
+                                                        //     // href={`/storage/${data.path}`}
+                                                        //     className="transition-all group/button action-btn text-secondary hover:scale-105"
+                                                        // >
+                                                        //     <FaEdit className="mx-1 mr-2" />
+                                                        //     Edit
+                                                        // </a>
+                                                    )}
                                                 </td>
                                             </>
                                         ) : (
                                             <>
+                                                {/* Kalo Belum Diupload Sama seklai */}
+
                                                 <td
                                                     colSpan={2}
                                                     className="text-center"
@@ -338,7 +418,7 @@ export default function DetailPengajuan({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -354,40 +434,50 @@ export default function DetailPengajuan({
                                                     )}
                                                 </td>
                                                 <td className="text-center">
-                                                    <input
-                                                        id={data.jenis_dokumen}
-                                                        type="file"
-                                                        className="hidden"
-                                                        onChange={(e) =>
-                                                            handleFileChange(
-                                                                e,
-                                                                data.jenis_dokumen,
-                                                                getKeyByValue(
-                                                                    requiredBerkasPBJ,
-                                                                    data.jenis_dokumen
-                                                                )
-                                                            )
-                                                        }
-                                                    />
-                                                    <label
-                                                        htmlFor={
-                                                            data.jenis_dokumen
-                                                        }
-                                                        className="action-btn"
-                                                    >
-                                                        <FaFileUpload className="mr-2 mx-1" />
-                                                        {uploadedFiles[
-                                                            data.jenis_dokumen
-                                                        ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
-                                                                Upload
+                                                    <Dropdown disabled={false}>
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className={
+                                                                        "inline-flex text-nowrap items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md cursor-not-allowed hover:text-gray-700 focus:outline-none"
+                                                                    }
+                                                                >
+                                                                    Pilih Status
+                                                                    <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                </button>
                                                             </span>
-                                                        ) : (
-                                                            <span className="cursor-pointer">
-                                                                Upload
-                                                            </span>
-                                                        )}
-                                                    </label>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
                                                 </td>
                                             </>
                                         )}
@@ -396,10 +486,10 @@ export default function DetailPengajuan({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />
@@ -407,14 +497,14 @@ export default function DetailPengajuan({
                         </div>
                     </form>
 
-                    <h2 className="text-base font-semibold  mt-2 ">
+                    <h2 className="mt-2 text-base font-semibold ">
                         Berkas Berkas Pemesanan
                     </h2>
                     {/* Tabel Berkas Pemesanan */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -428,18 +518,17 @@ export default function DetailPengajuan({
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* row 1 */}
                                 {berkasPK.map((data, i) => (
                                     <tr>
                                         <th className="text-primary">
                                             {i + 1}
                                         </th>
-                                        <td className="capitalize ">
+                                        <td className="capitalize">
                                             {data.jenis_dokumen}
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -448,68 +537,100 @@ export default function DetailPengajuan({
 
                                                 <td className="text-center">
                                                     {data.is_valid === null && (
-                                                        <div className="label-secondary">
+                                                        <div className="label-base bg-secondary/15">
                                                             Diproses
                                                         </div>
                                                     )}
 
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-success">
-                                                                Valid
-                                                            </div>
-                                                        )}
+                                                    {data.is_valid == true && (
+                                                        <div className="label-success">
+                                                            Valid
+                                                        </div>
+                                                    )}
 
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <div className="label-warning">
-                                                                Tidak Valid
-                                                            </div>
-                                                        )}
+                                                    {data.is_valid == false && (
+                                                        <div className="label-warning">
+                                                            Tidak Valid
+                                                        </div>
+                                                    )}
                                                 </td>
 
-                                                <td className="text-center  ">
-                                                    {data.is_valid == null && (
+                                                <td className="text-center">
+                                                    {data.is_valid === null && (
+                                                        <Dropdown>
+                                                            <Dropdown.Trigger>
+                                                                <span className="inline-flex rounded-md">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md group/item hover:text-primary focus:outline-none"
+                                                                    >
+                                                                        Pilih
+                                                                        Status
+                                                                        <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-primary" />
+                                                                    </button>
+                                                                </span>
+                                                            </Dropdown.Trigger>
+
+                                                            <Dropdown.Content>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: true,
+                                                                    }}
+                                                                >
+                                                                    <span className="text-hijau">
+                                                                        Valid
+                                                                    </span>
+                                                                </Dropdown.Link>
+                                                                <Dropdown.Link
+                                                                    method="post"
+                                                                    href={route(
+                                                                        "pbj.validasi"
+                                                                    )}
+                                                                    data={{
+                                                                        id: data.id,
+                                                                        is_valid: false,
+                                                                    }}
+                                                                >
+                                                                    <span className="text-error">
+                                                                        Tidak
+                                                                        Valid
+                                                                    </span>
+                                                                </Dropdown.Link>
+                                                            </Dropdown.Content>
+                                                        </Dropdown>
+                                                    )}
+
+                                                    {data.is_valid == true && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
-                                                            className="action-btn"
+                                                            className="transition-all group/button action-btn text-hijau hover:scale-105"
                                                         >
-                                                            <FaEye className="mr-2 mx-1" />
                                                             Lihat
+                                                            <FaEye className="mx-1 fill-hijau" />
                                                         </a>
                                                     )}
 
-                                                    {data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                href={`/storage/${data.path}`}
-                                                                target="_blank"
-                                                                className="action-btn"
-                                                            >
-                                                                <FaEye className="mr-2 mx-1" />
-                                                                Lihat
-                                                            </a>
-                                                        )}
-
-                                                    {!data.is_valid &&
-                                                        data.is_valid !=
-                                                            null && (
-                                                            <a
-                                                                // href={`/storage/${data.path}`}
-                                                                className="action-btn"
-                                                            >
-                                                                <FaEdit className="mr-2 mx-1" />
-                                                                Edit
-                                                            </a>
-                                                        )}
+                                                    {data.is_valid == false && (
+                                                        <a
+                                                            // href={`/storage/${data.path}`}
+                                                            className="transition-all group/button action-btn text-secondary hover:scale-105"
+                                                        >
+                                                            <FaEdit className="mx-1 mr-2" />
+                                                            Edit
+                                                        </a>
+                                                    )}
                                                 </td>
                                             </>
                                         ) : (
                                             <>
+                                                {/* Kalo Belum Diupload Sama seklai */}
+
                                                 <td
                                                     colSpan={2}
                                                     className="text-center"
@@ -517,7 +638,7 @@ export default function DetailPengajuan({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -532,42 +653,60 @@ export default function DetailPengajuan({
                                                         </div>
                                                     )}
                                                 </td>
-
                                                 <td className="text-center">
-                                                    <input
-                                                        id={data.jenis_dokumen}
-                                                        type="file"
-                                                        className="hidden"
-                                                        onChange={(e) =>
-                                                            handleFileChange(
-                                                                e,
-                                                                data.jenis_dokumen,
-                                                                getKeyByValue(
-                                                                    requiredBerkasPK,
-                                                                    data.jenis_dokumen
-                                                                )
-                                                            )
+                                                    <Dropdown
+                                                        disabled={
+                                                            uploadedFiles[
+                                                                data
+                                                                    .jenis_dokumen
+                                                            ]
+                                                                ? false
+                                                                : true
                                                         }
-                                                    />
-                                                    <label
-                                                        htmlFor={
-                                                            data.jenis_dokumen
-                                                        }
-                                                        className="action-btn"
                                                     >
-                                                        <FaFileUpload className="mr-2 mx-1" />
-                                                        {uploadedFiles[
-                                                            data.jenis_dokumen
-                                                        ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
-                                                                Upload
+                                                        <Dropdown.Trigger>
+                                                            <span className="inline-flex rounded-md hover:cursor-not-allowed">
+                                                                <button
+                                                                    type="button"
+                                                                    className={
+                                                                        "inline-flex text-nowrap items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md cursor-not-allowed hover:text-gray-700 focus:outline-none"
+                                                                    }
+                                                                >
+                                                                    Pilih Status
+                                                                    <IoIosArrowDown className="w-4 h-4 mx-1 fill-slate-500 group-hover/item:fill-secondary/60" />
+                                                                </button>
                                                             </span>
-                                                        ) : (
-                                                            <span className="cursor-pointer">
-                                                                Upload
-                                                            </span>
-                                                        )}
-                                                    </label>
+                                                        </Dropdown.Trigger>
+
+                                                        <Dropdown.Content>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: true,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Valid
+                                                            </Dropdown.Link>
+                                                            <Dropdown.Link
+                                                                method="post"
+                                                                href={route(
+                                                                    "pbj.validasi"
+                                                                )}
+                                                                data={{
+                                                                    id: data.id,
+                                                                    is_valid: false,
+                                                                }}
+                                                                disabled={true}
+                                                            >
+                                                                Tidak Valid
+                                                            </Dropdown.Link>
+                                                        </Dropdown.Content>
+                                                    </Dropdown>
                                                 </td>
                                             </>
                                         )}
@@ -576,10 +715,10 @@ export default function DetailPengajuan({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />
@@ -587,15 +726,15 @@ export default function DetailPengajuan({
                         </div>
                     </form>
 
-                    <h2 className="text-base font-semibold mt-2">
+                    <h2 className="mt-2 text-base font-semibold">
                         Berkas Berita Acara
                     </h2>
 
                     {/* Tabel Berkas Berita Acara */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -620,7 +759,7 @@ export default function DetailPengajuan({
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -629,7 +768,7 @@ export default function DetailPengajuan({
 
                                                 <td className="text-center">
                                                     {data.is_valid === null && (
-                                                        <div className="label-secondary">
+                                                        <div className="label-base bg-secondary/15">
                                                             Diproses
                                                         </div>
                                                     )}
@@ -651,14 +790,14 @@ export default function DetailPengajuan({
                                                         )}
                                                 </td>
 
-                                                <td className="text-center  ">
+                                                <td className="text-center ">
                                                     {data.is_valid == null && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
                                                             className="action-btn"
                                                         >
-                                                            <FaEye className="mr-2 mx-1" />
+                                                            <FaEye className="mx-1 mr-2" />
                                                             Lihat
                                                         </a>
                                                     )}
@@ -671,7 +810,7 @@ export default function DetailPengajuan({
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
-                                                                <FaEye className="mr-2 mx-1" />
+                                                                <FaEye className="mx-1 mr-2" />
                                                                 Lihat
                                                             </a>
                                                         )}
@@ -683,7 +822,7 @@ export default function DetailPengajuan({
                                                                 // href={`/storage/${data.path}`}
                                                                 className="action-btn"
                                                             >
-                                                                <FaEdit className="mr-2 mx-1" />
+                                                                <FaEdit className="mx-1 mr-2" />
                                                                 Edit
                                                             </a>
                                                         )}
@@ -698,7 +837,7 @@ export default function DetailPengajuan({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -735,11 +874,11 @@ export default function DetailPengajuan({
                                                         }
                                                         className="action-btn"
                                                     >
-                                                        <FaFileUpload className="mr-2 mx-1" />
+                                                        <FaFileUpload className="mx-1 mr-2" />
                                                         {uploadedFiles[
                                                             data.jenis_dokumen
                                                         ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
+                                                            <span className="max-w-xs truncate bg-accent">
                                                                 Upload
                                                             </span>
                                                         ) : (
@@ -756,10 +895,10 @@ export default function DetailPengajuan({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />
@@ -767,14 +906,14 @@ export default function DetailPengajuan({
                         </div>
                     </form>
 
-                    <h2 className="text-base font-semibold mt-2">
+                    <h2 className="mt-2 text-base font-semibold">
                         Berkas Kuitansi
                     </h2>
                     {/* Tabel Berkas Kuitansi */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -799,7 +938,7 @@ export default function DetailPengajuan({
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -808,7 +947,7 @@ export default function DetailPengajuan({
 
                                                 <td className="text-center">
                                                     {data.is_valid === null && (
-                                                        <div className="label-secondary">
+                                                        <div className="label-base bg-secondary/15">
                                                             Diproses
                                                         </div>
                                                     )}
@@ -830,14 +969,14 @@ export default function DetailPengajuan({
                                                         )}
                                                 </td>
 
-                                                <td className="text-center  ">
+                                                <td className="text-center ">
                                                     {data.is_valid == null && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
                                                             className="action-btn"
                                                         >
-                                                            <FaEye className="mr-2 mx-1" />
+                                                            <FaEye className="mx-1 mr-2" />
                                                             Lihat
                                                         </a>
                                                     )}
@@ -850,7 +989,7 @@ export default function DetailPengajuan({
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
-                                                                <FaEye className="mr-2 mx-1" />
+                                                                <FaEye className="mx-1 mr-2" />
                                                                 Lihat
                                                             </a>
                                                         )}
@@ -862,7 +1001,7 @@ export default function DetailPengajuan({
                                                                 // href={`/storage/${data.path}`}
                                                                 className="action-btn"
                                                             >
-                                                                <FaEdit className="mr-2 mx-1" />
+                                                                <FaEdit className="mx-1 mr-2" />
                                                                 Edit
                                                             </a>
                                                         )}
@@ -877,7 +1016,7 @@ export default function DetailPengajuan({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -914,11 +1053,11 @@ export default function DetailPengajuan({
                                                         }
                                                         className="action-btn"
                                                     >
-                                                        <FaFileUpload className="mr-2 mx-1" />
+                                                        <FaFileUpload className="mx-1 mr-2" />
                                                         {uploadedFiles[
                                                             data.jenis_dokumen
                                                         ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
+                                                            <span className="max-w-xs truncate bg-accent">
                                                                 Upload
                                                             </span>
                                                         ) : (
@@ -935,10 +1074,10 @@ export default function DetailPengajuan({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />
@@ -946,7 +1085,7 @@ export default function DetailPengajuan({
                         </div>
                     </form>
                 </div>
-            </div>
+            </section>
 
             {/* end of content */}
         </AuthenticatedLayout>

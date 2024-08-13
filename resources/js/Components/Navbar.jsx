@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { BiSolidDownArrowAlt } from "react-icons/bi";
 import ProfileImage from "./ProfileImage";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Navbar = ({user, title}) => {
     let admin = false
@@ -25,26 +26,26 @@ const Navbar = ({user, title}) => {
                 </label>
             </div>
           <div className="navbar-start">
-            <button><a className="btn btn-ghost normal-case text-2xl">{title}</a></button>
+            <button><a className="text-2xl normal-case btn btn-ghost">{title}</a></button>
           </div>
           <div className="navbar-end">
                     <div className="dropdown dropdown-end">
                       <label tabIndex={0} className="">
-                        {!user ? <button className="btn btn-ghost mr-8">Login / Register</button> :
-                        <div className="flex items-center -ml-10 w-36 justify-end gap-2 bg-secondary/10 rounded-md p-2">
-                            <div className="font-semibold flex-cols justify-end">
-                            <span className="block text-slate-600 text-base "> Nama {user.name}</span>
-                            <span className="block text-secondary text-xs text-right">{user.divisi}</span>
+                        {!user ? <button className="mr-8 btn btn-ghost">Login / Register</button> :
+                        <div className="flex items-center justify-end gap-2 p-2 transition-all group/item w-60 hover:shadow-md hover:bg-base-100/10 rounded-xl hover:cursor-pointer">
+                            <div className="mr-1 font-semibold text-nowrap">
+                            <span className="block text-sm text-slate-600 "> Nama {user.name}</span>
+                            <span className="block text-xs text-right text-secondary">{user.divisi}</span>
                             </div>
-                            <div >
-                            <ProfileImage name={user.name}/>
+                            <div className="avatar">
+                                <ProfileImage name={user.name}/>
                             </div>
+                            <IoIosArrowDown className='w-5 h-5 fill-slate-500 group-hover/item:fill-secondary/60' />
                         </div>
                          }
-                        {/* <button className="btn btn-ghost mr-8">Logged In as {user.divisi} <BiSolidDownArrowAlt size="1.5em"></BiSolidDownArrowAlt></button> */}
-
-
+                        {/* <button className="mr-8 btn btn-ghost">Logged In as {user.divisi} <BiSolidDownArrowAlt size="1.5em"></BiSolidDownArrowAlt></button> */}
                       </label>
+
                       <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-neutral rounded-box w-52 z-[50] relative text-black">
                           <>
                         <li><Link href="/home">Homepage</Link></li>
