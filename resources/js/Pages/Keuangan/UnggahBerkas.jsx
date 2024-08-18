@@ -9,13 +9,12 @@ import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { IoIosSend } from "react-icons/io";
 import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
+import { FaRegFolder } from "react-icons/fa6";
 
 export default function UnggahBerkas({
     title,
     auth,
     pengajuan,
-    kegiatan,
-    ketuaTim,
 }) {
     const [select, setSelect] = useState("");
     const props = usePage().props;
@@ -34,6 +33,9 @@ export default function UnggahBerkas({
         form_permintaan: null,
         surat_permintaan: false,
     });
+
+
+
 
     function submit(e) {
         e.preventDefault();
@@ -58,90 +60,74 @@ export default function UnggahBerkas({
         //     })
         // );
     }
+    const ketuaTim = pengajuan.created_by;
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
 
-    console.log(select);
 
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
             {/* content */}
             <div className="mx-24">
                 <div className="mb-6">
-                    <div className="breadcrumbs mt-3 text-sm">
+
+                    <div className="flex justify-between mt-7">
+                    <div className="mt-3 text-sm breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("ppk.daftar-berkas")}>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="mr-1 h-4 w-4 stroke-current"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                                        ></path>
-                                    </svg>
+                                <a href={route("keuangan.daftar-berkas")}>
+                                    <FaRegFolder className="w-4 h-4 mr-2 stroke-current" />
                                     Daftar Berkas
                                 </a>
                             </li>
 
                             <li>
                                 <span className="inline-flex items-center gap-2">
-                                    {kegiatan.nama_kegiatan}
+                                    {pengajuan.nama_kegiatan}
                                 </span>
                             </li>
 
                             <li>
                                 <span className="inline-flex items-center gap-2">
-                                    <MdOutlineDriveFolderUpload className="h-4 w-4 stroke-current" />
-                                    {/* <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="h-4 w-4 stroke-current"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                        ></path>
-                                    </svg> */}
+                                    <MdOutlineDriveFolderUpload className="w-4 h-4 stroke-current" />
                                     Unggah Berkas
                                 </span>
                             </li>
                         </ul>
                     </div>
-                    <div className="flex justify-between mt-7">
-                        <strong className="text-2xl">{title}</strong>
                         <SecondaryButton
                             onClick={() => window.history.back()}
-                            className="bg-secondary/5 capitalize "
+                            className="capitalize bg-secondary/5 "
                         >
                             Kembali{" "}
                             <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                         </SecondaryButton>
                     </div>
-                    <h4 className="mt-6 font-extrabold">
-                        Nama Kegiatan:
-                        <span className="mx-1 font-normal capitalize">
-                            {kegiatan.nama_kegiatan}
-                        </span>
-                    </h4>
-                    <h4 className="mt-2 mb-10 font-extrabold">
-                        Ketua Tim:
-                        <span className=" mx-1 font-normal capitalize">
-                            {ketuaTim.name}
-                        </span>
-                    </h4>
 
-                    <strong className="font-extrabold pt-12">
+
+
+                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap mb-8">
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Kegiatan</span>
+                            <span>: {pengajuan.nama_kegiatan}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Ketua Tim</span>
+                            <span>
+                                : {nama} {gelar}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Tim</span>
+                            <span>: {pengajuan.nama_tim}</span>
+                        </div>
+                    </div>
+
+                    <strong className="font-extrabold ">
                         Pilih Berkas yang ingin diunggah
                     </strong>
 
-                    <div className="max-w-screen-tablet pb-5">
+                    <div className="pb-5 max-w-screen-tablet">
                         {/* Pengajuan PBJ */}
 
                         <form
@@ -180,14 +166,14 @@ export default function UnggahBerkas({
                             </div>
 
                             {/* Button */}
-                            <div className="w-full mt-4 justify-end flex">
+                            <div className="flex justify-end w-full mt-4">
                                 <PrimaryButton
                                     disabled={processing}
                                     type="submit"
                                     className="bg-hijau"
                                 >
                                     Ajukan
-                                    <IoIosSend className="ml-1 w-5 h-5" />
+                                    <IoIosSend className="w-5 h-5 ml-1" />
                                 </PrimaryButton>
                             </div>
                         </form>

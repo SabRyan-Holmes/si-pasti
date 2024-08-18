@@ -14,7 +14,7 @@ import { FaRegFolder } from "react-icons/fa";
 export default function UnggahBerkas({ title, auth, pengajuan }) {
     const [select, setSelect] = useState("");
     const props = usePage().props;
-    const { data, setData, post, processing, errors, reset, clearErrors} =
+    const { data, setData, post, processing, errors, reset, clearErrors } =
         useForm({
             pengajuan_id: pengajuan.id,
             nama_kegiatan: pengajuan.nama_kegiatan,
@@ -42,7 +42,9 @@ export default function UnggahBerkas({ title, auth, pengajuan }) {
         });
     }
     const ketuaTim = pengajuan.created_by;
-    console.log('errors');
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
+    console.log("errors");
     console.log(errors);
 
     return (
@@ -50,11 +52,11 @@ export default function UnggahBerkas({ title, auth, pengajuan }) {
             {/* content */}
             <div className="mx-24">
                 <div className="mb-6">
-                    <div className="breadcrumbs mt-3 text-sm">
+                    <div className="mt-3 text-sm breadcrumbs">
                         <ul>
                             <li>
                                 <a href={route("ppk.daftar-berkas")}>
-                                    <FaRegFolder className="h-4 w-4 stroke-current mr-2" />
+                                    <FaRegFolder className="w-4 h-4 mr-2 stroke-current" />
                                     Daftar Berkas
                                 </a>
                             </li>
@@ -67,7 +69,7 @@ export default function UnggahBerkas({ title, auth, pengajuan }) {
 
                             <li>
                                 <span className="inline-flex items-center gap-2">
-                                    <MdOutlineDriveFolderUpload className="h-4 w-4 stroke-current" />
+                                    <MdOutlineDriveFolderUpload className="w-4 h-4 stroke-current" />
                                     Unggah Berkas
                                 </span>
                             </li>
@@ -77,26 +79,31 @@ export default function UnggahBerkas({ title, auth, pengajuan }) {
                         <strong className="text-2xl">{title}</strong>
                         <SecondaryButton
                             onClick={() => window.history.back()}
-                            className="bg-secondary/5 capitalize "
+                            className="capitalize bg-secondary/5 "
                         >
                             Kembali
                             <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                         </SecondaryButton>
                     </div>
-                    <h4 className="mt-6 font-extrabold">
-                        Nama Kegiatan:
-                        <span className="mx-1 font-normal capitalize">
-                            {pengajuan.nama_kegiatan}
-                        </span>
-                    </h4>
-                    <h4 className="mt-2 mb-10 font-extrabold">
-                        Ketua Tim:
-                        <span className=" mx-1 font-normal capitalize">
-                            {ketuaTim.name}
-                        </span>
-                    </h4>
 
-                    <div className="max-w-screen-tablet pb-5">
+                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Kegiatan</span>
+                            <span>: {pengajuan.nama_kegiatan}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Ketua Tim</span>
+                            <span>
+                                : {nama} {gelar}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Tim</span>
+                            <span>: {pengajuan.nama_tim}</span>
+                        </div>
+                    </div>
+
+                    <div className="pb-5 mt-10 max-w-screen-tablet">
                         {/* Pengajuan PBJ */}
 
                         <form
@@ -164,13 +171,13 @@ export default function UnggahBerkas({ title, auth, pengajuan }) {
                             </div>
 
                             {/* Button */}
-                            <div className="w-full mt-4 justify-end flex">
+                            <div className="flex justify-end w-full mt-4">
                                 <PrimaryButton
                                     disabled={processing}
                                     type="submit"
                                 >
                                     Ajukan
-                                    <IoIosSend className="ml-1 w-5 h-5" />
+                                    <IoIosSend className="w-5 h-5 ml-1" />
                                 </PrimaryButton>
                             </div>
                         </form>

@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Pengajuan;
 use App\Models\Document;
-use App\Models\Kegiatan;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\PengajuanStoreRequest;
+use App\Http\Requests\PPK\UnggahBerkasUlangRequest;
 
 class KetuaTimController extends Controller
 {
@@ -24,9 +22,10 @@ class KetuaTimController extends Controller
 
     public function ajukan_pengajuan(PengajuanStoreRequest $request)
     {
-        // dd($request);
+        dd($request);
         $validated = $request->validated();
         // Store Pengajuan/Pengajuan
+
         $new_pengajuan = Pengajuan::create([
             'nama_kegiatan' => $validated['nama_kegiatan'],
             'nama_tim' => $validated['nama_tim'],
@@ -38,12 +37,37 @@ class KetuaTimController extends Controller
         ]);
 
         // Logic Store Document
-        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang', $new_pengajuan->id);
-        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_pengajuan->id);
-        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $new_pengajuan->id);
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan', $new_pengajuan->id);
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan', $new_pengajuan->id);
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan', $new_pengajuan->id);
 
         return redirect()->back()->with('message', 'Pengajuan berhasil diajukan!');
     }
+
+    public function ajukan_berkas_ulang(UnggahBerkasUlangRequest $request)
+    {
+        // dd($request);
+
+        $request->validated();
+        //Pengajuan Ketua Tim /Pengadaan
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan', $request->pengajuan_id);
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan', $request->pengajuan_id);
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan', $request->pengajuan_id);
+
+
+        // Jika Diupload Ulang maka status dokumen kembali berubah dari tidak valid menjadi null/diproses
+        $ids = array_unique($request->edited_id);
+        // Update beberapa row sekaligus
+        Document::whereIn('id', $ids)->update([
+            'is_valid' => null
+        ]);
+
+
+        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
+    }
+
+
+
 
     private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori, $pengajuanId)
     {
@@ -94,10 +118,11 @@ class KetuaTimController extends Controller
 
     public function show_pengajuan(Pengajuan $pengajuan)
     {
-
+        $berkas_kt = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
         return Inertia::render('KetuaTim/ShowPengajuan', [
-            'title' => 'Status Pengadaan',
+            'title' => 'Detail Riwayat Pengajuan',
             'pengajuan' => $pengajuan,
+            'berkasKT' => $berkas_kt,
 
         ]);
     }
@@ -123,7 +148,7 @@ class KetuaTimController extends Controller
             "subTitle" => $subTitle,
             // "pengajuans" => $pengajuans->paginate(10),
             "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
-            "search" => request('search'),
+            "searchReq" => request('search'),
             "byStatusReq" => request('byStatus'),
             "byStageReq" => request('byStage'),
         ]);

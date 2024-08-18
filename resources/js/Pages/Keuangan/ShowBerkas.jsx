@@ -8,8 +8,9 @@ import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { IoIosSend } from "react-icons/io";
 import { Dropdown } from "@/Components";
+import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
 
-export default function CekBerkas({
+export default function ShowBerkas({
     title,
     auth,
     flash,
@@ -197,9 +198,12 @@ export default function CekBerkas({
         }
     }, [flash.message]);
 
+    const ketuaTim = pengajuan.created_by;
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
+
     console.log("errors :");
     console.log(errors);
-    const ketuaTim = pengajuan.created_by
 
     return (
         <AuthenticatedLayout
@@ -212,36 +216,60 @@ export default function CekBerkas({
             <section className="mx-auto px-7">
                 <div className="my-6">
                     <div className="flex justify-between">
-                        <strong className="text-2xl">{title}</strong>
+                        <div className="my-3 text-sm capitalize breadcrumbs">
+                            <ul>
+                                <li>
+                                    <a href={route("keuangan.daftar-berkas")}>
+                                        <FaRegFolder className="w-4 h-4 mr-2" />
+                                        Daftar Berkas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <FaRegFolderOpen className="w-4 h-4 mr-2" />
+                                        {pengajuan.nama_kegiatan}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>{title}</a>
+                                </li>
+                            </ul>
+                        </div>
                         <SecondaryButton
                             onClick={() => window.history.back()}
-                            className="bg-secondary/5 capitalize "
+                            className="capitalize bg-secondary/5 "
                         >
                             Kembali
                             <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                         </SecondaryButton>
                     </div>
 
-                    <div class="max-w-screen-phone  mt-10">
+                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>
                             <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1  font-bold">Ketua TIM</span>
-                            <span>: {ketuaTim.name}</span>
+                            <span class="mr-1 font-bold">Ketua Tim </span>
+                            <span>
+                                : {nama} {gelar}{" "}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Tim</span>
+                            <span>: {pengajuan.nama_tim}</span>
                         </div>
                     </div>
                 </div>
-                <div className="overflow-x-auto mt-16 mb-20">
+                <div className="mt-10 mb-20 overflow-x-auto">
                     <h2 className="text-base font-semibold">
                         Berkas Pengajuan PBJ
                     </h2>
                     {/* Tabel Berkas Pengajuan PBJ Start */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -265,7 +293,7 @@ export default function CekBerkas({
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -303,7 +331,7 @@ export default function CekBerkas({
                                                                 <span className="inline-flex rounded-md">
                                                                     <button
                                                                         type="button"
-                                                                        className="inline-flex items-center  py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                        className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none"
                                                                     >
                                                                         Pilih
                                                                         Status
@@ -360,7 +388,7 @@ export default function CekBerkas({
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
-                                                                <FaEye className="mr-2 mx-1" />
+                                                                <FaEye className="mx-1 mr-2" />
                                                                 Lihat
                                                             </a>
                                                         )}
@@ -372,7 +400,7 @@ export default function CekBerkas({
                                                                 // href={`/storage/${data.path}`}
                                                                 className="action-btn"
                                                             >
-                                                                <FaEdit className="mr-2 mx-1" />
+                                                                <FaEdit className="mx-1 mr-2" />
                                                                 Edit
                                                             </a>
                                                         )}
@@ -387,7 +415,7 @@ export default function CekBerkas({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -408,7 +436,7 @@ export default function CekBerkas({
                                                             <span className="inline-flex rounded-md hover:cursor-not-allowed">
                                                                 <button
                                                                     type="button"
-                                                                    className="inline-flex items-center hover:cursor-not-allowed py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:cursor-not-allowed hover:text-gray-700 focus:outline-none"
                                                                 >
                                                                     Pilih Status
                                                                     <svg
@@ -438,7 +466,6 @@ export default function CekBerkas({
                                                                     is_valid: true,
                                                                 }}
                                                                 disabled={true}
-
                                                             >
                                                                 Valid
                                                             </Dropdown.Link>
@@ -452,7 +479,6 @@ export default function CekBerkas({
                                                                     is_valid: false,
                                                                 }}
                                                                 disabled={true}
-
                                                             >
                                                                 Tidak Valid
                                                             </Dropdown.Link>
@@ -466,10 +492,10 @@ export default function CekBerkas({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />
@@ -477,14 +503,14 @@ export default function CekBerkas({
                         </div>
                     </form>
 
-                    <h2 className="text-base font-semibold  mt-2 ">
+                    <h2 className="mt-2 text-base font-semibold ">
                         Berkas Berkas Pemesanan
                     </h2>
                     {/* Tabel Berkas Pemesanan */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -508,7 +534,7 @@ export default function CekBerkas({
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -541,12 +567,12 @@ export default function CekBerkas({
 
                                                 <td className="text-center">
                                                     {data.is_valid == null && (
-                                                        <Dropdown >
+                                                        <Dropdown>
                                                             <Dropdown.Trigger>
                                                                 <span className="inline-flex rounded-md">
                                                                     <button
                                                                         type="button"
-                                                                        className="inline-flex items-center  py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                        className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none"
                                                                     >
                                                                         Pilih
                                                                         Status
@@ -603,7 +629,7 @@ export default function CekBerkas({
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
-                                                                <FaEye className="mr-2 mx-1" />
+                                                                <FaEye className="mx-1 mr-2" />
                                                                 Lihat
                                                             </a>
                                                         )}
@@ -615,7 +641,7 @@ export default function CekBerkas({
                                                                 // href={`/storage/${data.path}`}
                                                                 className="action-btn"
                                                             >
-                                                                <FaEdit className="mr-2 mx-1" />
+                                                                <FaEdit className="mx-1 mr-2" />
                                                                 Edit
                                                             </a>
                                                         )}
@@ -630,7 +656,7 @@ export default function CekBerkas({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -651,7 +677,7 @@ export default function CekBerkas({
                                                             <span className="inline-flex rounded-md">
                                                                 <button
                                                                     type="button"
-                                                                    className="inline-flex items-center  py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                                    className="inline-flex items-center py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none"
                                                                 >
                                                                     Pilih Status
                                                                     <svg
@@ -708,10 +734,10 @@ export default function CekBerkas({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />
@@ -719,15 +745,15 @@ export default function CekBerkas({
                         </div>
                     </form>
 
-                    <h2 className="text-base font-semibold mt-2">
+                    <h2 className="mt-2 text-base font-semibold">
                         Berkas Berita Acara
                     </h2>
 
                     {/* Tabel Berkas Berita Acara */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -752,7 +778,7 @@ export default function CekBerkas({
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -783,14 +809,14 @@ export default function CekBerkas({
                                                         )}
                                                 </td>
 
-                                                <td className="text-center  ">
+                                                <td className="text-center ">
                                                     {data.is_valid == null && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
                                                             className="action-btn"
                                                         >
-                                                            <FaEye className="mr-2 mx-1" />
+                                                            <FaEye className="mx-1 mr-2" />
                                                             Lihat
                                                         </a>
                                                     )}
@@ -803,7 +829,7 @@ export default function CekBerkas({
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
-                                                                <FaEye className="mr-2 mx-1" />
+                                                                <FaEye className="mx-1 mr-2" />
                                                                 Lihat
                                                             </a>
                                                         )}
@@ -815,7 +841,7 @@ export default function CekBerkas({
                                                                 // href={`/storage/${data.path}`}
                                                                 className="action-btn"
                                                             >
-                                                                <FaEdit className="mr-2 mx-1" />
+                                                                <FaEdit className="mx-1 mr-2" />
                                                                 Edit
                                                             </a>
                                                         )}
@@ -830,7 +856,7 @@ export default function CekBerkas({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -867,11 +893,11 @@ export default function CekBerkas({
                                                         }
                                                         className="action-btn"
                                                     >
-                                                        <FaFileUpload className="mr-2 mx-1" />
+                                                        <FaFileUpload className="mx-1 mr-2" />
                                                         {uploadedFiles[
                                                             data.jenis_dokumen
                                                         ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
+                                                            <span className="max-w-xs truncate bg-accent">
                                                                 Upload
                                                             </span>
                                                         ) : (
@@ -888,10 +914,10 @@ export default function CekBerkas({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />
@@ -899,14 +925,14 @@ export default function CekBerkas({
                         </div>
                     </form>
 
-                    <h2 className="text-base font-semibold mt-2">
+                    <h2 className="mt-2 text-base font-semibold">
                         Berkas Kuitansi
                     </h2>
                     {/* Tabel Berkas Kuitansi */}
                     <form onSubmit={submit} enctype="multipart/form-data">
-                        <table className="table border rounded-md border-primary/25 mt-3 table-bordered">
+                        <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                             {/* head */}
-                            <thead className="">
+                            <thead className="bg-secondary">
                                 <tr className="text-sm ">
                                     <th width="5%"></th>
                                     <th width="30%">Nama Berkas</th>
@@ -931,7 +957,7 @@ export default function CekBerkas({
                                         </td>
                                         {data.nama ? (
                                             <>
-                                                <td className="capitalize text-xs ">
+                                                <td className="text-xs capitalize ">
                                                     {data.nama}.
                                                     <span className="lowercase">
                                                         {data.tipe_file}
@@ -962,14 +988,14 @@ export default function CekBerkas({
                                                         )}
                                                 </td>
 
-                                                <td className="text-center  ">
+                                                <td className="text-center ">
                                                     {data.is_valid == null && (
                                                         <a
                                                             href={`/storage/${data.path}`}
                                                             target="_blank"
                                                             className="action-btn"
                                                         >
-                                                            <FaEye className="mr-2 mx-1" />
+                                                            <FaEye className="mx-1 mr-2" />
                                                             Lihat
                                                         </a>
                                                     )}
@@ -982,7 +1008,7 @@ export default function CekBerkas({
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
-                                                                <FaEye className="mr-2 mx-1" />
+                                                                <FaEye className="mx-1 mr-2" />
                                                                 Lihat
                                                             </a>
                                                         )}
@@ -994,7 +1020,7 @@ export default function CekBerkas({
                                                                 // href={`/storage/${data.path}`}
                                                                 className="action-btn"
                                                             >
-                                                                <FaEdit className="mr-2 mx-1" />
+                                                                <FaEdit className="mx-1 mr-2" />
                                                                 Edit
                                                             </a>
                                                         )}
@@ -1009,7 +1035,7 @@ export default function CekBerkas({
                                                     {uploadedFiles[
                                                         data.jenis_dokumen
                                                     ] ? (
-                                                        <span className="capitalize text-sm text-secondary font-medium text-center">
+                                                        <span className="text-sm font-medium text-center capitalize text-secondary">
                                                             {
                                                                 uploadedFiles[
                                                                     data
@@ -1046,11 +1072,11 @@ export default function CekBerkas({
                                                         }
                                                         className="action-btn"
                                                     >
-                                                        <FaFileUpload className="mr-2 mx-1" />
+                                                        <FaFileUpload className="mx-1 mr-2" />
                                                         {uploadedFiles[
                                                             data.jenis_dokumen
                                                         ] ? (
-                                                            <span className="truncate bg-accent max-w-xs">
+                                                            <span className="max-w-xs truncate bg-accent">
                                                                 Upload
                                                             </span>
                                                         ) : (
@@ -1067,10 +1093,10 @@ export default function CekBerkas({
                             </tbody>
                         </table>
                         {/* Button */}
-                        <div className="w-full mt-4 justify-end flex">
+                        <div className="flex justify-end w-full mt-4">
                             <button
                                 type="submit"
-                                className="button-correct uppercase"
+                                className="uppercase button-correct"
                             >
                                 Kirim Ulang
                                 <IoIosSend />

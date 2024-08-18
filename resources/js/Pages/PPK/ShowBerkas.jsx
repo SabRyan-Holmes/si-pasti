@@ -268,10 +268,10 @@ export default function DetailPengajuan({
                                                                     data.nama
                                                                 }
                                                                 target="_blank"
-                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
                                                             >
                                                                 Unduh
-                                                                <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
                                                             </a>
                                                         </div>
                                                     </div>
@@ -325,6 +325,7 @@ export default function DetailPengajuan({
                                                                     data={{
                                                                         id: data.id,
                                                                         is_valid: true,
+                                                                        pengajuan_id: pengajuan.id
                                                                     }}
                                                                 >
                                                                     <span className="text-hijau">
@@ -339,6 +340,7 @@ export default function DetailPengajuan({
                                                                     data={{
                                                                         id: data.id,
                                                                         is_valid: false,
+                                                                        pengajuan_id: pengajuan.id
                                                                     }}
                                                                 >
                                                                     <span className="text-error">
@@ -395,14 +397,6 @@ export default function DetailPengajuan({
 
                                                             <Dropdown.Content>
                                                                 <Dropdown.Link
-                                                                    method="post"
-                                                                    href={route(
-                                                                        "ppk.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: true,
-                                                                    }}
                                                                     disabled={
                                                                         true
                                                                     }
@@ -411,13 +405,6 @@ export default function DetailPengajuan({
                                                                 </Dropdown.Link>
                                                                 <Dropdown.Link
                                                                     method="post"
-                                                                    href={route(
-                                                                        "ppk.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: false,
-                                                                    }}
                                                                     disabled={
                                                                         true
                                                                     }
@@ -499,10 +486,10 @@ export default function DetailPengajuan({
                                                                     data.nama
                                                                 }
                                                                 target="_blank"
-                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
                                                             >
                                                                 Unduh
-                                                                <FaDownload className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
                                                             </a>
                                                         </div>
                                                     </div>
@@ -555,6 +542,7 @@ export default function DetailPengajuan({
                                                                     data={{
                                                                         id: data.id,
                                                                         is_valid: true,
+                                                                        pengajuan_id: pengajuan.id
                                                                     }}
                                                                 >
                                                                     <span className="text-hijau">
@@ -569,6 +557,7 @@ export default function DetailPengajuan({
                                                                     data={{
                                                                         id: data.id,
                                                                         is_valid: false,
+                                                                        pengajuan_id: pengajuan.id
                                                                     }}
                                                                 >
                                                                     <span className="text-error">
@@ -625,14 +614,7 @@ export default function DetailPengajuan({
 
                                                             <Dropdown.Content>
                                                                 <Dropdown.Link
-                                                                    method="post"
-                                                                    href={route(
-                                                                        "ppk.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: true,
-                                                                    }}
+
                                                                     disabled={
                                                                         true
                                                                     }
@@ -640,14 +622,6 @@ export default function DetailPengajuan({
                                                                     Valid
                                                                 </Dropdown.Link>
                                                                 <Dropdown.Link
-                                                                    method="post"
-                                                                    href={route(
-                                                                        "ppk.validasi"
-                                                                    )}
-                                                                    data={{
-                                                                        id: data.id,
-                                                                        is_valid: false,
-                                                                    }}
                                                                     disabled={
                                                                         true
                                                                     }

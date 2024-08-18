@@ -31,7 +31,7 @@ class PBJController extends Controller
             "subTitle" => $subTitle,
             // "pengajuans" => $pengajuans->paginate(10),
             "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
-            "search" => request('search'),
+            "searchReq" => request('search'),
             "byStatusReq" => request('byStatus'),
             "byStageReq" => request('byStage'),
         ]);
@@ -47,7 +47,7 @@ class PBJController extends Controller
         $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
 
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
-        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
+        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Pembayaran')->get();
 
         // dd($berkas_pbj);
         return Inertia::render('PBJ/ShowBerkas', [
@@ -159,7 +159,7 @@ class PBJController extends Controller
             "subTitle" => $subTitle,
             // "pengajuans" => $pengajuans->paginate(10),
             "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
-            "search" => request('search'),
+            "searchReq" => request('search'),
             "byStatusReq" => request('byStatus'),
             "byStageReq" => request('byStage'),
         ]);

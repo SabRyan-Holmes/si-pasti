@@ -5,13 +5,8 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
-import { MdEditDocument } from "react-icons/md";
 import { IoIosSend } from "react-icons/io";
-import {
-    FaFileCircleCheck,
-    FaRegFolder,
-    FaRegFolderOpen,
-} from "react-icons/fa6";
+import { FaDownload, FaFileCircleCheck } from "react-icons/fa6";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TiDocumentText } from "react-icons/ti";
 
@@ -110,6 +105,9 @@ export default function ShowPengajuan({
             nama_kegiatan: pengajuan.nama_kegiatan,
             unggah_ulang: true,
 
+            // If edited
+            edited_id: [],
+
             // Pengajuan PBJ
             "rancangan kontrak": null,
             spekteknis: null,
@@ -191,6 +189,8 @@ export default function ShowPengajuan({
     console.log("errors :");
     console.log(errors);
     const ketuaTim = pengajuan.created_by;
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
 
     return (
         <AuthenticatedLayout
@@ -238,10 +238,18 @@ export default function ShowPengajuan({
                             <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Ketua TIM</span>
-                            <span>: {ketuaTim.name}</span>
+                            <span class="mr-1 font-bold">Ketua TIM /NIP</span>
+                            <span>
+                                : {nama} {gelar}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-0">
+                            <span class="mr-1 font-bold">Nama Tim</span>
+                            <span>: {pengajuan.nama_tim}</span>
                         </div>
                     </div>
+
+
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">
                             Berkas Pengajuan PBJ
@@ -264,39 +272,76 @@ export default function ShowPengajuan({
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {documentsPBJ.map((data, i) => (
+                                    {documentsPBJ.map((berkas, i) => (
                                         <tr>
                                             <th className="text-primary">
                                                 {i + 1}
                                             </th>
                                             <td className="capitalize">
-                                                {data.jenis_dokumen}
+                                                {berkas.jenis_dokumen}
                                             </td>
-                                            {data.nama ? (
+                                            {berkas.nama ? (
                                                 <>
-                                                    <td className="text-xs capitalize ">
-                                                        {data.nama}.
-                                                        <span className="lowercase">
-                                                            {data.tipe_file}
-                                                        </span>
+                                                    <td className="text-sm capitalize">
+                                                        <div className="relative group">
+                                                            <a
+                                                                href={`/storage/${berkas.path}`}
+                                                                target="_blank"
+                                                                className="underline hover:text-primary text-primary decoration-primary"
+                                                            >
+                                                                {berkas.nama}.
+                                                                <span className="lowercase">
+                                                                    {
+                                                                        berkas.tipe_file
+                                                                    }
+                                                                </span>
+                                                            </a>
+
+                                                            {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                            <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                                {/* Tombol "Lihat" */}
+
+                                                                <a
+                                                                    href={`/storage/${berkas.path}`}
+                                                                    target="_blank"
+                                                                    className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                                >
+                                                                    Lihat
+                                                                    <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                                </a>
+
+                                                                {/* Tombol "Download" */}
+                                                                <a
+                                                                    href={`/storage/${berkas.path}`}
+                                                                    download={
+                                                                        berkas.nama
+                                                                    }
+                                                                    target="_blank"
+                                                                    className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
+                                                                >
+                                                                    Unduh
+                                                                    <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     </td>
 
-                                                    <td className="text-center">
-                                                        {data.is_valid ===
+                                                    <td className="text-center text-nowrap">
+                                                        {berkas.is_valid ==
                                                             null && (
                                                             <div className="label-base bg-secondary/10">
                                                                 Diproses
                                                             </div>
                                                         )}
 
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             true && (
                                                             <div className="label-success">
                                                                 Valid
                                                             </div>
                                                         )}
 
-                                                        {!data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             false && (
                                                             <div className="label-warning">
                                                                 Tidak Valid
@@ -304,11 +349,11 @@ export default function ShowPengajuan({
                                                         )}
                                                     </td>
 
-                                                    <td className="text-center">
-                                                        {data.is_valid ==
+                                                    <td className="text-center text-nowrap">
+                                                        {berkas.is_valid ==
                                                             null && (
                                                             <a
-                                                                href={`/storage/${data.path}`}
+                                                                href={`/storage/${berkas.path}`}
                                                                 target="_blank"
                                                                 className="mx-auto transition-all action-btn text-hijau hover:scale-105"
                                                             >
@@ -317,10 +362,10 @@ export default function ShowPengajuan({
                                                             </a>
                                                         )}
 
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             true && (
                                                             <a
-                                                                href={`/storage/${data.path}`}
+                                                                href={`/storage/${berkas.path}`}
                                                                 target="_blank"
                                                                 className="mx-auto transition-all action-btn text-hijau hover:scale-105"
                                                             >
@@ -329,16 +374,87 @@ export default function ShowPengajuan({
                                                             </a>
                                                         )}
 
-                                                        {data.is_valid ==
-                                                            false && (
-                                                            <a
-                                                                // href={`/storage/${data.path}`}
-                                                                // TODO: LOGIKA EDIT/MODIFIKASI
-                                                                className="mx-auto transition-all action-btn text-secondary hover:scale-105"
+                                                        {/* input  Hidden for Upload Ulang*/}
+                                                        <input
+                                                            id={
+                                                                berkas.jenis_dokumen
+                                                            }
+                                                            type="file"
+                                                            className="hidden"
+                                                            onChange={(e) => {
+                                                                handleFileChange(
+                                                                    e,
+                                                                    berkas.jenis_dokumen,
+                                                                    getKeyByValue(
+                                                                        requiredBerkasPBJ,
+                                                                        berkas.jenis_dokumen
+                                                                    )
+                                                                );
+                                                                // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
+
+                                                                // Gunakan setData dengan cara yang benar
+                                                                setData(
+                                                                    (
+                                                                        prevData
+                                                                    ) => {
+                                                                        // Tambahkan berkas.id ke edited_id, pastikan tidak ada duplikat
+                                                                        const updatedEditedId =
+                                                                            [
+                                                                                ...prevData.edited_id,
+                                                                                berkas.id,
+                                                                            ].filter(
+                                                                                (
+                                                                                    v,
+                                                                                    i,
+                                                                                    a
+                                                                                ) =>
+                                                                                    a.indexOf(
+                                                                                        v
+                                                                                    ) ===
+                                                                                    i
+                                                                            );
+
+                                                                        return {
+                                                                            ...prevData,
+                                                                            edited_id:
+                                                                                updatedEditedId,
+                                                                        };
+                                                                    }
+                                                                );
+                                                            }}
+                                                        />
+
+                                                        {berkas.is_valid ==
+                                                            false &&
+                                                        uploadedFiles[
+                                                            berkas.jenis_dokumen
+                                                        ] ? (
+                                                            <label
+                                                                htmlFor={
+                                                                    berkas.jenis_dokumen
+                                                                }
+                                                                className="transition-all cursor-wait action-btn text-secondary hover:scale-105"
                                                             >
-                                                                <FaEdit className="mx-1 mr-1 fill-secondary" />
-                                                                Edit
-                                                            </a>
+                                                                <FaFileCircleCheck className="mx-1 mr-1 fill-secondary" />
+                                                                <span>
+                                                                    Edit
+                                                                </span>
+                                                            </label>
+                                                        ) : (
+                                                            berkas.is_valid ==
+                                                                false && (
+                                                                <label
+                                                                    htmlFor={
+                                                                        berkas.jenis_dokumen
+                                                                    }
+                                                                    className="transition-all action-btn text-secondary hover:scale-105"
+                                                                >
+                                                                    <FaEdit className="mx-1 mr-1 fill-secondary" />
+                                                                    <span>
+                                                                        Edit
+                                                                    </span>
+                                                                </label>
+                                                            )
                                                         )}
                                                     </td>
                                                 </>
@@ -349,12 +465,12 @@ export default function ShowPengajuan({
                                                         className="text-center"
                                                     >
                                                         {uploadedFiles[
-                                                            data.jenis_dokumen
+                                                            berkas.jenis_dokumen
                                                         ] ? (
                                                             <span className="text-sm font-medium text-center capitalize text-secondary">
                                                                 {
                                                                     uploadedFiles[
-                                                                        data
+                                                                        berkas
                                                                             .jenis_dokumen
                                                                     ]
                                                                 }
@@ -367,31 +483,64 @@ export default function ShowPengajuan({
                                                         )}
                                                     </td>
                                                     <td className="text-center">
+                                                        {/* input  Hidden for upload jika belum pernah diupload*/}
+
                                                         <input
                                                             id={
-                                                                data.jenis_dokumen
+                                                                berkas.jenis_dokumen
                                                             }
                                                             type="file"
                                                             className="hidden"
-                                                            onChange={(e) =>
+                                                            onChange={(e) => {
                                                                 handleFileChange(
                                                                     e,
-                                                                    data.jenis_dokumen,
+                                                                    berkas.jenis_dokumen,
                                                                     getKeyByValue(
                                                                         requiredBerkasPBJ,
-                                                                        data.jenis_dokumen
+                                                                        berkas.jenis_dokumen
                                                                     )
-                                                                )
-                                                            }
+                                                                );
+                                                                // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
+
+                                                                // Gunakan setData dengan cara yang benar
+                                                                setData(
+                                                                    (
+                                                                        prevData
+                                                                    ) => {
+                                                                        // Tambahkan berkas.id ke edited_id, pastikan tidak ada duplikat
+                                                                        const updatedEditedId =
+                                                                            [
+                                                                                ...prevData.edited_id,
+                                                                                berkas.id,
+                                                                            ].filter(
+                                                                                (
+                                                                                    v,
+                                                                                    i,
+                                                                                    a
+                                                                                ) =>
+                                                                                    a.indexOf(
+                                                                                        v
+                                                                                    ) ===
+                                                                                    i
+                                                                            );
+
+                                                                        return {
+                                                                            ...prevData,
+                                                                            edited_id:
+                                                                                updatedEditedId,
+                                                                        };
+                                                                    }
+                                                                );
+                                                            }}
                                                         />
 
                                                         {/* Kalo Dicoba Upload */}
                                                         {uploadedFiles[
-                                                            data.jenis_dokumen
+                                                            berkas.jenis_dokumen
                                                         ] ? (
                                                             <label
                                                                 htmlFor={
-                                                                    data.jenis_dokumen
+                                                                    berkas.jenis_dokumen
                                                                 }
                                                                 className="transition-all cursor-wait action-btn text-secondary hover:scale-105"
                                                             >
@@ -403,7 +552,7 @@ export default function ShowPengajuan({
                                                         ) : (
                                                             <label
                                                                 htmlFor={
-                                                                    data.jenis_dokumen
+                                                                    berkas.jenis_dokumen
                                                                 }
                                                                 className="transition-all action-btn text-secondary hover:scale-105"
                                                             >
@@ -453,39 +602,39 @@ export default function ShowPengajuan({
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {berkasPK.map((data, i) => (
+                                    {berkasPK.map((berkas, i) => (
                                         <tr>
                                             <th className="text-primary">
                                                 {i + 1}
                                             </th>
                                             <td className="capitalize">
-                                                {data.jenis_dokumen}
+                                                {berkas.jenis_dokumen}
                                             </td>
-                                            {data.nama ? (
+                                            {berkas.nama ? (
                                                 <>
                                                     <td className="text-xs capitalize ">
-                                                        {data.nama}.
+                                                        {berkas.nama}.
                                                         <span className="lowercase">
-                                                            {data.tipe_file}
+                                                            {berkas.tipe_file}
                                                         </span>
                                                     </td>
 
                                                     <td className="text-center">
-                                                        {data.is_valid ===
+                                                        {berkas.is_valid ===
                                                             null && (
                                                             <div className="label-base bg-secondary/10">
                                                                 Diproses
                                                             </div>
                                                         )}
 
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             true && (
                                                             <div className="label-success">
                                                                 Valid
                                                             </div>
                                                         )}
 
-                                                        {!data.is_valid ==
+                                                        {!berkas.is_valid ==
                                                             false && (
                                                             <div className="label-warning">
                                                                 Tidak Valid
@@ -494,10 +643,10 @@ export default function ShowPengajuan({
                                                     </td>
 
                                                     <td className="text-center">
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             null && (
                                                             <a
-                                                                href={`/storage/${data.path}`}
+                                                                href={`/storage/${berkas.path}`}
                                                                 target="_blank"
                                                                 className="mx-auto transition-all action-btn text-hijau hover:scale-105"
                                                             >
@@ -506,10 +655,10 @@ export default function ShowPengajuan({
                                                             </a>
                                                         )}
 
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             true && (
                                                             <a
-                                                                href={`/storage/${data.path}`}
+                                                                href={`/storage/${berkas.path}`}
                                                                 target="_blank"
                                                                 className="mx-auto transition-all action-btn text-hijau hover:scale-105"
                                                             >
@@ -518,10 +667,10 @@ export default function ShowPengajuan({
                                                             </a>
                                                         )}
 
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             false && (
                                                             <a
-                                                                // href={`/storage/${data.path}`}
+                                                                // href={`/storage/${berkas.path}`}
                                                                 // TODO: LOGIKA EDIT/MODIFIKASI
                                                                 className="mx-auto transition-all action-btn text-secondary hover:scale-105"
                                                             >
@@ -538,7 +687,7 @@ export default function ShowPengajuan({
                                                         className="text-center"
                                                     >
                                                         {uploadedFiles[
-                                                            data.jenis_dokumen
+                                                            berkas.jenis_dokumen
                                                         ] ? (
                                                             <span className="text-sm font-medium text-center capitalize text-secondary">
                                                                 {
@@ -558,17 +707,17 @@ export default function ShowPengajuan({
                                                     <td className="text-center">
                                                         <input
                                                             id={
-                                                                data.jenis_dokumen
+                                                                berkas.jenis_dokumen
                                                             }
                                                             type="file"
                                                             className="hidden"
                                                             onChange={(e) =>
                                                                 handleFileChange(
                                                                     e,
-                                                                    data.jenis_dokumen,
+                                                                    berkas.jenis_dokumen,
                                                                     getKeyByValue(
                                                                         requiredBerkasPBJ,
-                                                                        data.jenis_dokumen
+                                                                        berkas.jenis_dokumen
                                                                     )
                                                                 )
                                                             }
@@ -576,11 +725,11 @@ export default function ShowPengajuan({
 
                                                         {/* Kalo Dicoba Upload */}
                                                         {uploadedFiles[
-                                                            data.jenis_dokumen
+                                                            berkas.jenis_dokumen
                                                         ] ? (
                                                             <label
                                                                 htmlFor={
-                                                                    data.jenis_dokumen
+                                                                    berkas.jenis_dokumen
                                                                 }
                                                                 className="transition-all cursor-wait action-btn text-secondary hover:scale-105"
                                                             >
@@ -592,7 +741,7 @@ export default function ShowPengajuan({
                                                         ) : (
                                                             <label
                                                                 htmlFor={
-                                                                    data.jenis_dokumen
+                                                                    berkas.jenis_dokumen
                                                                 }
                                                                 className="transition-all action-btn text-secondary hover:scale-105"
                                                             >
@@ -644,41 +793,41 @@ export default function ShowPengajuan({
                                 </thead>
                                 <tbody>
                                     {/* row 1 */}
-                                    {berkasBA.map((data, i) => (
+                                    {berkasBA.map((berkas, i) => (
                                         <tr>
                                             <th className="text-primary">
                                                 {i + 1}
                                             </th>
                                             <td className="capitalize ">
-                                                {data.jenis_dokumen}
+                                                {berkas.jenis_dokumen}
                                             </td>
-                                            {data.nama ? (
+                                            {berkas.nama ? (
                                                 <>
                                                     <td className="text-xs capitalize ">
-                                                        {data.nama}.
+                                                        {berkas.nama}.
                                                         <span className="lowercase">
-                                                            {data.tipe_file}
+                                                            {berkas.tipe_file}
                                                         </span>
                                                     </td>
 
                                                     <td className="text-center">
-                                                        {data.is_valid ===
+                                                        {berkas.is_valid ===
                                                             null && (
                                                             <div className="label-base bg-secondary/10">
                                                                 Diproses
                                                             </div>
                                                         )}
 
-                                                        {data.is_valid &&
-                                                            data.is_valid !=
+                                                        {berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <div className="label-success">
                                                                     Valid
                                                                 </div>
                                                             )}
 
-                                                        {!data.is_valid &&
-                                                            data.is_valid !=
+                                                        {!berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <div className="label-warning">
                                                                     Tidak Valid
@@ -687,10 +836,10 @@ export default function ShowPengajuan({
                                                     </td>
 
                                                     <td className="text-center ">
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             null && (
                                                             <a
-                                                                href={`/storage/${data.path}`}
+                                                                href={`/storage/${berkas.path}`}
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
@@ -699,11 +848,11 @@ export default function ShowPengajuan({
                                                             </a>
                                                         )}
 
-                                                        {data.is_valid &&
-                                                            data.is_valid !=
+                                                        {berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <a
-                                                                    href={`/storage/${data.path}`}
+                                                                    href={`/storage/${berkas.path}`}
                                                                     target="_blank"
                                                                     className="action-btn"
                                                                 >
@@ -712,11 +861,11 @@ export default function ShowPengajuan({
                                                                 </a>
                                                             )}
 
-                                                        {!data.is_valid &&
-                                                            data.is_valid !=
+                                                        {!berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <a
-                                                                    // href={`/storage/${data.path}`}
+                                                                    // href={`/storage/${berkas.path}`}
                                                                     className="action-btn"
                                                                 >
                                                                     <FaEdit className="mx-1 mr-1" />
@@ -732,7 +881,7 @@ export default function ShowPengajuan({
                                                         className="text-center"
                                                     >
                                                         {uploadedFiles[
-                                                            data.jenis_dokumen
+                                                            berkas.jenis_dokumen
                                                         ] ? (
                                                             <span className="text-sm font-medium text-center capitalize text-secondary">
                                                                 {
@@ -752,24 +901,24 @@ export default function ShowPengajuan({
                                                     <td className="text-center">
                                                         <input
                                                             id={
-                                                                data.jenis_dokumen
+                                                                berkas.jenis_dokumen
                                                             }
                                                             type="file"
                                                             className="hidden"
                                                             onChange={(e) =>
                                                                 handleFileChange(
                                                                     e,
-                                                                    data.jenis_dokumen,
+                                                                    berkas.jenis_dokumen,
                                                                     getKeyByValue(
                                                                         requiredBerkasBA,
-                                                                        data.jenis_dokumen
+                                                                        berkas.jenis_dokumen
                                                                     )
                                                                 )
                                                             }
                                                         />
                                                         <label
                                                             htmlFor={
-                                                                data.jenis_dokumen
+                                                                berkas.jenis_dokumen
                                                             }
                                                             className="action-btn"
                                                         >
@@ -828,41 +977,41 @@ export default function ShowPengajuan({
                                 </thead>
                                 <tbody>
                                     {/* row 1 */}
-                                    {berkasKuitansi.map((data, i) => (
+                                    {berkasKuitansi.map((berkas, i) => (
                                         <tr>
                                             <th className="text-primary">
                                                 {i + 1}
                                             </th>
                                             <td className="capitalize ">
-                                                {data.jenis_dokumen}
+                                                {berkas.jenis_dokumen}
                                             </td>
-                                            {data.nama ? (
+                                            {berkas.nama ? (
                                                 <>
                                                     <td className="text-xs capitalize ">
-                                                        {data.nama}.
+                                                        {berkas.nama}.
                                                         <span className="lowercase">
-                                                            {data.tipe_file}
+                                                            {berkas.tipe_file}
                                                         </span>
                                                     </td>
 
                                                     <td className="text-center">
-                                                        {data.is_valid ===
+                                                        {berkas.is_valid ===
                                                             null && (
                                                             <div className="label-base bg-secondary/10">
                                                                 Diproses
                                                             </div>
                                                         )}
 
-                                                        {data.is_valid &&
-                                                            data.is_valid !=
+                                                        {berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <div className="label-success">
                                                                     Valid
                                                                 </div>
                                                             )}
 
-                                                        {!data.is_valid &&
-                                                            data.is_valid !=
+                                                        {!berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <div className="label-warning">
                                                                     Tidak Valid
@@ -871,10 +1020,10 @@ export default function ShowPengajuan({
                                                     </td>
 
                                                     <td className="text-center ">
-                                                        {data.is_valid ==
+                                                        {berkas.is_valid ==
                                                             null && (
                                                             <a
-                                                                href={`/storage/${data.path}`}
+                                                                href={`/storage/${berkas.path}`}
                                                                 target="_blank"
                                                                 className="action-btn"
                                                             >
@@ -883,11 +1032,11 @@ export default function ShowPengajuan({
                                                             </a>
                                                         )}
 
-                                                        {data.is_valid &&
-                                                            data.is_valid !=
+                                                        {berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <a
-                                                                    href={`/storage/${data.path}`}
+                                                                    href={`/storage/${berkas.path}`}
                                                                     target="_blank"
                                                                     className="action-btn"
                                                                 >
@@ -896,11 +1045,11 @@ export default function ShowPengajuan({
                                                                 </a>
                                                             )}
 
-                                                        {!data.is_valid &&
-                                                            data.is_valid !=
+                                                        {!berkas.is_valid &&
+                                                            berkas.is_valid !=
                                                                 null && (
                                                                 <a
-                                                                    // href={`/storage/${data.path}`}
+                                                                    // href={`/storage/${berkas.path}`}
                                                                     className="action-btn"
                                                                 >
                                                                     <FaEdit className="mx-1 mr-1" />
@@ -916,7 +1065,7 @@ export default function ShowPengajuan({
                                                         className="text-center"
                                                     >
                                                         {uploadedFiles[
-                                                            data.jenis_dokumen
+                                                            berkas.jenis_dokumen
                                                         ] ? (
                                                             <span className="text-sm font-medium text-center capitalize text-secondary">
                                                                 {
@@ -936,24 +1085,24 @@ export default function ShowPengajuan({
                                                     <td className="text-center">
                                                         <input
                                                             id={
-                                                                data.jenis_dokumen
+                                                                berkas.jenis_dokumen
                                                             }
                                                             type="file"
                                                             className="hidden"
                                                             onChange={(e) =>
                                                                 handleFileChange(
                                                                     e,
-                                                                    data.jenis_dokumen,
+                                                                    berkas.jenis_dokumen,
                                                                     getKeyByValue(
                                                                         requiredKuitansi,
-                                                                        data.jenis_dokumen
+                                                                        berkas.jenis_dokumen
                                                                     )
                                                                 )
                                                             }
                                                         />
                                                         <label
                                                             htmlFor={
-                                                                data.jenis_dokumen
+                                                                berkas.jenis_dokumen
                                                             }
                                                             className="action-btn"
                                                         >

@@ -19,7 +19,7 @@ export default function RiwayatPengajuan({
     title,
     auth,
     pengajuans,
-    search,
+    searchReq: initialSearch,
     byStatusReq: initialStatus,
     byStageReq: initialStage,
 }) {
@@ -27,6 +27,7 @@ export default function RiwayatPengajuan({
 
     const [byStatus, setByStatus] = useState(initialStatus || "");
     const [byStage, setByStage] = useState(initialStage || "");
+    const [search, setSearch] = useState(initialSearch || "");
 
     const handlePageClick = (event) => {
         const selectedPage = event.selected + 1;
@@ -34,7 +35,7 @@ export default function RiwayatPengajuan({
 
         router.get(
             route("ketua-tim.riwayat-pengajuan"),
-            { page: selectedPage },
+            { page: selectedPage, byStatus, byStage, search },
             {
                 replace: true,
                 preserveState: true,
@@ -45,58 +46,76 @@ export default function RiwayatPengajuan({
         );
     };
 
-    // useEffect(() => {
-    //     if (byStatus) {
-    //         router.get(
-    //             route("ketua-tim.riwayat-pengajuan"),
-    //             { byStatus, search },
-    //             { replace: true, preserveState: true }
-    //         );
-    //     } else if (byStatus == "") {
-    //         router.get(
-    //             route("ketua-tim.riwayat-pengajuan"),
-    //             {},
-    //             { replace: true, preserveState: true }
-    //         );
-    //     }
-    // }, [byStatus]);
 
     useEffect(() => {
-        if (byStatus) {
+        if (
+            (byStatus && byStatus != initialStatus) ||
+            (byStage && byStage != initialStage)
+        ) {
             router.get(
                 route("ketua-tim.riwayat-pengajuan"),
-                { byStatus, search },
+                {
+                    byStatus: byStatus,
+                    byStage: byStage,
+                },
                 { replace: true, preserveState: true }
             );
-        }
-    }, [byStatus, byStage, search]);
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        const searchValue = e.target.search.value;
-
-        router.get(
-            route("ketua-tim.riwayat-pengajuan"),
-            { byStatus, search: searchValue },
-            { replace: true, preserveState: true }
-        );
-    };
-
-    useEffect(() => {
-        if (byStatus || byStage) {
+        } else if (
+            (byStatus &&
+                byStatus != initialStatus &&
+                search != initialSearch) ||
+            (byStage && byStage != initialStage && search != initialSearch)
+        ) {
             router.get(
                 route("ketua-tim.riwayat-pengajuan"),
-                { byStatus, byStage, search },
-                { replace: true, preserveState: true }
-            );
-        } else if (byStatus == "" && byStage == "") {
-            router.get(
-                route("ketua-tim.riwayat-pengajuan"),
-                {},
+                {
+                    byStatus,
+                    byStage,
+                    search,
+                },
                 { replace: true, preserveState: true }
             );
         }
     }, [byStatus, byStage]);
+
+    useEffect(() => {
+        // Kalo semua
+        if (byStatus == "Semua Kategori" && byStage == "Semua Kategori" ) {
+            router.get(
+                route("ketua-tim.riwayat-pengajuan"),
+                {
+                    search,
+                },
+                { replace: true, preserveState: true }
+            );
+        } else if(byStatus == "Semua Kategori") {
+            router.get(
+                route("ketua-tim.riwayat-pengajuan"),
+                {
+                    byStage, search
+                },
+                { replace: true, preserveState: true }
+            );
+        } else if(byStage == "Semua Kategori") {
+            router.get(
+                route("ketua-tim.riwayat-pengajuan"),
+                {
+                    byStatus, search
+                },
+                { replace: true, preserveState: true }
+            );
+        }
+        else if(search && search != initialSearch) {
+            router.get(
+                route("ketua-tim.riwayat-pengajuan"),
+                {
+                    search
+                },
+                { replace: true, preserveState: true }
+            );
+        }
+    }, [byStatus, byStage]);
+
 
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
@@ -107,7 +126,6 @@ export default function RiwayatPengajuan({
                     <>
                         <form
                             className="flex items-center justify-between w-full "
-                            onSubmit={handleSearch}
                         >
                             <div className="flex items-center justify-start gap-3 my-3 w-fit">
                                 <div className="w-48">
@@ -124,7 +142,7 @@ export default function RiwayatPengajuan({
                                             setByStatus(e.target.value)
                                         }
                                     >
-                                        <option value="">Semua Status</option>
+                                        <option>Semua Kategori</option>
                                         <option>Diproses</option>
                                         <option>Selesai</option>
                                         <option>Ditolak</option>
@@ -145,7 +163,7 @@ export default function RiwayatPengajuan({
                                             setByStage(e.target.value)
                                         }
                                     >
-                                        <option value="">Semua Stage</option>
+                                        <option>Semua Kategori</option>
                                         <option>diajukan ketua tim </option>
                                         <option>diproses ppk</option>
                                         <option>dipesan pbj</option>
@@ -178,6 +196,7 @@ export default function RiwayatPengajuan({
                                         type="search"
                                         id="search"
                                         defaultValue={search}
+                                        onSubmit={(e) => setSearch(e.target.value)}
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
                                         placeholder="Cari nama ketua tim/nama kegiatan.."

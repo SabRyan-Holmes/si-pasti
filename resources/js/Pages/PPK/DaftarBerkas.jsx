@@ -18,14 +18,16 @@ export default function DaftarBerkas({
     auth,
     pengajuans,
     flash,
-    search,
+    search: initialSearch,
     byStatusReq: initialStatus,
     byStageReq: initialStage,
 }) {
     moment.locale("id");
 
+
     const [byStatus, setByStatus] = useState(initialStatus || "");
     const [byStage, setByStage] = useState(initialStage || "");
+    const [search, setSearch] = useState(initialSearch || "");
 
     const handlePageClick = (event) => {
         const selectedPage = event.selected + 1;
@@ -33,7 +35,7 @@ export default function DaftarBerkas({
 
         router.get(
             route("ppk.daftar-berkas"),
-            { page: selectedPage },
+            { page: selectedPage, byStatus, byStage, search },
             {
                 replace: true,
                 preserveState: true,
@@ -45,37 +47,71 @@ export default function DaftarBerkas({
     };
 
     useEffect(() => {
-        if (byStatus) {
+        if (
+            (byStatus && byStatus != initialStatus) ||
+            (byStage && byStage != initialStage)
+        ) {
             router.get(
                 route("ppk.daftar-berkas"),
-                { byStatus, search },
+                {
+                    byStatus: byStatus,
+                    byStage: byStage,
+                },
+                { replace: true, preserveState: true }
+            );
+        } else if (
+            (byStatus &&
+                byStatus != initialStatus &&
+                search != initialSearch) ||
+            (byStage && byStage != initialStage && search != initialSearch)
+        ) {
+            router.get(
+                route("ppk.daftar-berkas"),
+                {
+                    byStatus,
+                    byStage,
+                    search,
+                },
                 { replace: true, preserveState: true }
             );
         }
-    }, [byStatus, byStage, search]);
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        const searchValue = e.target.search.value;
-
-        router.get(
-            route("ppk.daftar-berkas"),
-            { byStatus, search: searchValue },
-            { replace: true, preserveState: true }
-        );
-    };
+    }, [byStatus, byStage]);
 
     useEffect(() => {
-        if (byStatus || byStage) {
+        // Kalo semua
+        if (byStatus == "Semua Kategori" && byStage == "Semua Kategori") {
             router.get(
                 route("ppk.daftar-berkas"),
-                { byStatus, byStage, search },
+                {
+                    search,
+                },
                 { replace: true, preserveState: true }
             );
-        } else if (byStatus == "" && byStage == "") {
+        } else if (byStatus == "Semua Kategori") {
             router.get(
                 route("ppk.daftar-berkas"),
-                {},
+                {
+                    byStage,
+                    search,
+                },
+                { replace: true, preserveState: true }
+            );
+        } else if (byStage == "Semua Kategori") {
+            router.get(
+                route("ppk.daftar-berkas"),
+                {
+                    byStatus,
+                    search,
+                },
+                { replace: true, preserveState: true }
+            );
+            // FIXME: Ada bug kerefresh ketika search
+        } else if (search && search != initialSearch) {
+            router.get(
+                route("ppk.daftar-berkas"),
+                {
+                    search,
+                },
                 { replace: true, preserveState: true }
             );
         }
@@ -101,11 +137,10 @@ export default function DaftarBerkas({
                     </ul>
                 </div>
 
-                {pengajuans.data.length ? (
+                {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
                         <form
                             className="flex items-center justify-between w-full "
-                            onSubmit={handleSearch}
                         >
                             <div className="flex items-center justify-start gap-3 my-3 w-fit">
                                 <div className="w-48">
@@ -122,7 +157,7 @@ export default function DaftarBerkas({
                                             setByStatus(e.target.value)
                                         }
                                     >
-                                        <option value="">Semua Status</option>
+                                        <option>Semua Kategori</option>
                                         <option>Diproses</option>
                                         <option>Selesai</option>
                                         <option>Ditolak</option>
@@ -143,7 +178,7 @@ export default function DaftarBerkas({
                                             setByStage(e.target.value)
                                         }
                                     >
-                                        <option value="">Semua Stage</option>
+                                        <option>Semua Kategori</option>
                                         <option>diajukan ketua tim </option>
                                         <option>diproses ppk</option>
                                         <option>dipesan pbj</option>
@@ -176,6 +211,7 @@ export default function DaftarBerkas({
                                         type="search"
                                         id="search"
                                         defaultValue={search}
+                                        onSubmit={(e) => setSearch(e.target.value)}
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
                                         placeholder="Cari nama ketua tim/nama kegiatan.."
@@ -260,7 +296,7 @@ export default function DaftarBerkas({
                                                         as="a"
                                                         href={route(
                                                             "ppk.show-berkas",
-                                                            data.id
+                                                            data.nama_kegiatan
                                                         )}
                                                         className="items-center justify-center inline-block gap-2 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75 action-btn border-hijau/20 hover:bg-hijau hover:text-white "
                                                     >

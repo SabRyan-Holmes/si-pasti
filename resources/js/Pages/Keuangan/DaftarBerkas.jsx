@@ -23,6 +23,8 @@ export default function DaftarBerkas({
     byStageReq: initialStage,
 }) {
     moment.locale("id");
+
+
     const [byStatus, setByStatus] = useState(initialStatus || "");
     const [byStage, setByStage] = useState(initialStage || "");
     const [search, setSearch] = useState(initialSearch || "");
@@ -32,7 +34,7 @@ export default function DaftarBerkas({
         const newOffset = (selectedPage - 1) * pengajuans.per_page;
 
         router.get(
-            route("pbj.daftar-berkas"),
+            route("keuangan.daftar-berkas"),
             { page: selectedPage, byStatus, byStage, search },
             {
                 replace: true,
@@ -50,7 +52,7 @@ export default function DaftarBerkas({
             (byStage && byStage != initialStage)
         ) {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("keuangan.daftar-berkas"),
                 {
                     byStatus: byStatus,
                     byStage: byStage,
@@ -64,7 +66,7 @@ export default function DaftarBerkas({
             (byStage && byStage != initialStage && search != initialSearch)
         ) {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("keuangan.daftar-berkas"),
                 {
                     byStatus,
                     byStage,
@@ -79,7 +81,7 @@ export default function DaftarBerkas({
         // Kalo semua
         if (byStatus == "Semua Kategori" && byStage == "Semua Kategori") {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("keuangan.daftar-berkas"),
                 {
                     search,
                 },
@@ -87,7 +89,7 @@ export default function DaftarBerkas({
             );
         } else if (byStatus == "Semua Kategori") {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("keuangan.daftar-berkas"),
                 {
                     byStage,
                     search,
@@ -96,7 +98,7 @@ export default function DaftarBerkas({
             );
         } else if (byStage == "Semua Kategori") {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("keuangan.daftar-berkas"),
                 {
                     byStatus,
                     search,
@@ -106,7 +108,7 @@ export default function DaftarBerkas({
             // FIXME: Ada bug kerefresh ketika search
         } else if (search && search != initialSearch) {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("keuangan.daftar-berkas"),
                 {
                     search,
                 },
@@ -114,6 +116,7 @@ export default function DaftarBerkas({
             );
         }
     }, [byStatus, byStage]);
+
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
             <Head title={title} />
@@ -136,7 +139,9 @@ export default function DaftarBerkas({
 
                 {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
-                        <form className="flex items-center justify-between w-full ">
+                        <form
+                            className="flex items-center justify-between w-full "
+                        >
                             <div className="flex items-center justify-start gap-3 my-3 w-fit">
                                 <div className="w-48">
                                     <InputLabel
@@ -206,6 +211,7 @@ export default function DaftarBerkas({
                                         type="search"
                                         id="search"
                                         defaultValue={search}
+                                        onSubmit={(e) => setSearch(e.target.value)}
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
                                         placeholder="Cari nama ketua tim/nama kegiatan.."
@@ -289,7 +295,7 @@ export default function DaftarBerkas({
                                                     <Link
                                                         as="a"
                                                         href={route(
-                                                            "pbj.show-berkas",
+                                                            "keuangan.show-berkas",
                                                             data.nama_kegiatan
                                                         )}
                                                         className="items-center justify-center inline-block gap-2 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75 action-btn border-hijau/20 hover:bg-hijau hover:text-white "
@@ -301,7 +307,7 @@ export default function DaftarBerkas({
                                                     <Link
                                                         as="a"
                                                         href={route(
-                                                            "pbj.unggah-berkas",
+                                                            "keuangan.unggah-berkas",
                                                             data.nama_kegiatan
                                                         )}
                                                         className="items-center justify-center inline-block gap-2 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"

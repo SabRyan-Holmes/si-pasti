@@ -21,7 +21,6 @@ class PPKController extends Controller
 
     public function daftar_berkas()
     {
-
         $pengajuans = Pengajuan::latest();
         $subTitle = "";
 
@@ -40,7 +39,7 @@ class PPKController extends Controller
             "subTitle" => $subTitle,
             // "pengajuans" => $pengajuans->paginate(10),
             "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
-            "search" => request('search'),
+            "searchReq" => request('search'),
             "byStatusReq" => request('byStatus'),
             "byStageReq" => request('byStage'),
         ]);
@@ -54,7 +53,7 @@ class PPKController extends Controller
         // })->where('submitted_by', 3)->get();
 
         $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
-        $berkas_ketua_tim = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan Barang')->get();
+        $berkas_ketua_tim = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
 
 
         return Inertia::render('PPK/ShowBerkas', [
@@ -95,7 +94,7 @@ class PPKController extends Controller
         $this->storeDocument($request, 'sppbj', 'SPPBJ', 'Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)', 'Pengajuan Kontrak');
         $this->storeDocument($request, 'surat_kontrak', 'SK', 'Surat Kontrak/Surat Pesanan', 'Pengajuan Kontrak');
 
-        //pengajuan Berita Acara
+        //Pengajuan Berita Acara
         $this->storeDocument($request, 'bast', 'BAST', 'Berita Acara Serah Terima(BAST)', 'Pengajuan Berita Acara');
         $this->storeDocument($request, 'bap', 'BAP', 'Berita Acara Pembayaran(BAP)', 'Pengajuan Berita Acara');
 
@@ -104,6 +103,11 @@ class PPKController extends Controller
         $this->storeDocument($request, 'surat_pesanan', 'SP', 'Surat Pesanan', 'Pengajuan Kuitansi');
 
 
+        // $ids = array_unique($request->edited_id);
+        // // Update beberapa row sekaligus
+        // Document::whereIn('id', $ids)->update([
+        //     'is_valid' => null
+        // ]);
 
 
         // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
@@ -213,7 +217,7 @@ class PPKController extends Controller
             "subTitle" => $subTitle,
             // "pengajuans" => $pengajuans->paginate(10),
             "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
-            "search" => request('search'),
+            "searchReq" => request('search'),
             "byStatusReq" => request('byStatus'),
             "byStageReq" => request('byStage'),
         ]);
@@ -245,6 +249,10 @@ class PPKController extends Controller
     {
         Document::where('id', $request->id)->update([
             'is_valid' => $request->is_valid
+        ]);
+
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'stage' => 'diproses ppk'
         ]);
 
         redirect()->back();

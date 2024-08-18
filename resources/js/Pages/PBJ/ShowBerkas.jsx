@@ -8,7 +8,7 @@ import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { IoIosArrowDown, IoIosSend } from "react-icons/io";
 import { Dropdown } from "@/Components";
-import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
+import { FaDownload, FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
 
 export default function ShowBerkas({
     title,
@@ -233,16 +233,15 @@ export default function ShowBerkas({
                             <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Ketua TIM</span>
-                            <span>
-                                : {nama} {gelar}
-                            </span>
+                            <span class="mr-1 font-bold">Ketua Tim </span>
+                            <span>: {nama} {gelar} </span>
                         </div>
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Tim</span>
                             <span>: {pengajuan.nama_tim}</span>
                         </div>
                     </div>
+
                 </div>
                 <div className="pb-16 mt-10 overflow-x-auto">
                     <h2 className="text-base font-semibold">
@@ -355,7 +354,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -369,7 +368,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -429,7 +428,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -442,7 +441,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -575,7 +574,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -589,7 +588,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -649,7 +648,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -662,7 +661,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -795,7 +794,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -809,7 +808,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -869,7 +868,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -882,7 +881,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1015,7 +1014,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1029,7 +1028,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1089,7 +1088,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1102,7 +1101,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1235,7 +1234,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1249,7 +1248,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1309,7 +1308,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1322,7 +1321,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1455,7 +1454,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1469,7 +1468,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1529,7 +1528,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,
@@ -1542,7 +1541,7 @@ export default function ShowBerkas({
                                                             <Dropdown.Link
                                                                 method="post"
                                                                 href={route(
-                                                                    "ppk.validasi"
+                                                                    "pbj.validasi"
                                                                 )}
                                                                 data={{
                                                                     id: data.id,

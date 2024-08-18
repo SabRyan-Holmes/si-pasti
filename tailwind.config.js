@@ -32,7 +32,7 @@ export default {
                 explora: ["Explora"],
             },
             backgroundImage: {
-                // card: "url('/resources/assets/card.png')",
+                bps: "url('/resources/assets/image/background-bps.jpg')",
             },
 
             screens: {

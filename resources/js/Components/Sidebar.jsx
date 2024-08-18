@@ -14,6 +14,7 @@ import {
 } from "react-icons/hi2";
 import logo from "../../assets/image/logo.png";
 import NavLinkDashboard from "@/Components/NavLinkDashboard";
+import ApplicationLogo from "./ApplicationLogo";
 
 export default function Sidebar({ divisi, active }) {
     return (
@@ -25,21 +26,32 @@ export default function Sidebar({ divisi, active }) {
 
             <ul className="relative z-10 min-h-full p-4 space-y-4 menu w-80 text-slate-100">
                 {/* Sidebar content */}
-                <div className="relative z-20 flex-col items-center justify-center mt-10">
+                <div className="flex items-center justify-start gap-2 mb-5">
+                    <a href="/">
+                        <ApplicationLogo className="mx-auto text-gray-500 fill-current w-7 h-7 aspect-square " />
+                    </a>
+                    <strong className="text-xs italic font-bold text-slate-400">
+                        BPS Provinsi Jambi
+                    </strong>
+                </div>
+                <div className="relative z-20 flex-col items-center justify-center mt-10 space-y-6">
                     {/* App Name */}
-                    <strong className="flex justify-center text-2xl text-gradient gradient-bps">
-                        SiPasti
+                    <strong className="flex justify-center -mb-3 text-3xl tracking-wider uppercase text-gradient gradient-base">
+                        SIPASTI
                     </strong>
 
-                    {/* App Logo */}
-                    <img
-                        src={logo}
-                        className="relative z-20 w-24 h-24 m-3 mx-auto filter drop-shadow-lg"
-                    />
-                </div>
+                    <div className="flex items-center justify-center h-16 mx-5 border rounded-xl bg-slate-400/50 border-t-primary/70 border-x-secondary/70 border-b-hijau/70">
+                        <strong className="mx-5 text-lg font-semibold leading-6 text-center height text-slate-300 text-opacity-90 ">
+                            Sistem Pengadaan Terintegrasi
+                        </strong>
+                    </div>
 
-                <div className="relative z-20 h-[2px] mx-3 border-none outline-none rounded-md">
-                    <div className="absolute inset-0 w-full h-full p-0 transition-colors duration-1000 ease-in-out rounded-md opacity-100 bg-gradient-to-r from-primary via-hijau to-secondary" />
+                    {/* <div className="relative z-20 h-[2px] mx-3 border-none outline-none rounded-md bg-slate-300 ">
+                        <div className="absolute inset-0 w-full h-full p-0 transition-colors duration-1000 ease-in-out rounded-md opacity-100 bg-gradient-to-r from-primary/10 via-hijau/15 to-secondary/20" />
+                    </div> */}
+                    <div className="relative z-20 h-[2px] mx-3 border-none outline-none rounded-md bg-slate-300 ">
+                        <div className="absolute inset-0 w-full h-full p-0 transition-colors duration-1000 ease-in-out rounded-md opacity-100 bg-gradient-to-r from-primary/40 via-hijau/40 to-secondary/40" />
+                    </div>
                 </div>
 
                 {/* Link Dashboard */}
@@ -98,8 +110,10 @@ export default function Sidebar({ divisi, active }) {
 
                         <NavLinkDashboard
                             href={route("ppk.riwayat-pengajuan")}
-                            active={route().current("ppk.riwayat-pengajuan") ||
-                                route().current("ppk.show-pengajuan")}
+                            active={
+                                route().current("ppk.riwayat-pengajuan") ||
+                                route().current("ppk.show-pengajuan")
+                            }
                             className="relative z-20"
                         >
                             <HiDocumentDuplicate />
@@ -139,9 +153,21 @@ export default function Sidebar({ divisi, active }) {
                 {divisi === "Keuangan" && (
                     <section>
                         <NavLinkDashboard
-                            href={route("keuangan.riwayat_pengajuan")}
+                            href={route("keuangan.daftar-berkas")}
+                            active={
+                                route().current("keuangan.daftar-berkas") ||
+                                active === "keuangan.show-berkas"
+                            }
+                            className="relative z-20"
+                        >
+                            <HiClipboardDocumentList />
+                            Daftar Berkas
+                        </NavLinkDashboard>
+
+                        <NavLinkDashboard
+                            href={route("keuangan.riwayat-pengajuan")}
                             active={route().current(
-                                "keuangan.riwayat_pengajuan"
+                                "keuangan.riwayat-pengajuan"
                             )}
                             className="relative z-20"
                         >

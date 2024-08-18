@@ -18,7 +18,7 @@ export default function RiwayatPengajuan({
     title,
     auth,
     pengajuans,
-    search,
+    searchReq: initialSearch,
     byStatusReq: initialStatus,
     byStageReq: initialStage,
 }) {
@@ -26,6 +26,7 @@ export default function RiwayatPengajuan({
 
     const [byStatus, setByStatus] = useState(initialStatus || "");
     const [byStage, setByStage] = useState(initialStage || "");
+    const [search, setSearch] = useState(initialSearch || "");
 
     const handlePageClick = (event) => {
         const selectedPage = event.selected + 1;
@@ -33,7 +34,7 @@ export default function RiwayatPengajuan({
 
         router.get(
             route("ppk.riwayat-pengajuan"),
-            { page: selectedPage },
+            { page: selectedPage, byStatus, byStage, search },
             {
                 replace: true,
                 preserveState: true,
@@ -45,37 +46,70 @@ export default function RiwayatPengajuan({
     };
 
     useEffect(() => {
-        if (byStatus) {
+        if (
+            (byStatus && byStatus != initialStatus) ||
+            (byStage && byStage != initialStage)
+        ) {
             router.get(
                 route("ppk.riwayat-pengajuan"),
-                { byStatus, search },
+                {
+                    byStatus: byStatus,
+                    byStage: byStage,
+                },
+                { replace: true, preserveState: true }
+            );
+        } else if (
+            (byStatus &&
+                byStatus != initialStatus &&
+                search != initialSearch) ||
+            (byStage && byStage != initialStage && search != initialSearch)
+        ) {
+            router.get(
+                route("ppk.riwayat-pengajuan"),
+                {
+                    byStatus,
+                    byStage,
+                    search,
+                },
                 { replace: true, preserveState: true }
             );
         }
-    }, [byStatus, byStage, search]);
-
-    const handleSearch = (e) => {
-        e.preventDefault();
-        const searchValue = e.target.search.value;
-
-        router.get(
-            route("ppk.riwayat-pengajuan"),
-            { byStatus, search: searchValue },
-            { replace: true, preserveState: true }
-        );
-    };
+    }, [byStatus, byStage]);
 
     useEffect(() => {
-        if (byStatus || byStage) {
+        // Kalo semua
+        if (byStatus == "Semua Kategori" && byStage == "Semua Kategori") {
             router.get(
                 route("ppk.riwayat-pengajuan"),
-                { byStatus, byStage, search },
+                {
+                    search,
+                },
                 { replace: true, preserveState: true }
             );
-        } else if (byStatus == "" && byStage == "") {
+        } else if (byStatus == "Semua Kategori") {
             router.get(
                 route("ppk.riwayat-pengajuan"),
-                {},
+                {
+                    byStage,
+                    search,
+                },
+                { replace: true, preserveState: true }
+            );
+        } else if (byStage == "Semua Kategori") {
+            router.get(
+                route("ppk.riwayat-pengajuan"),
+                {
+                    byStatus,
+                    search,
+                },
+                { replace: true, preserveState: true }
+            );
+        } else if (search && search != initialSearch) {
+            router.get(
+                route("ppk.riwayat-pengajuan"),
+                {
+                    search,
+                },
                 { replace: true, preserveState: true }
             );
         }
@@ -86,7 +120,7 @@ export default function RiwayatPengajuan({
             {/* content */}
 
             <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
-            <div className="flex items-center justify-between ">
+                <div className="flex items-center justify-between ">
                     {/* Breadcumbs */}
                     <div className="my-3 text-sm capitalize breadcrumbs">
                         <ul>
@@ -97,8 +131,7 @@ export default function RiwayatPengajuan({
                                 </a>
                             </li>
                             <li>
-                                <a>
-                                </a>
+                                <a></a>
                             </li>
                         </ul>
                     </div>
@@ -106,10 +139,7 @@ export default function RiwayatPengajuan({
 
                 {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
-                        <form
-                            className="flex items-center justify-between w-full "
-                            onSubmit={handleSearch}
-                        >
+                        <form className="flex items-center justify-between w-full ">
                             <div className="flex items-center justify-start gap-3 my-3 w-fit">
                                 <div className="w-48">
                                     <InputLabel
@@ -125,7 +155,7 @@ export default function RiwayatPengajuan({
                                             setByStatus(e.target.value)
                                         }
                                     >
-                                        <option value="">Semua Status</option>
+                                        <option>Semua Kategori</option>
                                         <option>Diproses</option>
                                         <option>Selesai</option>
                                         <option>Ditolak</option>
@@ -146,7 +176,7 @@ export default function RiwayatPengajuan({
                                             setByStage(e.target.value)
                                         }
                                     >
-                                        <option value="">Semua Stage</option>
+                                        <option>Semua Kategori</option>
                                         <option>diajukan ketua tim </option>
                                         <option>diproses ppk</option>
                                         <option>dipesan pbj</option>
@@ -179,6 +209,9 @@ export default function RiwayatPengajuan({
                                         type="search"
                                         id="search"
                                         defaultValue={search}
+                                        onSubmit={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
                                         placeholder="Cari nama ketua tim/nama kegiatan.."
@@ -233,7 +266,7 @@ export default function RiwayatPengajuan({
                                                         <span className="font-bold">
                                                             {name} {gelar}
                                                         </span>
-                                                        <span className="block text-sm opacity-50 text-nowrap ">
+                                                        <span className="block text-xs opacity-50 text-nowrap ">
                                                             {data.nama_tim}
                                                         </span>
                                                     </div>
