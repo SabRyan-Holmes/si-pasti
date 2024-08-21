@@ -497,7 +497,7 @@ export default function ShowBerkas({
                                 type="submit"
                                 className="uppercase button-correct"
                             >
-                                Kirim Ulang
+                                Ajukan Ulang
                                 <IoIosSend />
                             </button>
                         </div>
@@ -739,7 +739,7 @@ export default function ShowBerkas({
                                 type="submit"
                                 className="uppercase button-correct"
                             >
-                                Kirim Ulang
+                                Ajukan Ulang
                                 <IoIosSend />
                             </button>
                         </div>
@@ -919,7 +919,7 @@ export default function ShowBerkas({
                                 type="submit"
                                 className="uppercase button-correct"
                             >
-                                Kirim Ulang
+                                Ajukan Ulang
                                 <IoIosSend />
                             </button>
                         </div>
@@ -1098,7 +1098,7 @@ export default function ShowBerkas({
                                 type="submit"
                                 className="uppercase button-correct"
                             >
-                                Kirim Ulang
+                                Ajukan Ulang
                                 <IoIosSend />
                             </button>
                         </div>

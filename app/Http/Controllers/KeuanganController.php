@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PengajuanStoreRequest;
 use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
 use Inertia\Inertia;
 use App\Models\Document;
@@ -95,6 +96,97 @@ class KeuanganController extends Controller
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
     }
 
+
+
+    public function riwayat_pengajuan()
+    {
+
+        $pengajuans = Pengajuan::latest();
+        $subTitle = "";
+
+
+        if (request('byStatus')) {
+            $subTitle = 'Berdasarkan Status : ' . request('byStatus');
+        }
+
+        if (request('byStage')) {
+            $subTitle = 'Berdasarkan Stage : ' . request('byStage');
+        }
+
+        return Inertia::render('Keuangan/RiwayatPengajuan', [
+            // "title" => "Pengajuan " . $title,
+            "title" => "Riwayat Pengajuan",
+            "subTitle" => $subTitle,
+            // "pengajuans" => $pengajuans->paginate(10),
+            "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
+            "searchReq" => request('search'),
+            "byStatusReq" => request('byStatus'),
+            "byStageReq" => request('byStage'),
+        ]);
+    }
+
+    public function show_pengajuan(Pengajuan $pengajuan)
+    {
+        $berkas_pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
+
+        // dd($berkas_pembayaran);
+        return Inertia::render('Keuangan/ShowPengajuan', [
+            'title' => 'Detail Riwayat Pengajuan',
+            'pengajuan' => $pengajuan,
+            'berkasPembayaran' => $berkas_pembayaran,
+        ]);
+    }
+
+    public function ajukan_pengajuan(PengajuanStoreRequest $request)
+    {
+        // dd($request);
+        $validated = $request->validated();
+        // Store Pengajuan/Pengajuan
+
+        $new_pengajuan = Pengajuan::create([
+            'nama_kegiatan' => $validated['nama_kegiatan'],
+            'nama_tim' => $validated['nama_tim'],
+            'created_by' => Auth::user()->id,
+            'status' => 'diproses',
+            'stage' => 'diajukan ketua tim',
+            'start_date' => now(),
+            'end_date' => null,
+        ]);
+
+        // Logic Store Document
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan', $new_pengajuan->id);
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan', $new_pengajuan->id);
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan', $new_pengajuan->id);
+
+        return redirect()->back()->with('message', 'Pengajuan berhasil diajukan!');
+    }
+
+    public function ajukan_berkas_ulang(Request $request)
+    {
+        // dd($request);
+        $rule = [
+            'pengajuan_id' => ['required', 'integer'],
+            'nama_kegiatan' => ['required', 'string'],
+            'spm' => ['nullable', 'file', 'mimes:pdf', 'max:15192']
+        ];
+
+        $request->validate($rule);
+        //Pengajuan Ketua Tim /Pengadaan
+        $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
+
+
+        // Jika Diupload Ulang maka status dokumen kembali berubah dari tidak valid menjadi null/diproses
+        $ids = array_unique($request->edited_id);
+        // Update beberapa row sekaliguss
+
+        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
+    }
+
+
+
+
+
+
     private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori)
     {
         if ($request->file($fileKey)) {
@@ -139,50 +231,5 @@ class KeuanganController extends Controller
                 ]);
             }
         }
-    }
-
-    public function riwayat_pengajuan()
-    {
-
-        $pengajuans = Pengajuan::latest();
-        $subTitle = "";
-
-
-        if (request('byStatus')) {
-            $subTitle = 'Berdasarkan Status : ' . request('byStatus');
-        }
-
-        if (request('byStage')) {
-            $subTitle = 'Berdasarkan Stage : ' . request('byStage');
-        }
-
-        return Inertia::render('Keuangan/RiwayatPengajuan', [
-            // "title" => "Pengajuan " . $title,
-            "title" => "Riwayat Pengajuan",
-            "subTitle" => $subTitle,
-            // "pengajuans" => $pengajuans->paginate(10),
-            "pengajuans" => $pengajuans->filter(request(['search', 'byStatus', 'byStage']))->paginate(10),
-            "searchReq" => request('search'),
-            "byStatusReq" => request('byStatus'),
-            "byStageReq" => request('byStage'),
-        ]);
-    }
-
-    public function show_pengajuan(Pengajuan $pengajuan)
-    {
-        $berkas_pbj = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
-            $q->where('kegiatans.id', $pengajuan->kegiatan->id);
-        })->where('submitted_by', 3)->get();
-
-        // dd($berkas_pbj);
-        return Inertia::render('Keuangan/DetailPengajuan', [
-            'title' => 'Detail Riwayat Pengajuan',
-            'pengajuan' => $pengajuan,
-            'kegiatan' => $pengajuan->kegiatan,
-            'ketuaTim' => $pengajuan->kegiatan->user,
-            'berkasPBJ' => $berkas_pbj,
-
-
-        ]);
     }
 }

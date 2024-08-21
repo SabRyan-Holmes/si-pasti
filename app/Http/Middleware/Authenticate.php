@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class Keuangan
+class Authenticate
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,16 @@ class Keuangan
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->divisi == "Keuangan") {
+        if (Auth::check()) {
+            // Jika user sudah login dan mengakses / atau /login, redirect ke /dashboard
+            if ($request->is('/') || $request->is('login')) {
+                return redirect('/dashboard');
+            }
+
             return $next($request);
         }
-        //     return response()->json('Opps! You do not have permission to access.');
-        abort(401);
 
+        // Jika tidak, arahkan mereka ke halaman login atau abaikan
+        return redirect('/login');
     }
 }

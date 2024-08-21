@@ -13,7 +13,7 @@ use Inertia\Inertia;
 // s
 Route::get('/', function () {
     return Inertia::render('Auth/Login');
-});
+})->middleware('guest');
 
 Route::get('/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -79,6 +79,7 @@ Route::middleware(['auth', 'keuangan'])->prefix('keuangan')->name('keuangan.')->
     // Unggah Berkas
     Route::get('/unggah-berkas/{pengajuan:nama_kegiatan}', [KeuanganController::class, 'unggah_berkas'])->name('unggah-berkas');
     Route::post('/unggah-berkas', [KeuanganController::class, 'ajukan_berkas'])->name('ajukan-berkas');
+    Route::post('/unggah-berkas-ulang', [KeuanganController::class, 'ajukan_berkas_ulang'])->name('ajukan-berkas-ulang');
 
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan/pengajuan', [KeuanganController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');

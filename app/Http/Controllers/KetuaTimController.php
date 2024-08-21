@@ -22,7 +22,7 @@ class KetuaTimController extends Controller
 
     public function ajukan_pengajuan(PengajuanStoreRequest $request)
     {
-        dd($request);
+        // dd($request);
         $validated = $request->validated();
         // Store Pengajuan/Pengajuan
 

@@ -12,13 +12,14 @@ import { FaEye } from "react-icons/fa6";
 import { FaRegFolder } from "react-icons/fa";
 import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
+import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 export default function DaftarBerkas({
     title,
     auth,
     pengajuans,
     flash,
-    search: initialSearch,
+    searchReq: initialSearch,
     byStatusReq: initialStatus,
     byStageReq: initialStage,
 }) {
@@ -103,7 +104,6 @@ export default function DaftarBerkas({
                 },
                 { replace: true, preserveState: true }
             );
-            // FIXME: Ada bug kerefresh ketika search
         } else if (search && search != initialSearch) {
             router.get(
                 route("pbj.daftar-berkas"),
@@ -206,6 +206,9 @@ export default function DaftarBerkas({
                                         type="search"
                                         id="search"
                                         defaultValue={search}
+                                        onSubmit={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
                                         placeholder="Cari nama ketua tim/nama kegiatan.."

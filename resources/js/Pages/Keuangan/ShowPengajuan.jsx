@@ -15,30 +15,30 @@ import {
 } from "react-icons/fa6";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TiDocumentText } from "react-icons/ti";
+import { CgDetailsMore } from "react-icons/cg";
 
 export default function ShowPengajuan({
     title,
     auth,
-    flash,
     pengajuan,
-    berkasKT,
+    flash,
+    berkasPembayaran,
 }) {
     const props = usePage().props;
+    const [isEdit, setisEdit] = useState(false)
     // Function to get the key based on the value
     const getKeyByValue = (object, value) => {
         return Object.keys(object).find((key) => object[key] === value);
     };
 
-    const requiredBerkasKT = {
-        kak: "Kerangka Ajuan Kerja",
-        form_permintaan: "Form Permintaan",
-        surat_permintaan: "Surat Permintaan",
+    const requiredPembayaran = {
+        spm: "Surat Perintah Pembayaran(SPM)",
     };
 
-    const documentsKT = Object.keys(requiredBerkasKT).map((key) => {
-        const value = requiredBerkasKT[key];
+    const documentsPembayaran = Object.keys(requiredPembayaran).map((key) => {
+        const value = requiredPembayaran[key];
         return (
-            berkasKT.find((d) => d.jenis_dokumen === value) || {
+            berkasPembayaran.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -47,15 +47,12 @@ export default function ShowPengajuan({
             }
         );
     });
-
     const { data, setData, post, processing, errors, reset, clearErrors } =
         useForm({
             pengajuan_id: pengajuan.id,
             nama_kegiatan: pengajuan.nama_kegiatan,
             unggah_ulang: true,
-            kak: null,
-            form_permintaan: null,
-            surat_permintaan: null,
+            spm: null,
 
             // If edited
             edited_id: [],
@@ -63,7 +60,7 @@ export default function ShowPengajuan({
 
     function submit(e) {
         e.preventDefault(); // Mencegah perilaku default dari form submit
-        post(route("ketua-tim.ajukan-berkas-ulang"), {
+        post(route("keuangan.ajukan-berkas-ulang"), {
             data: data,
             _token: props.csrf_token,
             _method: "POST",
@@ -117,41 +114,77 @@ export default function ShowPengajuan({
         }
     }, [flash.message]);
 
+    // Logika untuk mengecek apakah  smaa2 berisi
+    function cekKeyNamaBerisi(berkasPembayaran, documentsPembayaran) {
+        // Cek panjang kedua array sama
+        if (berkasPembayaran.length !== documentsPembayaran.length) {
+            return false;
+        }
+
+        // Fungsi untuk mengecek apakah nilai dari key 'nama' tidak kosong, null, atau undefined
+        const isNamaValid = (obj) => obj.nama !== undefined && obj.nama !== null && obj.nama.trim() !== '';
+
+        // Cek semua elemen di 'berkasPembayaran'
+        const isBerkasNamaValid = berkasPembayaran.every(isNamaValid);
+
+        // Cek semua elemen di 'documentsPembayaran'
+        const isDocumentsNamaValid = documentsPembayaran.every(isNamaValid);
+
+        // Return true jika semua key 'nama' berisi nilai valid
+        return isBerkasNamaValid && isDocumentsNamaValid;
+    }
+
+    const hasil = cekKeyNamaBerisi(berkasPembayaran, documentsPembayaran);
+
+
     const ketuaTim = pengajuan.created_by;
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
 
-    console.log("isi data");
+    console.log("data : 👇");
     console.log(data);
-    console.log("errors :");
-    console.log(errors);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             title={title}
             current={route().current()}
         >
-            <Head title={title} />
             {/* content */}
             <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop ">
                 <div className="flex items-center justify-between ">
-                    {/* Breadcumbs */}
-                    <div className="my-3 text-sm capitalize breadcrumbs">
+                    <div className="my-3 text-sm breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("ppk.daftar-berkas")}>
+                                <a href={route("keuangan.riwayat-pengajuan")}>
                                     <IoDocumentTextOutline className="w-4 h-4 mr-2" />
                                     Riwayat Pengajuan
                                 </a>
                             </li>
+
                             <li>
-                                <a>
-                                    <TiDocumentText className="w-4 h-4 mr-1" />
+                                <span className="inline-flex items-center gap-2">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        className="w-4 h-4 stroke-current"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                        ></path>
+                                    </svg>
                                     {pengajuan.nama_kegiatan}
-                                </a>
+                                </span>
                             </li>
                             <li>
-                                <a>{title}</a>
+                                <span className="inline-flex items-center gap-2">
+                                    <CgDetailsMore className="w-4 h-4" /> Detail
+                                    Pengajuan
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -159,7 +192,7 @@ export default function ShowPengajuan({
                         onClick={() => window.history.back()}
                         className="capitalize bg-secondary/5 "
                     >
-                        Kembali
+                        Kembali{" "}
                         <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                     </SecondaryButton>
                 </div>
@@ -181,12 +214,11 @@ export default function ShowPengajuan({
                             <span>: {pengajuan.nama_tim}</span>
                         </div>
                     </div>
-
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">
-                            Pengajuan Permintaan Pengadaan
+                            Berkas Surat Perintah Pembayaran
                         </h2>
-                        {/* Tabel Berkas Pengajuan KT/Pengadaan  */}
+                        {/* Tabel Berkas Pengajuan Pembayaran Start */}
                         <form onSubmit={submit} enctype="multipart/form-data">
                             <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                                 {/* head */}
@@ -204,7 +236,7 @@ export default function ShowPengajuan({
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {documentsKT.map((berkas, i) => (
+                                    {documentsPembayaran.map((berkas, i) => (
                                         <tr>
                                             <th className="text-primary">
                                                 {i + 1}
@@ -212,6 +244,7 @@ export default function ShowPengajuan({
                                             <td className="capitalize">
                                                 {berkas.jenis_dokumen}
                                             </td>
+                                            {/* Kalo ada berkas */}
                                             {berkas.nama ? (
                                                 <>
                                                     <td className="text-sm capitalize">
@@ -318,7 +351,7 @@ export default function ShowPengajuan({
                                                                     e,
                                                                     berkas.jenis_dokumen,
                                                                     getKeyByValue(
-                                                                        requiredBerkasKT,
+                                                                        requiredPembayaran,
                                                                         berkas.jenis_dokumen
                                                                     )
                                                                 );
@@ -391,6 +424,7 @@ export default function ShowPengajuan({
                                                     </td>
                                                 </>
                                             ) : (
+                                                // Kalo ga ada berkas
                                                 <>
                                                     <td
                                                         colSpan={2}
@@ -428,7 +462,7 @@ export default function ShowPengajuan({
                                                                     e,
                                                                     berkas.jenis_dokumen,
                                                                     getKeyByValue(
-                                                                        requiredBerkasKT,
+                                                                        requiredPembayaran,
                                                                         berkas.jenis_dokumen
                                                                     )
                                                                 );
@@ -467,6 +501,7 @@ export default function ShowPengajuan({
                                                         />
 
                                                         {/* Kalo Dicoba Upload */}
+                                                        {/* TODO: Logika Upload/Upload Ulang SPM */}
                                                         {uploadedFiles[
                                                             berkas.jenis_dokumen
                                                         ] ? (
@@ -502,10 +537,11 @@ export default function ShowPengajuan({
                                 </tbody>
                             </table>
                             {/* Button */}
-                            <div className="flex justify-end w-full mt-4">
+                            <div className="flex justify-end w-full mt-4 cursor-not-allowed">
                                 <button
                                     type="submit"
-                                    className="uppercase button-correct"
+                                    disabled={hasil || isEdit ? true : false}
+                                    className="uppercase button-correct disabled:bg-accent"
                                 >
                                     Ajukan Ulang
                                     <IoIosSend />

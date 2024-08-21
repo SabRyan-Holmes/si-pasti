@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head, router } from "@inertiajs/react";
 import moment from "moment/min/moment-with-locales";
-import { FiEye } from "react-icons/fi";
 import { RiFolderUploadFill } from "react-icons/ri";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ReactPaginate from "react-paginate";
 import { TiArrowRight, TiArrowLeft } from "react-icons/ti";
-import { HiDocumentDuplicate } from "react-icons/hi2";
 import { FaEye } from "react-icons/fa6";
 import { FaRegFolder } from "react-icons/fa";
 import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
+import {
+    MdOutlineKeyboardDoubleArrowLeft,
+    MdOutlineKeyboardDoubleArrowRight,
+} from "react-icons/md";
 
 export default function DaftarBerkas({
     title,
     auth,
     pengajuans,
     flash,
-    search: initialSearch,
+    searchReq: initialSearch,
     byStatusReq: initialStatus,
     byStageReq: initialStage,
 }) {
     moment.locale("id");
-
 
     const [byStatus, setByStatus] = useState(initialStatus || "");
     const [byStage, setByStage] = useState(initialStage || "");
@@ -105,7 +105,6 @@ export default function DaftarBerkas({
                 },
                 { replace: true, preserveState: true }
             );
-            // FIXME: Ada bug kerefresh ketika search
         } else if (search && search != initialSearch) {
             router.get(
                 route("keuangan.daftar-berkas"),
@@ -121,7 +120,7 @@ export default function DaftarBerkas({
         <AuthenticatedLayout user={auth.user} title={title}>
             <Head title={title} />
             {/* content */}
-            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7 ">
+            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
                 {/* Breadcumbs */}
                 <div className="my-3 text-sm breadcrumbs">
                     <ul>
@@ -139,9 +138,7 @@ export default function DaftarBerkas({
 
                 {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
-                        <form
-                            className="flex items-center justify-between w-full "
-                        >
+                        <form className="flex items-center justify-between w-full ">
                             <div className="flex items-center justify-start gap-3 my-3 w-fit">
                                 <div className="w-48">
                                     <InputLabel
@@ -211,7 +208,9 @@ export default function DaftarBerkas({
                                         type="search"
                                         id="search"
                                         defaultValue={search}
-                                        onSubmit={(e) => setSearch(e.target.value)}
+                                        onSubmit={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
                                         placeholder="Cari nama ketua tim/nama kegiatan.."
@@ -238,7 +237,7 @@ export default function DaftarBerkas({
                                         <th className="text-center">
                                             Tanggal Disetujui
                                         </th>
-                                        <th className="text-center">Status</th>
+                                        <th className="text-center">Status/Stage</th>
                                         <th className="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -256,25 +255,25 @@ export default function DaftarBerkas({
                                                 className="group/item hover:bg-secondary/50 "
                                             >
                                                 <th>{i + 1}</th>
-                                                <td>
+                                                <td className="p-1">
                                                     <div className="flex-row items-center gap-3">
-                                                        <span className="font-bold">
+                                                        <span className="text-sm font-bold">
                                                             {name} {gelar}
                                                         </span>
-                                                        <span className="block text-xs opacity-50 text-nowrap ">
+                                                        <span className="block text-xs opacity-50 ">
                                                             {data.nama_tim}
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="font-medium capitalize">
+                                                <td className="p-1 text-sm font-medium capitalize text-nowrap">
                                                     {data.nama_kegiatan}
                                                 </td>
-                                                <td className="text-sm text-center">
+                                                <td className="p-1 text-sm text-center">
                                                     {moment(
                                                         data.created_at
                                                     ).format("LL")}
                                                 </td>
-                                                <td className="font-medium text-center">
+                                                <td className="p-1 font-medium text-center">
                                                     {data.status ==
                                                     "selesai" ? (
                                                         <span>
@@ -286,12 +285,17 @@ export default function DaftarBerkas({
                                                         <span>_</span>
                                                     )}
                                                 </td>
-                                                <td>
-                                                    <div className="text-center label-base bg-base-200 ">
-                                                        {data.status}
+                                                <td className="p-1">
+                                                    <div className="flex-row items-center gap-3">
+                                                        <div className="text-center bg-orange-50 label-base ">
+                                                            {data.status}
+                                                        </div>
+                                                        <div className="mt-1 text-xs text-center label-base bg-base-100 text-nowrap">
+                                                            {data.stage}
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td className="text-center whitespace-nowrap text-nowrap">
+                                                <td className="p-1 text-center whitespace-nowrap text-nowrap">
                                                     <Link
                                                         as="a"
                                                         href={route(

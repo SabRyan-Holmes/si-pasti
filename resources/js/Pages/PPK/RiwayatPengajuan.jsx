@@ -119,7 +119,7 @@ export default function RiwayatPengajuan({
         <AuthenticatedLayout user={auth.user} title={title}>
             {/* content */}
 
-            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
+            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
                 <div className="flex items-center justify-between ">
                     {/* Breadcumbs */}
                     <div className="my-3 text-sm capitalize breadcrumbs">

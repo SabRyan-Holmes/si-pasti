@@ -167,7 +167,8 @@ export default function Sidebar({ divisi, active }) {
                         <NavLinkDashboard
                             href={route("keuangan.riwayat-pengajuan")}
                             active={route().current(
-                                "keuangan.riwayat-pengajuan"
+                                "keuangan.riwayat-pengajuan" ||
+                                active === "keuangan.show-pengajuan"
                             )}
                             className="relative z-20"
                         >

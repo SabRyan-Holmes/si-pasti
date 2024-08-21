@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
 
         ])->alias([
+            'auth' => \App\Http\Middleware\Authenticate::class,
             'ketua_tim' => \App\Http\Middleware\KetuaTim::class,
             'ppk' => \App\Http\Middleware\PPK::class,
             'pbj' => \App\Http\Middleware\PBJ::class,
