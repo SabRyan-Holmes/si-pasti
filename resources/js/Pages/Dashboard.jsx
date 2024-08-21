@@ -14,6 +14,7 @@ export default function Dashboard({
     userCount,
     kegiatanCount,
     documentCount,
+
     ketuaTimCount,
     divisiCount,
     processCount,

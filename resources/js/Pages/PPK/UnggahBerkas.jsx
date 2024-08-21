@@ -106,7 +106,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                     <div className="mt-3 text-sm breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("ppk.daftar-berkas")}>
+                                <a href={route("daftar-berkas")}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -204,7 +204,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Rancangan Kontrak"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="rancangan_kontrak"
@@ -214,7 +214,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -236,7 +236,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Spekteknis"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="spekteknis"
@@ -246,7 +246,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -268,7 +268,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="RAB/HPS"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="rab"
@@ -278,7 +278,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -300,7 +300,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Surat Penunjukan Penjabat Pengadaan"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="sppp"
@@ -310,7 +310,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -352,7 +352,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="SPPBJ"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="sppbj"
@@ -362,7 +362,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -384,7 +384,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Surat Kontrak"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="surat_kontrak"
@@ -394,7 +394,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -436,7 +436,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Berita Acara Serah Terima(BAST)"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="bast"
@@ -446,7 +446,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -468,7 +468,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Berita Acara Pembayaran(BAP)"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="bap"
@@ -478,7 +478,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -520,7 +520,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Kuitansi"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="kuitansi"
@@ -530,7 +530,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
@@ -552,7 +552,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                             value="Surat Pesanan"
                                             className="my-2"
                                         />
-                                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                                        <div className="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                             <input
                                                 type="file"
                                                 name="surat_pesanan"
@@ -562,7 +562,7 @@ export default function UnggahBerkas({ title, auth, pengajuan, flash }) {
                                                         e.target.files[0]
                                                     )
                                                 }
-                                                class="
+                                                className="
                                         file:absolute file:right-0
                                         file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full

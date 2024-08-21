@@ -206,7 +206,7 @@ export default function ShowPengajuan({
                     <div className="my-3 text-sm capitalize breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("ppk.daftar-berkas")}>
+                                <a href={route("daftar-berkas")}>
                                     <IoDocumentTextOutline className="w-4 h-4 mr-2" />
                                     Riwayat Pengajuan
                                 </a>
@@ -232,19 +232,19 @@ export default function ShowPengajuan({
                 </div>
 
                 <main>
-                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Kegiatan</span>
+                    <div className="mt-10 capitalize max-w-screen-phone text-nowrap">
+                        <div className="grid grid-cols-2 gap-0">
+                            <span className="mr-1 font-bold">Nama Kegiatan</span>
                             <span>: {pengajuan.nama_kegiatan}</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Ketua TIM /NIP</span>
+                        <div className="grid grid-cols-2 gap-0">
+                            <span className="mr-1 font-bold">Ketua TIM /NIP</span>
                             <span>
                                 : {nama} {gelar}
                             </span>
                         </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Tim</span>
+                        <div className="grid grid-cols-2 gap-0">
+                            <span className="mr-1 font-bold">Nama Tim</span>
                             <span>: {pengajuan.nama_tim}</span>
                         </div>
                     </div>

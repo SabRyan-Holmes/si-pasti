@@ -12,6 +12,7 @@ import {
     FaFileCircleCheck,
     FaRegFolder,
     FaRegFolderOpen,
+    FaUpload,
 } from "react-icons/fa6";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TiDocumentText } from "react-icons/ti";
@@ -77,6 +78,7 @@ export default function ShowPengajuan({
             },
             onFinish: () => {
                 console.log("Submit selesai");
+                setisEdit(false)
             },
         });
     }
@@ -318,24 +320,22 @@ export default function ShowPengajuan({
                                                         {berkas.is_valid ==
                                                             null && (
                                                             <a
-                                                                href={`/storage/${berkas.path}`}
-                                                                target="_blank"
-                                                                className="mx-auto transition-all action-btn text-hijau hover:scale-105"
+                                                                disabled
+                                                                className="mx-auto transition-all cursor-not-allowed action-btn text-hijau"
                                                             >
-                                                                <FaEye className="mx-1 mr-1 fill-hijau" />
-                                                                Lihat
+                                                                <FaUpload className="mx-1 mr-1 fill-hijau" />
+                                                                Upload
                                                             </a>
                                                         )}
 
                                                         {berkas.is_valid ==
                                                             true && (
                                                             <a
-                                                                href={`/storage/${berkas.path}`}
                                                                 target="_blank"
                                                                 className="mx-auto transition-all action-btn text-hijau hover:scale-105"
                                                             >
-                                                                <FaEye className="mx-1 mr-1 fill-hijau" />
-                                                                Lihat
+                                                                <FaUpload className="mx-1 mr-1 fill-hijau" />
+                                                                Upload
                                                             </a>
                                                         )}
 
@@ -357,6 +357,7 @@ export default function ShowPengajuan({
                                                                 );
                                                                 // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
 
+                                                                setisEdit(true)
                                                                 // Gunakan setData dengan cara yang benar
                                                                 setData(
                                                                     (
@@ -467,6 +468,9 @@ export default function ShowPengajuan({
                                                                     )
                                                                 );
                                                                 // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
+
+                                                                // Jadikan isEdit
+                                                                setisEdit(true)
 
                                                                 // Gunakan setData dengan cara yang benar
                                                                 setData(

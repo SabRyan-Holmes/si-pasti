@@ -24,14 +24,32 @@ class PengajuanStoreRequest extends FormRequest
         return [
             'nama_tim' => ['required', 'string', 'max:100'],
             'nama_kegiatan' => ['required', 'string', 'max:100'],
+
             'kak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
             'form_permintaan' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
-            'surat_permintaan' => [ 'nullable', 'file',  'mimes:pdf', 'max:15192'],
-            // 'form_permintaan' => ['nullable', 'sometimes', 'required_without:surat_permintaan',  'file', 'mimes:pdf', 'max:15192'],
-            // 'surat_permintaan' => [ 'nullable','sometimes', 'required_without:form_permintaan', 'file',  'mimes:pdf', 'max:15192'],
+            'surat_permintaan' => ['nullable', 'file',  'mimes:pdf', 'max:15192'],
 
+            // Rule kustom untuk memastikan salah satu berkas harus diupload
+            // Menggunakan required_without_all
+            'kak' => ['required_without_all:form_permintaan,surat_permintaan', 'file', 'mimes:pdf', 'max:15192'],
+            'form_permintaan' => ['required_without_all:kak,surat_permintaan', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_permintaan' => ['required_without_all:kak,form_permintaan', 'file', 'mimes:pdf', 'max:15192'],
 
-            // required_if:email,null|string|exists:users,nim
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            // Pesan error untuk rule kustom
+            'required' => 'Kolom :attribute harus diisi.',
+            'string' => 'Kolom :attribute harus berupa teks.',
+            'max' => 'Kolom :attribute tidak boleh lebih dari :max karakter.',
+            'file' => 'Kolom :attribute harus berupa file.',
+            'mimes' => 'Kolom :attribute harus berupa dokumen PDF.',
+
+            'required_without_all' => 'Salah satu dari Berkas harus diupload.',
+
         ];
     }
 }

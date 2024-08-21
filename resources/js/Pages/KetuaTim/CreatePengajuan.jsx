@@ -9,6 +9,7 @@ import {
     PrimaryButton,
     SecondaryButton,
     Dropdown,
+    SuccessButton,
 } from "@/Components";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
@@ -22,9 +23,9 @@ export default function CreatePengajuan({ title, auth, flash }) {
         useForm({
             nama_tim: "",
             nama_kegiatan: "",
-            kak: null,
-            form_permintaan: null,
-            surat_permintaan: null,
+            // kak: null,
+            // form_permintaan: null,
+            // surat_permintaan: null,
         });
 
     function submit(e) {
@@ -107,7 +108,7 @@ export default function CreatePengajuan({ title, auth, flash }) {
                     <div className="my-3">
                         <InputLabel htmlFor="nama_kegiatan" value="Nama Tim" />
                         <select
-                            className="w-full px-2 my-2 rounded-md border-gradient"
+                            className="w-full px-2 my-2 text-sm rounded-md border-gradient"
                             onChange={(e) =>
                                 setData("nama_tim", e.target.value)
                             }
@@ -232,14 +233,13 @@ export default function CreatePengajuan({ title, auth, flash }) {
                     </div>
 
                     {/* Button */}
-                    <div className="flex justify-end w-full mt-4">
-                        <button
+                    <div className="flex justify-end w-full pb-16 mt-4">
+                        <SuccessButton
                             disabled={processing}
                             type="submit"
-                            className="uppercase bg-hijau button-correct"
                         >
                             Ajukan <IoIosSend className="w-5 h-5 ml-1" />
-                        </button>
+                        </SuccessButton>
                     </div>
                 </form>
             </section>

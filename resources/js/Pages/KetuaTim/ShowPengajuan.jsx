@@ -12,9 +12,11 @@ import {
     FaFileCircleCheck,
     FaRegFolder,
     FaRegFolderOpen,
+    FaUpload,
 } from "react-icons/fa6";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TiDocumentText } from "react-icons/ti";
+import { SuccessButton } from "@/Components";
 
 export default function ShowPengajuan({
     title,
@@ -80,6 +82,7 @@ export default function ShowPengajuan({
             },
             onFinish: () => {
                 console.log("Submit selesai");
+                setisEdit(false);
             },
         });
     }
@@ -117,14 +120,42 @@ export default function ShowPengajuan({
         }
     }, [flash.message]);
 
+    const [isEdit, setisEdit] = useState(false);
     const ketuaTim = pengajuan.created_by;
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
+
+    // Logika untuk mengecek apakah  smaa2 berisi
+    function cekKeyNamaBerisi(berkasDB, documentsRow) {
+        // Cek panjang kedua array sama
+        if (berkasDB.length !== documentsRow.length) {
+            return false;
+        }
+
+        // Fungsi untuk mengecek apakah nilai dari key 'nama' tidak kosong, null, atau undefined
+        const isNamaValid = (obj) =>
+            obj.nama !== undefined &&
+            obj.nama !== null &&
+            obj.nama.trim() !== "";
+
+        // Cek semua elemen di 'berkasDB'
+        const isBerkasNamaValid = berkasDB.every(isNamaValid);
+
+        // Cek semua elemen di 'documentsRow'
+        const isDocumentsNamaValid = documentsRow.every(isNamaValid);
+
+        // Return true jika semua key 'nama' berisi nilai valid
+        return isBerkasNamaValid && isDocumentsNamaValid;
+    }
+
+    const isDone = cekKeyNamaBerisi(berkasKT, documentsKT);
 
     console.log("isi data");
     console.log(data);
     console.log("errors :");
     console.log(errors);
+
+    console.log("is Edit & isDone ", isEdit, isDone);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -139,7 +170,7 @@ export default function ShowPengajuan({
                     <div className="my-3 text-sm capitalize breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("ppk.daftar-berkas")}>
+                                <a href={route("daftar-berkas")}>
                                     <IoDocumentTextOutline className="w-4 h-4 mr-2" />
                                     Riwayat Pengajuan
                                 </a>
@@ -281,31 +312,30 @@ export default function ShowPengajuan({
                                                         )}
                                                     </td>
 
+                                                    {/* Kalo Masih diproses belum bisa diedit */}
                                                     <td className="text-center text-nowrap">
                                                         {berkas.is_valid ==
                                                             null && (
-                                                            <a
-                                                                href={`/storage/${berkas.path}`}
-                                                                target="_blank"
-                                                                className="mx-auto transition-all action-btn text-hijau hover:scale-105"
-                                                            >
-                                                                <FaEye className="mx-1 mr-1 fill-hijau" />
-                                                                Lihat
-                                                            </a>
+                                                            <label className="transition-all cursor-not-allowed action-btn text-secondary">
+                                                                <FaFileCircleCheck className="mx-1 mr-1 fill-secondary" />
+                                                                <span>
+                                                                    Unggah
+                                                                </span>
+                                                            </label>
                                                         )}
 
                                                         {berkas.is_valid ==
                                                             true && (
-                                                            <a
-                                                                href={`/storage/${berkas.path}`}
-                                                                target="_blank"
-                                                                className="mx-auto transition-all action-btn text-hijau hover:scale-105"
+                                                            <label
+                                                                aria-disabled
+                                                                className="transition-all cursor-not-allowed action-btn text-secondary "
                                                             >
-                                                                <FaEye className="mx-1 mr-1 fill-hijau" />
-                                                                Lihat
-                                                            </a>
+                                                                <FaFileUpload className="mx-1 mr-1 fill-secondary" />
+                                                                <span>
+                                                                    Unggah
+                                                                </span>
+                                                            </label>
                                                         )}
-
                                                         {/* input  Hidden for Upload Ulang*/}
                                                         <input
                                                             id={
@@ -323,7 +353,7 @@ export default function ShowPengajuan({
                                                                     )
                                                                 );
                                                                 // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
-
+                                                                setisEdit(true);
                                                                 // Gunakan setData dengan cara yang benar
                                                                 setData(
                                                                     (
@@ -414,7 +444,7 @@ export default function ShowPengajuan({
                                                             </div>
                                                         )}
                                                     </td>
-                                                    <td className="text-center">
+                                                    <td className="p-1 text-center">
                                                         {/* input  Hidden for upload jika belum pernah diupload*/}
 
                                                         <input
@@ -434,6 +464,7 @@ export default function ShowPengajuan({
                                                                 );
                                                                 // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
 
+                                                                setisEdit(true);
                                                                 // Gunakan setData dengan cara yang benar
                                                                 setData(
                                                                     (
@@ -502,14 +533,15 @@ export default function ShowPengajuan({
                                 </tbody>
                             </table>
                             {/* Button */}
-                            <div className="flex justify-end w-full mt-4">
-                                <button
+                            <div className="flex justify-end w-full p-1 mt-4">
+                                <SuccessButton
                                     type="submit"
-                                    className="uppercase button-correct"
+                                    disabled={isDone ? true : false}
+                                    className="disabled:bg-accent"
                                 >
                                     Ajukan Ulang
                                     <IoIosSend />
-                                </button>
+                                </SuccessButton>
                             </div>
                         </form>
                     </div>

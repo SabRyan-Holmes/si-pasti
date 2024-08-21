@@ -202,7 +202,7 @@ export default function ShowBerkas({
                         <div className="my-3 text-sm capitalize breadcrumbs">
                             <ul>
                                 <li>
-                                    <a href={route("pbj.daftar-berkas")}>
+                                    <a href={route("daftar-berkas")}>
                                         <FaRegFolder className="w-4 h-4 mr-2" />
                                         Daftar Berkas
                                     </a>

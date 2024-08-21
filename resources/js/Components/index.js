@@ -15,6 +15,7 @@ import ProfileImage from "./ProfileImage";
 import ResponsiveNavLink from "./ResponsiveNavLink";
 import SecondaryButton from "./SecondaryButton";
 import Sidebar from "./Sidebar";
+import SuccessButton from "./SuccessButton";
 import TextInput from "./TextInput";
 
 export {
@@ -35,5 +36,6 @@ export {
     SecondaryButton,
     Sidebar,
     TextInput,
-    ProfileImage
+    ProfileImage,
+    SuccessButton,
 };

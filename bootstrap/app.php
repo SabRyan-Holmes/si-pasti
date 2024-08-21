@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         ])->alias([
             'auth' => \App\Http\Middleware\Authenticate::class,
+            'role' => \App\Http\Middleware\CheckRole::class,
             'ketua_tim' => \App\Http\Middleware\KetuaTim::class,
             'ppk' => \App\Http\Middleware\PPK::class,
             'pbj' => \App\Http\Middleware\PBJ::class,

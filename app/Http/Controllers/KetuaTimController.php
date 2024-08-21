@@ -133,7 +133,6 @@ class KetuaTimController extends Controller
         $pengajuans = Pengajuan::latest();
         $subTitle = "";
 
-
         if (request('byStatus')) {
             $subTitle = 'Berdasarkan Status : ' . request('byStatus');
         }
@@ -141,6 +140,7 @@ class KetuaTimController extends Controller
         if (request('byStage')) {
             $subTitle = 'Berdasarkan Stage : ' . request('byStage');
         }
+
 
         return Inertia::render('KetuaTim/RiwayatPengajuan', [
             // "title" => "Pengajuan " . $title,

@@ -10,21 +10,17 @@ import { TiArrowRight } from "react-icons/ti";
 import { Link, router } from "@inertiajs/react";
 import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
-import { FaRegFolder } from "react-icons/fa6";
-import { FaHistory } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
 export default function RiwayatPengajuan({
     title,
     auth,
     pengajuans,
-    searchReq : initialSearch,
+    searchReq: initialSearch,
     byStatusReq: initialStatus,
     byStageReq: initialStage,
 }) {
     moment.locale("id");
-
-
 
     const [byStatus, setByStatus] = useState(initialStatus || "");
     const [byStage, setByStage] = useState(initialStage || "");
@@ -35,7 +31,7 @@ export default function RiwayatPengajuan({
         const newOffset = (selectedPage - 1) * pengajuans.per_page;
 
         router.get(
-            route("pbj.riwayat-pengajuan"),
+            route("riwayat-pengajuan"),
             { page: selectedPage, byStatus, byStage, search },
             {
                 replace: true,
@@ -53,7 +49,7 @@ export default function RiwayatPengajuan({
             (byStage && byStage != initialStage)
         ) {
             router.get(
-                route("pbj.riwayat-pengajuan"),
+                route("riwayat-pengajuan"),
                 {
                     byStatus: byStatus,
                     byStage: byStage,
@@ -67,7 +63,7 @@ export default function RiwayatPengajuan({
             (byStage && byStage != initialStage && search != initialSearch)
         ) {
             router.get(
-                route("pbj.riwayat-pengajuan"),
+                route("riwayat-pengajuan"),
                 {
                     byStatus,
                     byStage,
@@ -82,7 +78,7 @@ export default function RiwayatPengajuan({
         // Kalo semua
         if (byStatus == "Semua Kategori" && byStage == "Semua Kategori") {
             router.get(
-                route("pbj.riwayat-pengajuan"),
+                route("riwayat-pengajuan"),
                 {
                     search,
                 },
@@ -90,7 +86,7 @@ export default function RiwayatPengajuan({
             );
         } else if (byStatus == "Semua Kategori") {
             router.get(
-                route("pbj.riwayat-pengajuan"),
+                route("riwayat-pengajuan"),
                 {
                     byStage,
                     search,
@@ -99,7 +95,7 @@ export default function RiwayatPengajuan({
             );
         } else if (byStage == "Semua Kategori") {
             router.get(
-                route("pbj.riwayat-pengajuan"),
+                route("riwayat-pengajuan"),
                 {
                     byStatus,
                     search,
@@ -108,7 +104,7 @@ export default function RiwayatPengajuan({
             );
         } else if (search && search != initialSearch) {
             router.get(
-                route("pbj.riwayat-pengajuan"),
+                route("riwayat-pengajuan"),
                 {
                     search,
                 },
@@ -117,24 +113,40 @@ export default function RiwayatPengajuan({
         }
     }, [byStatus, byStage]);
 
+    let linkShowPengajuan;
+
+    switch (auth.user.divisi) {
+        case "Ketua Tim":
+            linkShowPengajuan = "ketua-tim.show-pengajuan";
+            break;
+        case "PPK":
+            linkShowPengajuan = "ppk.show-pengajuan";
+            break;
+        case "PBJ":
+            linkShowPengajuan = "pbj.show-pengajuan";
+            break;
+        case "Keuangan":
+            linkShowPengajuan = "keuangan.show-pengajuan";
+            break;
+    }
+
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
             {/* content */}
 
-            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7">
-            <div className="flex items-center justify-between ">
+            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
+                <div className="flex items-center justify-between ">
                     {/* Breadcumbs */}
                     <div className="my-3 text-sm capitalize breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("pbj.riwayat-pengajuan")}>
+                                <a href={route("riwayat-pengajuan")}>
                                     <IoDocumentTextOutline className="w-4 h-4 mr-2" />
                                     Riwayat Pengajuan
                                 </a>
                             </li>
                             <li>
-                                <a>
-                                </a>
+                                <a></a>
                             </li>
                         </ul>
                     </div>
@@ -142,9 +154,7 @@ export default function RiwayatPengajuan({
 
                 {pengajuans.data.length || search || byStatus || byStage ? (
                     <>
-                        <form
-                            className="flex items-center justify-between w-full "
-                        >
+                        <form className="flex items-center justify-between w-full ">
                             <div className="flex items-center justify-start gap-3 my-3 w-fit">
                                 <div className="w-48">
                                     <InputLabel
@@ -214,6 +224,9 @@ export default function RiwayatPengajuan({
                                         type="search"
                                         id="search"
                                         defaultValue={search}
+                                        onSubmit={(e) =>
+                                            setSearch(e.target.value)
+                                        }
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
                                         placeholder="Cari nama ketua tim/nama kegiatan.."
@@ -256,7 +269,8 @@ export default function RiwayatPengajuan({
                                             <Link
                                                 as="tr"
                                                 href={route(
-                                                    "pbj.show-pengajuan",
+                                                    // Berdasarkan Link Divisi
+                                                    linkShowPengajuan,
                                                     data.nama_kegiatan
                                                 )}
                                                 key={i}
@@ -294,9 +308,26 @@ export default function RiwayatPengajuan({
                                                     )}
                                                 </td>
                                                 <td>
-                                                    <div className="text-center label-base bg-base-200 ">
-                                                        {data.status}
-                                                    </div>
+                                                    {data.status ==
+                                                        "diproses" && (
+                                                        <div className="text-center bg-orange-50 label-base ">
+                                                            {data.status}
+                                                        </div>
+                                                    )}
+
+                                                    {data.status ==
+                                                        "selesai" && (
+                                                        <div className="text-center bg-orange-50 label-success ">
+                                                            {data.status}
+                                                        </div>
+                                                    )}
+
+                                                    {data.status ==
+                                                        "ditolak" && (
+                                                        <div className="text-center bg-orange-50 label-success ">
+                                                            {data.status}
+                                                        </div>
+                                                    )}
                                                 </td>
                                                 <td className="p-0 m-0">
                                                     <div className="text-xs text-center text-nowrap label-base bg-base-200 ">

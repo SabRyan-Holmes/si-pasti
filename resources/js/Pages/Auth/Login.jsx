@@ -60,7 +60,7 @@ export default function Login({ status, canResetPassword }) {
             </div>
 
             <p className="mt-5 text-sm font-semibold text-center text-slate-600/90">
-                Selamat Datang, silahkan masuk menggunakan akun anda
+                Selamat Datang, silahkan masuk menggunakan akun divisi anda
             </p>
 
             <section className="mx-2 mt-6 ">
@@ -80,7 +80,8 @@ export default function Login({ status, canResetPassword }) {
                             onChange={(e) => setData("login", e.target.value)}
                         />
 
-                        <InputError message={errors.login} className="mt-2" />
+                        <InputError message={errors.nip} className="mt-2" />
+                        <InputError message={errors.email} className="mt-2" />
                     </div>
 
                     <div className="mt-4">

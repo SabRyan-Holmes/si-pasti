@@ -65,21 +65,5 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function dashboard() {
-        $pengajuan = Pengajuan::where('status', 'diproses')->count();
-        $rejected = Pengajuan::where('status', 'ditolak')->count();
-        $accepted = Pengajuan::where('status', 'selesai')->count();
-        return Inertia::render('Dashboard', [
-            'title' => 'Dashboard',
-            'userCount' => User::all()->count(),
-            'divisiCount' => User::select('divisi')->distinct()->count('divisi'),
-            'ketuaTimCount' => User::where('divisi', 'Ketua Tim')->count(),
-            'kegiatanCount' => Pengajuan::all()->count(),
-            'documentCount' => Document::all()->count(),
-            'rejectedCount' => $rejected,
-            'acceptedCount' => $accepted,
-            'processCount' => $pengajuan,
 
-        ]);
-    }
 }

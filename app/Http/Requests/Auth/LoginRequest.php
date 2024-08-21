@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -45,7 +47,33 @@ class LoginRequest extends FormRequest
         return [
             'email' => 'sometimes|required_without:nip|string|nullable|email|exists:users,email',
             'nip' => 'required_if:email,null|string|exists:users,nip',
-            'password' => 'required|string',
+            'password' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    // Mengambil user berdasarkan email atau NIP
+                    $user = User::where('email', $this->input('email'))
+                        ->orWhere('nip', $this->input('nip'))
+                        ->first();
+
+                    // Jika user ditemukan, periksa passwordnya
+                    if ($user && !Hash::check($value, $user->password)) {
+                        $fail('Password yang dimasukkan tidak sesuai.');
+                    }
+                },
+            ],
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'email.required_without' => 'Alamat email harus diisi jika NIP tidak diisi.',
+            'email.email' => 'Alamat email yang dimasukkan tidak valid.',
+            'email.exists' => 'Alamat email tidak terdaftar.',
+            'nip.required_if' => 'NIP harus diisi jika alamat email tidak diisi.',
+            'nip.exists' => 'NIP tidak terdaftar.',
+            'password.required' => 'Password harus diisi.',
+            'password.string' => 'Password harus berupa teks.',
         ];
     }
 

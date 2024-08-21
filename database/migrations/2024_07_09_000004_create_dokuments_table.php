@@ -14,9 +14,35 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('kategori')->nullable();
+            // $table->string('kategori')->nullable();
+            $table->enum('kategori', [
+                'Pengajuan Permintaan Pengadaan',
+                'Pengajuan PBJ',
+                'Pengajuan Kontrak',
+                'Berkas Pembayaran',
+                'Pengajuan Berkas ke divisi PPK',
+                'Pengajuan Berita Acara',
+                'Pengajuan Kuitansi',
+                'Berkas Pembayaran'
+            ]);
+
             $table->string('tipe_file');
-            $table->string('jenis_dokumen');
+            // $table->string('jenis_dokumen');
+            $table->enum('jenis_dokumen', [
+                'Kerangka Ajuan Kerja',
+                'Form Permintaan',
+                'Surat Permintaan',
+                'Rancangan Kontrak',
+                'Spekteknis',
+                'RAB/HPS',
+                'Surat Penunjukan Penjabat Pengadaan(SPPP)',
+                'Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)',
+                'Surat Kontrak/Surat Pesanan',
+                'Berita Acara Serah Terima(BAST)',
+                'Berita Acara Pembayaran(BAP)',
+                'Surat Perintah Pembayaran(SPM)',
+                'Surat Pesanan',
+            ]);
             $table->string('path');
             $table->boolean('is_valid')->nullable(); //If Null = Menunggu Validasi
 

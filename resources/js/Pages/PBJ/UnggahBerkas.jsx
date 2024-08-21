@@ -55,7 +55,7 @@ export default function UnggahBerkas({ title, auth, pengajuan }) {
                     <div className="mt-3 text-sm breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("ppk.daftar-berkas")}>
+                                <a href={route("daftar-berkas")}>
                                     <FaRegFolder className="w-4 h-4 mr-2 stroke-current" />
                                     Daftar Berkas
                                 </a>

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    font-family: "Inder", "Signika";
+    font-family: "Roboto", "Signika";
     @apply text-slate-700;
 }
 
@@ -57,7 +57,7 @@ input[type="number"] {
 }
 
 .button-glass {
-    @apply items-center text-lg font-semibold text-white transition duration-150 ease-in-out scale-75 bg-red-400 border border-transparent rounded-md btn glass hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+    @apply items-center text-lg font-semibold text-white transition duration-150 ease-in-out bg-red-400 border border-transparent rounded-md btn glass hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
 }
 
 .border-card {
@@ -101,7 +101,7 @@ input[type="number"] {
 }
 
 .button-correct {
-    @apply bg-emerald-500/90  inline-flex scale-[0.78] btn glass items-center px-4 py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-emerald-600 active:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
+    @apply bg-emerald-500/90  inline-flex scale-[0.78] btn glass items-center px-4 py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-emerald-500/80 focus:bg-emerald-600 active:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
 }
 
 .button-incorrect {

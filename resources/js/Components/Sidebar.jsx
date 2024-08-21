@@ -37,7 +37,7 @@ export default function Sidebar({ divisi, active }) {
                 <div className="relative z-20 flex-col items-center justify-center mt-10 space-y-6">
                     {/* App Name */}
                     <strong className="flex justify-center -mb-3 text-3xl tracking-wider uppercase text-gradient gradient-base">
-                        SIPASTI
+                        <a href="/">SIPASTI</a>
                     </strong>
 
                     <div className="flex items-center justify-center h-16 mx-5 border rounded-xl bg-slate-400/50 border-t-primary/70 border-x-secondary/70 border-b-hijau/70">
@@ -76,10 +76,10 @@ export default function Sidebar({ divisi, active }) {
                         </NavLinkDashboard>
 
                         <NavLinkDashboard
-                            href={route("ketua-tim.riwayat-pengajuan")}
+                            href={route("riwayat-pengajuan")}
                             active={
                                 route().current(
-                                    "ketua-tim.riwayat-pengajuan"
+                                    "riwayat-pengajuan"
                                 ) ||
                                 active === "ketua-tim.show-pengajuan" ||
                                 active === "pegawai.edit" ||
@@ -93,14 +93,17 @@ export default function Sidebar({ divisi, active }) {
                     </section>
                 )}
 
-                {divisi === "PPK" && (
+                {(divisi === "PPK" ||
+                    divisi === "PBJ" ||
+                    divisi === "Keuangan") && (
                     <section>
                         <NavLinkDashboard
-                            href={route("ppk.daftar-berkas")}
+                            href={route("daftar-berkas")}
                             active={
-                                route().current("ppk.daftar-berkas") ||
-                                route().current("ppk.show-berkas") ||
-                                active === "ppk.unggah-berkas"
+                                route().current("daftar-berkas") ||
+                                (typeof active === "string" &&
+                                    (active.indexOf("show-berkas") !== -1 ||
+                                        active.indexOf("unggah-berkas") !== -1))
                             }
                             className="relative z-20"
                         >
@@ -109,67 +112,12 @@ export default function Sidebar({ divisi, active }) {
                         </NavLinkDashboard>
 
                         <NavLinkDashboard
-                            href={route("ppk.riwayat-pengajuan")}
+                            href={route("riwayat-pengajuan")}
                             active={
-                                route().current("ppk.riwayat-pengajuan") ||
-                                route().current("ppk.show-pengajuan")
+                                route().current("riwayat-pengajuan") ||
+                                (typeof active === "string" &&
+                                    active.indexOf("show-pengajuan") !== -1)
                             }
-                            className="relative z-20"
-                        >
-                            <HiDocumentDuplicate />
-                            Riwayat Pengajuan
-                        </NavLinkDashboard>
-                    </section>
-                )}
-
-                {divisi === "PBJ" && (
-                    <section>
-                        <NavLinkDashboard
-                            href={route("pbj.daftar-berkas")}
-                            active={
-                                route().current("pbj.daftar-berkas") ||
-                                active === "pbj.show-berkas"
-                            }
-                            className="relative z-20"
-                        >
-                            <HiClipboardDocumentList />
-                            Daftar Berkas
-                        </NavLinkDashboard>
-
-                        <NavLinkDashboard
-                            href={route("pbj.riwayat-pengajuan")}
-                            active={
-                                route().current("pbj.riwayat-pengajuan") ||
-                                active === "pbj.show-pengajuan"
-                            }
-                            className="relative z-20"
-                        >
-                            <HiDocumentDuplicate />
-                            Riwayat Pengajuan
-                        </NavLinkDashboard>
-                    </section>
-                )}
-
-                {divisi === "Keuangan" && (
-                    <section>
-                        <NavLinkDashboard
-                            href={route("keuangan.daftar-berkas")}
-                            active={
-                                route().current("keuangan.daftar-berkas") ||
-                                active === "keuangan.show-berkas"
-                            }
-                            className="relative z-20"
-                        >
-                            <HiClipboardDocumentList />
-                            Daftar Berkas
-                        </NavLinkDashboard>
-
-                        <NavLinkDashboard
-                            href={route("keuangan.riwayat-pengajuan")}
-                            active={route().current(
-                                "keuangan.riwayat-pengajuan" ||
-                                active === "keuangan.show-pengajuan"
-                            )}
                             className="relative z-20"
                         >
                             <HiDocumentDuplicate />

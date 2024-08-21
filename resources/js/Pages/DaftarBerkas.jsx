@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "@/Components/Navbar";
 import { useForm, Link, Head, router } from "@inertiajs/react";
 import moment from "moment/min/moment-with-locales";
-import { FiEye } from "react-icons/fi";
 import { RiFolderUploadFill } from "react-icons/ri";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ReactPaginate from "react-paginate";
 import { TiArrowRight, TiArrowLeft } from "react-icons/ti";
-import { HiDocumentDuplicate } from "react-icons/hi2";
-import { FaEye } from "react-icons/fa6";
+import { FaCheck, FaEye, FaUpload } from "react-icons/fa6";
 import { FaRegFolder } from "react-icons/fa";
 import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
-import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import {
+    MdOutlineKeyboardDoubleArrowLeft,
+    MdOutlineKeyboardDoubleArrowRight,
+} from "react-icons/md";
+import { TbPencilCheck } from "react-icons/tb";
 
 export default function DaftarBerkas({
     title,
@@ -24,6 +25,7 @@ export default function DaftarBerkas({
     byStageReq: initialStage,
 }) {
     moment.locale("id");
+
     const [byStatus, setByStatus] = useState(initialStatus || "");
     const [byStage, setByStage] = useState(initialStage || "");
     const [search, setSearch] = useState(initialSearch || "");
@@ -33,7 +35,7 @@ export default function DaftarBerkas({
         const newOffset = (selectedPage - 1) * pengajuans.per_page;
 
         router.get(
-            route("pbj.daftar-berkas"),
+            route("daftar-berkas"),
             { page: selectedPage, byStatus, byStage, search },
             {
                 replace: true,
@@ -51,7 +53,7 @@ export default function DaftarBerkas({
             (byStage && byStage != initialStage)
         ) {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("daftar-berkas"),
                 {
                     byStatus: byStatus,
                     byStage: byStage,
@@ -65,7 +67,7 @@ export default function DaftarBerkas({
             (byStage && byStage != initialStage && search != initialSearch)
         ) {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("daftar-berkas"),
                 {
                     byStatus,
                     byStage,
@@ -80,7 +82,7 @@ export default function DaftarBerkas({
         // Kalo semua
         if (byStatus == "Semua Kategori" && byStage == "Semua Kategori") {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("daftar-berkas"),
                 {
                     search,
                 },
@@ -88,7 +90,7 @@ export default function DaftarBerkas({
             );
         } else if (byStatus == "Semua Kategori") {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("daftar-berkas"),
                 {
                     byStage,
                     search,
@@ -97,7 +99,7 @@ export default function DaftarBerkas({
             );
         } else if (byStage == "Semua Kategori") {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("daftar-berkas"),
                 {
                     byStatus,
                     search,
@@ -106,7 +108,7 @@ export default function DaftarBerkas({
             );
         } else if (search && search != initialSearch) {
             router.get(
-                route("pbj.daftar-berkas"),
+                route("daftar-berkas"),
                 {
                     search,
                 },
@@ -114,11 +116,12 @@ export default function DaftarBerkas({
             );
         }
     }, [byStatus, byStage]);
+
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
             <Head title={title} />
             {/* content */}
-            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop px-7 ">
+            <section className="mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
                 {/* Breadcumbs */}
                 <div className="my-3 text-sm breadcrumbs">
                     <ul>
@@ -235,7 +238,9 @@ export default function DaftarBerkas({
                                         <th className="text-center">
                                             Tanggal Disetujui
                                         </th>
-                                        <th className="text-center">Status</th>
+                                        <th className="text-center">
+                                            Status/Stage
+                                        </th>
                                         <th className="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -253,25 +258,25 @@ export default function DaftarBerkas({
                                                 className="group/item hover:bg-secondary/50 "
                                             >
                                                 <th>{i + 1}</th>
-                                                <td>
+                                                <td className="p-1">
                                                     <div className="flex-row items-center gap-3">
-                                                        <span className="font-bold">
+                                                        <span className="text-sm font-bold">
                                                             {name} {gelar}
                                                         </span>
-                                                        <span className="block text-xs opacity-50 text-nowrap ">
+                                                        <span className="block text-xs opacity-50 ">
                                                             {data.nama_tim}
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="font-medium capitalize">
+                                                <td className="p-1 text-sm font-medium capitalize text-nowrap">
                                                     {data.nama_kegiatan}
                                                 </td>
-                                                <td className="text-sm text-center">
+                                                <td className="p-1 text-sm text-center">
                                                     {moment(
                                                         data.created_at
                                                     ).format("LL")}
                                                 </td>
-                                                <td className="font-medium text-center">
+                                                <td className="p-1 font-medium text-center">
                                                     {data.status ==
                                                     "selesai" ? (
                                                         <span>
@@ -283,35 +288,169 @@ export default function DaftarBerkas({
                                                         <span>_</span>
                                                     )}
                                                 </td>
-                                                <td>
-                                                    <div className="text-center label-base bg-base-200 ">
-                                                        {data.status}
+                                                <td className="p-1">
+                                                    <div className="flex-row items-center gap-3">
+                                                        {data.status ==
+                                                            "diproses" && (
+                                                            <div className="text-center bg-orange-50 label-base ">
+                                                                {data.status}
+                                                            </div>
+                                                        )}
+
+                                                        {data.status ==
+                                                            "selesai" && (
+                                                            <div className="text-center bg-orange-50 label-success ">
+                                                                {data.status}
+                                                            </div>
+                                                        )}
+
+                                                        {data.status ==
+                                                            "ditolak" && (
+                                                            <div className="text-center bg-orange-50 label-success ">
+                                                                {data.status}
+                                                            </div>
+                                                        )}
+
+                                                        <div className="mt-1 text-xs text-center label-base bg-base-100 text-nowrap">
+                                                            {data.stage}
+                                                        </div>
                                                     </div>
                                                 </td>
-                                                <td className="text-center whitespace-nowrap text-nowrap">
-                                                    <Link
-                                                        as="a"
-                                                        href={route(
-                                                            "pbj.show-berkas",
-                                                            data.nama_kegiatan
-                                                        )}
-                                                        className="items-center justify-center inline-block gap-2 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75 action-btn border-hijau/20 hover:bg-hijau hover:text-white "
-                                                    >
-                                                        <span>Lihat</span>
-                                                        <FaEye className="fill-hijau/75 group-hover/item:fill-white" />
-                                                    </Link>
-                                                    <span className="inline-block mx-1"></span>
-                                                    <Link
-                                                        as="a"
-                                                        href={route(
-                                                            "pbj.unggah-berkas",
-                                                            data.nama_kegiatan
-                                                        )}
-                                                        className="items-center justify-center inline-block gap-2 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
-                                                    >
-                                                        <span>Unggah</span>
-                                                        <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
-                                                    </Link>
+                                                <td className="p-1 text-center whitespace-nowrap text-nowrap">
+                                                    {/* Divisi Ketua Tim */}
+                                                    {auth.user.divisi ===
+                                                        "Ketua Tim" && (
+                                                        <>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "ketua-tim.show-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75 action-btn border-hijau/20 hover:bg-hijau hover:text-white "
+                                                            >
+                                                                <span>
+                                                                    Validasi
+                                                                </span>
+                                                                <TbPencilCheck className="fill-hijau/75 group-hover/item:fill-white" />
+                                                            </Link>
+                                                            <span className="inline-block mx-1"></span>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "ketua-tim.unggah-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                                            >
+                                                                <span>
+                                                                    Unggah
+                                                                </span>
+                                                                <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
+                                                            </Link>
+                                                        </>
+                                                    )}
+
+                                                    {/* Divisi PBJ */}
+                                                    {auth.user.divisi ===
+                                                        "PBJ" && (
+                                                        <>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "pbj.show-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75 action-btn border-hijau/20 hover:bg-hijau hover:text-white "
+                                                            >
+                                                                <span>
+                                                                    Validasi
+                                                                </span>
+                                                                <TbPencilCheck className="fill-hijau/75 group-hover/item:fill-white" />
+                                                            </Link>
+                                                            <span className="inline-block mx-1"></span>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "pbj.unggah-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                                            >
+                                                                <span>
+                                                                    Unggah
+                                                                </span>
+                                                                <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
+                                                            </Link>
+                                                        </>
+                                                    )}
+
+                                                    {/* Divisi PPK */}
+                                                    {auth.user.divisi ===
+                                                        "PPK" && (
+                                                        <>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "ppk.show-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75 action-btn border-hijau/20 hover:bg-hijau hover:text-white "
+                                                            >
+                                                                <span>
+                                                                    Validasi
+                                                                </span>
+                                                                <TbPencilCheck className="fill-hijau/75 group-hover/item:fill-white" />
+                                                            </Link>
+                                                            <span className="inline-block mx-1"></span>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "ppk.unggah-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                                            >
+                                                                <span>
+                                                                    Unggah
+                                                                </span>
+                                                                <FaUpload className="fill-secondary group-hover/item:fill-white" />
+                                                            </Link>
+                                                        </>
+                                                    )}
+                                                    {/* Divisi Keuangan */}
+                                                    {auth.user.divisi ===
+                                                        "Keuangan" && (
+                                                        <>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "keuangan.show-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-hijau group-hover/item:text-white text-hijau/75 action-btn border-hijau/20 hover:bg-hijau hover:text-white "
+                                                            >
+                                                                <span>
+                                                                    Validasi
+                                                                </span>
+                                                                <TbPencilCheck className="fill-hijau/75 group-hover/item:fill-white" />
+                                                            </Link>
+                                                            <span className="inline-block mx-1"></span>
+                                                            <Link
+                                                                as="a"
+                                                                href={route(
+                                                                    "keuangan.unggah-berkas",
+                                                                    data.nama_kegiatan
+                                                                )}
+                                                                className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                                            >
+                                                                <span>
+                                                                    Unggah
+                                                                </span>
+                                                                <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
+                                                            </Link>
+                                                        </>
+                                                    )}
                                                 </td>
                                             </tr>
                                         );
