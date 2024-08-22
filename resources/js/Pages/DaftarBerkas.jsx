@@ -268,7 +268,7 @@ export default function DaftarBerkas({
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="p-1 text-sm font-medium capitalize text-nowrap">
+                                                <td className="p-1 text-sm font-medium capitalize">
                                                     {data.nama_kegiatan}
                                                 </td>
                                                 <td className="p-1 text-sm text-center">

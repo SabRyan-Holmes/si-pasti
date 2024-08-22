@@ -48,14 +48,8 @@ class PPKController extends Controller
 
     public function show_berkas(Pengajuan $pengajuan)
     {
-        // $berkas_pbj = Document::whereHas('kegiatan', function ($q) use ($pengajuan) {
-        //     $q->where('kegiatans.id', $pengajuan->id);
-        // })->where('submitted_by', 3)->get();
-
         $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
         $berkas_ketua_tim = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
-
-
         return Inertia::render('PPK/ShowBerkas', [
             'title' => 'Status Pengadaan Barang',
             'pengajuan' => $pengajuan,
@@ -67,11 +61,18 @@ class PPKController extends Controller
 
     public function unggah_berkas(Pengajuan $pengajuan)
     {
+        $berkasPBJ = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
+        $berkasPK = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kontrak')->get();
+        $berkasBA = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
+        $berkasKuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
 
-        // dd($pengajuan);
         return Inertia::render('PPK/UnggahBerkas', [
             'title' => 'Pengajuan berkas ke divisi PBJ',
             'pengajuan' => $pengajuan,
+            'berkasPBJ' => $berkasPBJ,
+            'berkasPK' => $berkasPK,
+            'berkasBA' => $berkasBA,
+            'berkasKuitansi' => $berkasKuitansi,
         ]);
     }
 
@@ -80,9 +81,9 @@ class PPKController extends Controller
         // dd($request);
         $request->validated();
         //Pengajuan Ketua Tim /Pengadaan Barang
-        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang');
-        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang');
-        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang');
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan');
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan');
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan');
 
         // Pengajuan PBJ
         $this->storeDocument($request, 'rancangan_kontrak', 'RC', 'Rancangan Kontrak', 'Pengajuan PBJ');
@@ -119,9 +120,9 @@ class PPKController extends Controller
         // dd($request);
         $request->validated();
         //Pengajuan Ketua Tim /Pengadaan Barang
-        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang');
-        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang');
-        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang');
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan');
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan');
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan');
 
         // Pengajuan PBJ
         $this->storeDocument($request, 'rancangan_kontrak', 'RC', 'Rancangan Kontrak', 'Pengajuan PBJ');
@@ -140,8 +141,6 @@ class PPKController extends Controller
         //Pengajuan kuintansi
         $this->storeDocument($request, 'kuitansi', 'KUITANSI', 'Kuitansi', 'Pengajuan Kuitansi');
         $this->storeDocument($request, 'surat_pesanan', 'SP', 'Surat Pesanan', 'Pengajuan Kuitansi');
-
-
 
 
         // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
@@ -198,10 +197,8 @@ class PPKController extends Controller
 
     public function riwayat_pengajuan()
     {
-
         $pengajuans = Pengajuan::latest();
         $subTitle = "";
-
 
         if (request('byStatus')) {
             $subTitle = 'Berdasarkan Status : ' . request('byStatus');
@@ -239,9 +236,9 @@ class PPKController extends Controller
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,
             'berkasPBJ' => $berkas_pbj,
-            'pengajuanKontrak' => $pengajuan_kontrak,
-            'beritaAcara' => $berita_acara,
-            'kuitansi' => $kuitansi,
+            'berkasPK' => $pengajuan_kontrak,
+            'berkasBA' => $berita_acara,
+            'berkasKuitansi' => $kuitansi,
         ]);
     }
 
@@ -254,7 +251,7 @@ class PPKController extends Controller
         Pengajuan::where('id', $request->pengajuan_id)->update([
             'stage' => 'diproses ppk'
         ]);
+        redirect()->back()->with('message', 'Berhasil Diperbarui');
 
-        redirect()->back();
     }
 }

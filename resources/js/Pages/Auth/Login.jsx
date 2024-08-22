@@ -60,7 +60,7 @@ export default function Login({ status, canResetPassword }) {
             </div>
 
             <p className="mt-5 text-sm font-semibold text-center text-slate-600/90">
-                Selamat Datang, silahkan masuk menggunakan akun divisi anda
+                Selamat Datang, silahkan masuk menggunakan akun anda
             </p>
 
             <section className="mx-2 mt-6 ">

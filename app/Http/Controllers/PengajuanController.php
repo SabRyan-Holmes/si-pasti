@@ -25,7 +25,7 @@ class PengajuanController extends Controller
     public function create()
     {
         return Inertia::render('KetuaTim/Pengajuan', [
-            'title' => 'Pengajuan Permintaan Pengadaan Barang',
+            'title' => 'Pengajuan Permintaan Pengadaan',
         ]);
     }
 

@@ -172,9 +172,9 @@ class KetuaTimController extends Controller
         $request->validate($rule);
 
         // Logic Store Document
-        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan Barang', $request->kegiatan_id);
-        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $request->kegiatan_id);
-        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan Barang', $request->kegiatan_id);
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan', $request->kegiatan_id);
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan', $request->kegiatan_id);
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan', $request->kegiatan_id);
 
         return redirect()->back()->with('message', 'Berkas berhasil Diupload!');
     }

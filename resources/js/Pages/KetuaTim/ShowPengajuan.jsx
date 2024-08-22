@@ -537,7 +537,6 @@ export default function ShowPengajuan({
                                 <SuccessButton
                                     type="submit"
                                     disabled={isDone ? true : false}
-                                    className="disabled:bg-accent"
                                 >
                                     Ajukan Ulang
                                     <IoIosSend />
