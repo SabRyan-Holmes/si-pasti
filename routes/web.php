@@ -70,6 +70,7 @@ Route::middleware(['auth', 'pbj'])->prefix('pbj')->name('pbj.')->group(function 
     // Show Berkas
     // Route::get('/daftar-berkas/pengajuan', [PBJController::class, 'daftar_berkas'])->name('daftar-berkas');
     Route::get('/show-berkas/{pengajuan:nama_kegiatan}', [PBJController::class, 'show_berkas'])->name('show-berkas');
+    // Route::get('/show-berkas/{pengajuan:nama_kegiatan}', [PBJController::class, 'show_berkas'])->name('show-berkas');
 
     // Unggah Berkas
     Route::get('/unggah-berkas/{pengajuan:nama_kegiatan}', [PBJController::class, 'unggah_berkas'])->name('unggah-berkas');

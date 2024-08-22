@@ -353,7 +353,7 @@ export default function DaftarBerkas({
 
                                                     {/* Divisi PBJ */}
                                                     {auth.user.divisi ===
-                                                        "PBJ" && (
+                                                    "PBJ" ? (
                                                         <>
                                                             <Link
                                                                 as="a"
@@ -383,6 +383,25 @@ export default function DaftarBerkas({
                                                                 <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
                                                             </Link>
                                                         </>
+                                                    ) : (
+                                                        auth.user.divisi ===
+                                                            "PBJ" &&
+                                                        data.status ===
+                                                            "selesai" && ( ''
+                                                            // <Link
+                                                            //     as="a"
+                                                            //     href={route(
+                                                            //         "pbj.berkas-done",
+                                                            //         data.nama_kegiatan
+                                                            //     )}
+                                                            //     className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                                            // >
+                                                            //     <span>
+                                                            //         Unggah
+                                                            //     </span>
+                                                            //     <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
+                                                            // </Link>
+                                                        )
                                                     )}
 
                                                     {/* Divisi PPK */}
