@@ -16,15 +16,30 @@ export default function ShowBerkas({
     auth,
     flash,
     pengajuan,
+    berkasKT,
+    berkasPPK,
     berkasPBJ,
-    pengajuanKontrak,
-    beritaAcara,
-    kuitansi,
+    berkasPK,
+    berkasBA,
+    berkasKuitansi,
+    berkasPembayaran,
+    // semuaBerkas,
 }) {
     const props = usePage().props;
     // Function to get the key based on the value
     const getKeyByValue = (object, value) => {
         return Object.keys(object).find((key) => object[key] === value);
+    };
+
+
+    const requiredBerkasKT = {
+        kak: "Kerangka Ajuan Kerja",
+        form_permintaan: "Form Permintaan",
+        surat_permintaan: "Surat Permintaan",
+    };
+    const requiredBerkasPPK = {
+        ban: "Berita Acara Negoisasi",
+        bahp: "Berita Acara Hasil Pemilihan(BAHP)",
     };
 
     const requiredBerkasPBJ = {
@@ -44,11 +59,40 @@ export default function ShowBerkas({
         bap: "Berita Acara Pembayaran(BAP)",
     };
     const requiredKuitansi = {
-        kuitansi: "Kuitansi",
+        berkasKuitansi: "Kuitansi",
         surat_pesanan: "Surat Pesanan",
     };
+    const requiredPembayaran = {
+        spm: "Surat Perintah Pembayaran(SPM)",
+    };
 
-    const documentsPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
+    const _berkasKT = Object.keys(requiredBerkasKT).map((key) => {
+        const value = requiredBerkasKT[key];
+        return (
+            berkasKT.find((d) => d.jenis_dokumen === value) || {
+                jenis_dokumen: value,
+                is_valid: null,
+                path: "",
+                nama: "",
+                tipe_file: "",
+            }
+        );
+    });
+
+    const _berkasPPK = Object.keys(requiredBerkasPPK).map((key) => {
+        const value = requiredBerkasPPK[key];
+        return (
+            berkasPPK.find((d) => d.jenis_dokumen === value) || {
+                jenis_dokumen: value,
+                is_valid: null,
+                path: "",
+                nama: "",
+                tipe_file: "",
+            }
+        );
+    });
+
+    const _berkasPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
         const value = requiredBerkasPBJ[key];
         return (
             berkasPBJ.find((d) => d.jenis_dokumen === value) || {
@@ -61,10 +105,10 @@ export default function ShowBerkas({
         );
     });
 
-    const berkasPK = Object.keys(requiredBerkasPK).map((key) => {
+    const _berkasPK = Object.keys(requiredBerkasPK).map((key) => {
         const value = requiredBerkasPK[key];
         return (
-            pengajuanKontrak.find((d) => d.jenis_dokumen === value) || {
+            berkasPK.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -74,10 +118,10 @@ export default function ShowBerkas({
         );
     });
 
-    const berkasBA = Object.keys(requiredBerkasBA).map((key) => {
+    const _berkasBA = Object.keys(requiredBerkasBA).map((key) => {
         const value = requiredBerkasBA[key];
         return (
-            beritaAcara.find((d) => d.jenis_dokumen === value) || {
+            berkasBA.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -87,10 +131,10 @@ export default function ShowBerkas({
         );
     });
 
-    const berkasKuitansi = Object.keys(requiredKuitansi).map((key) => {
+    const _berkasKuitansi = Object.keys(requiredKuitansi).map((key) => {
         const value = requiredKuitansi[key];
         return (
-            kuitansi.find((d) => d.jenis_dokumen === value) || {
+            berkasKuitansi.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -99,6 +143,29 @@ export default function ShowBerkas({
             }
         );
     });
+
+    const _berkasPembayaran = Object.keys(requiredPembayaran).map((key) => {
+        const value = requiredPembayaran[key];
+        return (
+            berkasPembayaran.find((d) => d.jenis_dokumen === value) || {
+                jenis_dokumen: value,
+                is_valid: null,
+                path: "",
+                nama: "",
+                tipe_file: "",
+            }
+        );
+    });
+
+    const semuaBerkas = [
+        ..._berkasKT,
+        ..._berkasPPK,
+        ..._berkasPBJ,
+        ..._berkasPK,
+        ..._berkasBA,
+        ..._berkasKuitansi,
+        ..._berkasPembayaran,
+    ];
 
     const { data, setData, post, processing, errors, reset, clearErrors } =
         useForm({
@@ -120,7 +187,7 @@ export default function ShowBerkas({
             bap: null,
 
             // Pengajuan Kuitansi
-            kuitansi: null,
+            berkasKuitansi: null,
             surat_pesanan: null,
         });
 
@@ -252,14 +319,127 @@ export default function ShowBerkas({
                         </div>
 
                         {pengajuan.status == "selesai" && (
-                            <div className="w-24 text-2xl label-success ">
-                                Selesai
+                            <div className="mx-2 text-2xl label-success">
+                                Pemesanan Selesai
                             </div>
                         )}
                     </div>
                 </div>
 
-                {!pengajuan.status === "selesai" ? (
+                {pengajuan.status === "selesai" ? (
+                    <table className="table my-20 mt-3 border rounded-md border-primary/25 table-bordered">
+                        {/* head */}
+                        <thead className="bg-secondary">
+                            <tr className="text-sm ">
+                                <th width="5%"></th>
+                                <th width="30%">Nama Berkas</th>
+                                <th width="35%">Berkas</th>
+                                <th width="15%" className="text-center">
+                                    Status
+                                </th>
+                                <th width="15%" className="text-center">
+                                    Keterangan
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {semuaBerkas.map((berkas, i) => (
+                                <tr key={i}>
+                                    <th className="text-primary">{i + 1}</th>
+                                    <td className="capitalize">
+                                        {berkas.jenis_dokumen}
+                                    </td>
+
+                                    <td className="text-sm capitalize">
+                                        <div className="relative group">
+                                            {berkas.nama ? (
+                                                <>
+                                                    <a
+                                                        target="_blank"
+                                                        className="underline hover:text-primary text-primary decoration-primary"
+                                                    >
+                                                        {berkas.nama}.
+                                                        <span className="lowercase">
+                                                            {berkas.tipe_file}
+                                                        </span>
+                                                    </a>
+                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
+                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                                        {/* Tombol "Lihat" */}
+
+                                                        <a
+                                                            href={`/storage/${berkas.path}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        >
+                                                            Lihat
+                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                        </a>
+
+                                                        {/* Tombol "Download" */}
+                                                        <a
+                                                            href={`/storage/${berkas.path}`}
+                                                            download={
+                                                                berkas.nama
+                                                            }
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
+                                                        >
+                                                            Unduh
+                                                            <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
+                                                        </a>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <span className="text-center">
+                                                    -
+                                                </span>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="p-1 text-center">
+                                        {berkas.is_valid === null &&
+                                        berkas.nama ? (
+                                            <div className="label-base bg-secondary/15">
+                                                Diproses
+                                            </div>
+                                        ) : (
+                                            <span className="text-center">
+                                                -
+                                            </span>
+                                        )}
+
+                                        {berkas.is_valid == true && (
+                                            <div className="label-success">
+                                                Valid
+                                            </div>
+                                        )}
+
+                                        {berkas.is_valid == false && (
+                                            <div className="label-warning">
+                                                Tidak Valid
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td className="w-full mx-auto text-center ">
+                                        {berkas.nama ? (
+                                            <div className="w-full label-success">
+                                                {pengajuan.status}
+                                            </div>
+                                        ) : (
+                                            <span className="label-base bg-base-300 text-nowrap">
+                                                Berkas tidak diajukan
+                                            </span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                            <tr></tr>
+                        </tbody>
+                    </table>
+                ) : (
                     <>
                         <div className="pb-16 mt-10 overflow-x-auto">
                             <h2 className="text-base font-semibold">
@@ -268,7 +448,8 @@ export default function ShowBerkas({
                             {/* Tabel Berkas Pengajuan PBJ */}
 
                             <TabelBerkas
-                                daftarBerkas={documentsPBJ}
+                                daftarBerkas={_berkasPBJ}
+                                validasiLink={route("pbj.validasi")}
                                 data={data}
                                 pengajuan={pengajuan}
                             />
@@ -280,8 +461,9 @@ export default function ShowBerkas({
                             </h2>
                             {/* Tabel Berkas Pemesanan/Kontrak */}
                             <TabelBerkas
-                                daftarBerkas={berkasPK}
+                                daftarBerkas={_berkasPK}
                                 data={data}
+                                validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
                         </div>
@@ -292,8 +474,9 @@ export default function ShowBerkas({
                             </h2>
                             {/* Tabel Berkas Berita Acara */}
                             <TabelBerkas
-                                daftarBerkas={berkasBA}
+                                daftarBerkas={_berkasBA}
                                 data={data}
+                                validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
                         </div>
@@ -305,6 +488,7 @@ export default function ShowBerkas({
                             <TabelBerkas
                                 daftarBerkas={berkasPK}
                                 data={data}
+                                validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
                         </div>
@@ -315,8 +499,9 @@ export default function ShowBerkas({
                             </h2>
                             {/* Tabel Berkas Kuitansi */}
                             <TabelBerkas
-                                daftarBerkas={berkasKuitansi}
+                                daftarBerkas={_berkasKuitansi}
                                 data={data}
+                                validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
                         </div>
@@ -327,30 +512,13 @@ export default function ShowBerkas({
                             </h2>
                             {/* Tabel Berkas Ketua Tim Start */}
                             <TabelBerkas
-                                daftarBerkas={berkasKuitansi}
+                                daftarBerkas={_berkasPembayaran}
                                 data={data}
+                                validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
                         </div>
                     </>
-                ) : (
-                    <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
-                        {/* head */}
-                        <thead className="bg-secondary">
-                            <tr className="text-sm ">
-                                <th width="5%"></th>
-                                <th width="30%">Nama Berkas</th>
-                                <th width="35%">Berkas</th>
-                                <th width="15%" className="text-center">
-                                    Status Saat Ini
-                                </th>
-                                <th width="15%" className="text-center">
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
                 )}
             </section>
 

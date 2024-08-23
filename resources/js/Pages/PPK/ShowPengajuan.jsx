@@ -198,8 +198,8 @@ export default function ShowPengajuan({
     }
 
     // berkasPBJ,
-    // pengajuanKontrak,
-    // beritaAcara,
+    // berkasPK,
+    // berkasBA,
     // kuitansi,
     const isDonePBJ = cekKeyNamaBerisi(berkasPBJ, _berkasPBJ);
     const isDonePK = cekKeyNamaBerisi(berkasPK, _berkasPK);

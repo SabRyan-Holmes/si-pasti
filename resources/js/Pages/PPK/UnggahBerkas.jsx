@@ -128,10 +128,12 @@ export default function UnggahBerkas({
         sppbj: "Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)",
         surat_kontrak: "Surat Kontrak/Surat Pesanan",
     };
+
     const requiredBerkasBA = {
         bast: "Berita Acara Serah Terima(BAST)",
         bap: "Berita Acara Pembayaran(BAP)",
     };
+
     const requiredKuitansi = {
         kuitansi: "Kuitansi",
         surat_pesanan: "Surat Pesanan",
@@ -183,6 +185,7 @@ export default function UnggahBerkas({
             <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
                 <div className="flex items-center justify-between">
                     <div className="mt-3 text-sm breadcrumbs">
+
                         <ul>
                             <li>
                                 <a href={route("daftar-berkas")}>

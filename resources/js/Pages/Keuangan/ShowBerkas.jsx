@@ -16,8 +16,8 @@ export default function ShowBerkas({
     flash,
     pengajuan,
     berkasPBJ,
-    pengajuanKontrak,
-    beritaAcara,
+    berkasPK,
+    berkasBA,
     kuitansi,
 }) {
     const props = usePage().props;
@@ -63,7 +63,7 @@ export default function ShowBerkas({
     const berkasPK = Object.keys(requiredBerkasPK).map((key) => {
         const value = requiredBerkasPK[key];
         return (
-            pengajuanKontrak.find((d) => d.jenis_dokumen === value) || {
+            berkasPK.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -76,7 +76,7 @@ export default function ShowBerkas({
     const berkasBA = Object.keys(requiredBerkasBA).map((key) => {
         const value = requiredBerkasBA[key];
         return (
-            beritaAcara.find((d) => d.jenis_dokumen === value) || {
+            berkasBA.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",

@@ -56,8 +56,8 @@ class KeuanganController extends Controller
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,
             'berkasPBJ' => $berkas_pbj,
-            'pengajuanKontrak' => $pengajuan_kontrak,
-            'beritaAcara' => $berita_acara,
+            'berkasPK' => $pengajuan_kontrak,
+            'berkasBA' => $berita_acara,
             'kuitansi' => $kuitansi,
         ]);
     }

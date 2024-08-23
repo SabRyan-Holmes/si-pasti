@@ -1,7 +1,7 @@
 import { SuccessButton } from "@/Components";
 import { usePage } from "@inertiajs/react";
 import React, { useState } from "react";
-import { FaFileUpload } from "react-icons/fa";
+import { FaEdit, FaFileUpload } from "react-icons/fa";
 import { FaDownload, FaEye, FaFileCircleCheck } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
 
@@ -181,7 +181,7 @@ export default function TabelPengajuan({
                                         uploadedFiles[berkas.jenis_dokumen] ? (
                                             <label
                                                 htmlFor={berkas.jenis_dokumen}
-                                                className="transition-all cursor-wait action-btn text-secondary hover:scale-105"
+                                                className="transition-all cursor-pointer action-btn text-secondary hover:scale-105"
                                             >
                                                 <FaFileCircleCheck className="mx-1 mr-1 fill-secondary" />
                                                 <span>Edit</span>

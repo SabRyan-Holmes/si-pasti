@@ -152,6 +152,7 @@ export default function ShowBerkas({
                     {/* Tabel Berkas Ketua Tim Start */}
                     <TabelBerkas
                         daftarBerkas={_berkasKT}
+                        validasiLink={route('ppk.validasi')}
                         data={data}
                         pengajuan={pengajuan}
                     />
@@ -164,6 +165,7 @@ export default function ShowBerkas({
                     <TabelBerkas
                         daftarBerkas={_berkasPBJ}
                         data={data}
+                        validasiLink={route('ppk.validasi')}
                         pengajuan={pengajuan}
                     />
                 </div>

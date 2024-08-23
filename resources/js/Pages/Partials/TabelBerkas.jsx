@@ -5,7 +5,7 @@ import { MdEditDocument } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { Dropdown } from "@/Components";
 
-export default function TabelBerkas({ daftarBerkas, data, pengajuan }) {
+export default function TabelBerkas({ daftarBerkas, data, pengajuan, validasiLink }) {
     const [uploadedFiles, setUploadedFiles] = useState({});
 
     return (
@@ -112,7 +112,7 @@ export default function TabelBerkas({ daftarBerkas, data, pengajuan }) {
                                                 <Dropdown.Link
                                                     as="button"
                                                     method="post"
-                                                    href={route("ppk.validasi")}
+                                                    href={validasiLink}
                                                     data={{
                                                         id: data.id,
                                                         is_valid: true,
@@ -127,7 +127,7 @@ export default function TabelBerkas({ daftarBerkas, data, pengajuan }) {
                                                 <Dropdown.Link
                                                     as="button"
                                                     method="post"
-                                                    href={route("ppk.validasi")}
+                                                    href={validasiLink}
                                                     data={{
                                                         id: data.id,
                                                         is_valid: false,
@@ -176,7 +176,6 @@ export default function TabelBerkas({ daftarBerkas, data, pengajuan }) {
                                                     Valid
                                                 </Dropdown.Link>
                                                 <Dropdown.Link
-                                                    method="post"
                                                     disabled={true}
                                                 >
                                                     Tidak Valid

@@ -78,6 +78,7 @@ const DropdownLink = ({ className = '', children, disabled = false, ...props }) 
                 ${disabled ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100'}
                 transition duration-150 ease-in-out ` + className
             }
+            preserveScroll={true}
             onClick={e => {
                 if (disabled) {
                     e.preventDefault();

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PengajuanPPKStoreRequest;
 use Inertia\Inertia;
 use App\Models\Pengajuan;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
 
 class PBJController extends Controller
 {
@@ -39,6 +41,9 @@ class PBJController extends Controller
 
     public function show_berkas(Pengajuan $pengajuan)
     {
+        $berkas_kt = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
+        $berkas_ppk = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berkas ke divisi PPK')->get();
+
         $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)
             ->where('kategori', 'Pengajuan PBJ')->get();
 
@@ -49,15 +54,38 @@ class PBJController extends Controller
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
         $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Pembayaran')->get();
 
+        // Menggabungkan semua koleksi ke dalam satu array
+        $all_documents = $berkas_pbj
+            ->merge($pengajuan_kontrak)
+            ->merge($berita_acara)
+            ->merge($kuitansi)
+            ->merge($pembayaran);
+
+        // Atau, jika Anda lebih suka menggunakan array_merge()
+        // $all_documents = array_merge(
+        //     $berkas_pbj->toArray(),
+        //     $pengajuan_kontrak->toArray(),
+        //     $berita_acara->toArray(),
+        //     $kuitansi->toArray(),
+        //     $pembayaran->toArray()
+        // );
+
+        // dd($all_documents);
+
         // dd($berkas_pbj);
         return Inertia::render('PBJ/ShowBerkas', [
             'title' => 'Detail Berkas',
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,
+            'berkasKT' => $berkas_kt,
+            'berkasPPK' => $berkas_ppk,
             'berkasPBJ' => $berkas_pbj,
-            'pengajuanKontrak' => $pengajuan_kontrak,
-            'beritaAcara' => $berita_acara,
-            'kuitansi' => $kuitansi,
+            'berkasPK' => $pengajuan_kontrak,
+            'berkasBA' => $berita_acara,
+            'berkasPembayaran' => $pembayaran,
+
+            'berkasKuitansi' => $kuitansi,
+            // 'semuaBerkas' => $all_documents
         ]);
     }
 
@@ -65,33 +93,27 @@ class PBJController extends Controller
 
     public function unggah_berkas(Pengajuan $pengajuan)
     {
+        $berkas_ke_ppk = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berkas ke divisi PPK')->get();
 
-
-        // dd($pengajuan);
         return Inertia::render('PBJ/UnggahBerkas', [
             'title' => 'Pengajuan berkas ke divisi PPK',
             'pengajuan' => $pengajuan,
+            'berkasPPK' => $berkas_ke_ppk,
         ]);
     }
 
-    public function ajukan_berkas(Request $request)
+    public function ajukan_berkas(PengajuanPPKStoreRequest $request)
     {
 
-        $rule = [
-            'pengajuan_id' => ['required', 'integer'],
-            'nama_kegiatan' => ['required', 'string', 'max:100'],
-            'ban' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
-            'bahp' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
-        ];
 
-        $validated = $request->validate($rule);
-        $this->storeDocument($request, 'ban', 'BAN', 'Berita Acara Negoisasi', 'Pengajuan Berkas ke divisi PPK', $validated['pengajuan_id']);
-        $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan', 'Pengajuan Berkas ke divisi PPK', $validated['pengajuan_id']);
+        $request->validated();
+        $this->storeDocument($request, 'ban', 'BAN', 'Berita Acara Negoisasi', 'Pengajuan Berkas ke divisi PPK' );
+        $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan', 'Pengajuan Berkas ke divisi PPK' );
 
         return redirect()->back()->with('message', 'Berkas Berhasil Diajukan');
     }
 
-    private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori, $pengajuanId)
+    private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori)
     {
         if ($request->file($fileKey)) {
             // Membuat nama file
@@ -106,7 +128,7 @@ class PBJController extends Controller
 
 
             // Mencari dokumen yang sudah ada berdasarkan pengajuan_id, nama, dan kategori
-            $existingDocument = Document::where('pengajuan_id', $pengajuanId)
+            $existingDocument = Document::where('pengajuan_id', $request->pengajuan_id)
                 ->where('nama', $prefix . ' - ' . $request->nama_kegiatan)
                 ->where('kategori', $kategori)
                 ->where('submitted_by', Auth::user()->id)
@@ -131,7 +153,7 @@ class PBJController extends Controller
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
                     'jenis_dokumen' => $jenisDokumen,
-                    'pengajuan_id' => $pengajuanId,
+                    'pengajuan_id' => $request->pengajuan_id,
                     'submitted_by' => Auth::user()->id,
                 ]);
             }
@@ -167,6 +189,8 @@ class PBJController extends Controller
 
     public function show_pengajuan(Pengajuan $pengajuan)
     {
+        $berkas_kt = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
+        $berkas_ppk = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berkas ke divisi PPK')->get();
         $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
 
         $pengajuan_kontrak = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kontrak')->get();
@@ -175,14 +199,17 @@ class PBJController extends Controller
 
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
 
+        dd($berkas_kt);
         // dd($berkas_pbj);
         return Inertia::render('PBJ/ShowPengajuan', [
             'title' => 'Detail Riwayat Pengajuan',
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,
+            'berkasKT' => $berkas_kt,
+            'berkasPPK' => $berkas_ppk,
             'berkasPBJ' => $berkas_pbj,
-            'pengajuanKontrak' => $pengajuan_kontrak,
-            'beritaAcara' => $berita_acara,
+            'berkasPK' => $pengajuan_kontrak,
+            'berkasBA' => $berita_acara,
             'kuitansi' => $kuitansi,
         ]);
     }
@@ -191,6 +218,10 @@ class PBJController extends Controller
     {
         Document::where('id', $request->id)->update([
             'is_valid' => $request->is_valid
+        ]);
+
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'status' => 'diepesan pbj'
         ]);
 
         redirect()->back();

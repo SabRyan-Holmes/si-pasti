@@ -17,8 +17,8 @@ export default function ShowPengajuan({
     pengajuan,
     ketuaTim,
     berkasPBJ,
-    pengajuanKontrak,
-    beritaAcara,
+    berkasPK,
+    berkasBA,
     kuitansi,
 }) {
     const props = usePage().props;
@@ -48,7 +48,7 @@ export default function ShowPengajuan({
         surat_pesanan: "Surat Pesanan",
     };
 
-    const documentsPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
+    const berkasPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
         const value = requiredBerkasPBJ[key];
         return (
             berkasPBJ.find((d) => d.jenis_dokumen === value) || {
@@ -64,7 +64,7 @@ export default function ShowPengajuan({
     const berkasPK = Object.keys(requiredBerkasPK).map((key) => {
         const value = requiredBerkasPK[key];
         return (
-            pengajuanKontrak.find((d) => d.jenis_dokumen === value) || {
+            berkasPK.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -77,7 +77,7 @@ export default function ShowPengajuan({
     const berkasBA = Object.keys(requiredBerkasBA).map((key) => {
         const value = requiredBerkasBA[key];
         return (
-            beritaAcara.find((d) => d.jenis_dokumen === value) || {
+            berkasBA.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -273,7 +273,7 @@ export default function ShowPengajuan({
                                 </tr>
                             </thead>
                             <tbody>
-                                {documentsPBJ.map((data, i) => (
+                                {berkasPBJ.map((data, i) => (
                                     <tr>
                                         <th className="text-primary">
                                             {i + 1}
