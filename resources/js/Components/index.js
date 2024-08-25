@@ -17,6 +17,7 @@ import SecondaryButton from "./SecondaryButton";
 import Sidebar from "./Sidebar";
 import SuccessButton from "./SuccessButton";
 import TextInput from "./TextInput";
+import TextInputSecondary from "./TextInputSecondary";
 
 export {
     ApplicationLogo,
@@ -36,6 +37,7 @@ export {
     SecondaryButton,
     Sidebar,
     TextInput,
+    TextInputSecondary,
     ProfileImage,
     SuccessButton,
 };

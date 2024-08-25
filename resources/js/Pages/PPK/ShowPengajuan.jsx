@@ -174,33 +174,23 @@ export default function ShowPengajuan({
         }
     }, [flash.message]);
 
-    // Logika untuk mengecek apakah  smaa2 berisi
+
+
     function cekKeyNamaBerisi(berkasDB, berkasRow) {
-        // Cek panjang kedua array sama
-        if (berkasDB.length !== berkasRow.length) {
-            return true;
-        }
+        // Fungsi untuk mengecek apakah ada obj.nama yang berisi
+        const adaNamaBerisi = (arr) => {
+            return arr.some(obj => obj.nama && obj.nama.trim() !== "" && obj.nama.trim() !== null);
+        };
 
-        // Fungsi untuk mengecek apakah nilai dari key 'nama' tidak kosong, null, atau undefined
-        const isNamaValid = (obj) =>
-            obj.nama !== undefined &&
-            obj.nama !== null &&
-            obj.nama.trim() !== "";
+        // Cek jika salah satu array berkasDB atau berkasRow memiliki obj.nama yang berisi
+        const isBerkasDBNamaValid = adaNamaBerisi(berkasDB);
+        const isBerkasRowNamaValid = adaNamaBerisi(berkasRow);
 
-        // Cek semua elemen di 'berkasDB'
-        const isBerkasDBNamaValid = berkasDB.every(isNamaValid);
-
-        // Cek semua elemen di 'berkasRow'
-        const isBerkasNamaValid = berkasRow.every(isNamaValid);
-
-        // Return true jika semua key 'nama' berisi nilai valid
-        return !isBerkasNamaValid && !isBerkasDBNamaValid;
+        // Jika setidaknya salah satu dari berkasDB atau berkasRow berisi nama, return false
+        // Jika tidak ada sama sekali yang berisi, return true
+        return !(isBerkasDBNamaValid || isBerkasRowNamaValid);
     }
 
-    // berkasPBJ,
-    // berkasPK,
-    // berkasBA,
-    // kuitansi,
     const isDonePBJ = cekKeyNamaBerisi(berkasPBJ, _berkasPBJ);
     const isDonePK = cekKeyNamaBerisi(berkasPK, _berkasPK);
     const isDoneBA = cekKeyNamaBerisi(berkasBA, _berkasBA);
@@ -335,3 +325,33 @@ export default function ShowPengajuan({
         </AuthenticatedLayout>
     );
 }
+
+
+
+
+
+
+   // Logika untuk mengecek apakah semua smaa2 dan terupload semua berisi
+    // NOTE ! Mungkin nanti beguno
+
+    // function cekKeyNamaBerisi(berkasDB, berkasRow) {
+    //     // Cek panjang kedua array sama
+    //     if (berkasDB.length !== berkasRow.length) {
+    //         return true;
+    //     }
+
+    //     // Fungsi untuk mengecek apakah nilai dari key 'nama' tidak kosong, null, atau undefined
+    //     const isNamaValid = (obj) =>
+    //         obj.nama !== undefined &&
+    //         obj.nama !== null &&
+    //         obj.nama.trim() !== "";
+
+    //     // Cek semua elemen di 'berkasDB'
+    //     const isBerkasDBNamaValid = berkasDB.every(isNamaValid);
+
+    //     // Cek semua elemen di 'berkasRow'
+    //     const isBerkasNamaValid = berkasRow.every(isNamaValid);
+
+    //     // Return true jika semua key 'nama' berisi nilai valid
+    //     return isBerkasNamaValid && isBerkasDBNamaValid;
+    // }

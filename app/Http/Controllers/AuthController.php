@@ -12,19 +12,26 @@ use Inertia\Inertia;
 class AuthController extends Controller
 {
     public function dashboard() {
-        $pengajuan = Pengajuan::where('status', 'diproses')->count();
+        $processed = Pengajuan::where('status', 'diproses')->count();
         $rejected = Pengajuan::where('status', 'ditolak')->count();
-        $accepted = Pengajuan::where('status', 'selesai')->count();
+        $done = Pengajuan::where('status', 'selesai')->count();
+        $data = [
+            'diproses' => $processed,
+            'ditolak' => $rejected,
+            'selesai' => $done,
+        ];
+
         return Inertia::render('Dashboard', [
             'title' => 'Dashboard',
             'userCount' => User::all()->count(),
             'divisiCount' => User::select('divisi')->distinct()->count('divisi'),
             'ketuaTimCount' => User::where('divisi', 'Ketua Tim')->count(),
-            'kegiatanCount' => Pengajuan::all()->count(),
+            'pengajuanCount' => Pengajuan::all()->count(),
             'documentCount' => Document::all()->count(),
             'rejectedCount' => $rejected,
-            'acceptedCount' => $accepted,
-            'processCount' => $pengajuan,
+            'doneCount' => $done,
+            'processCount' => $processed,
+            'data'=> $data
 
         ]);
     }

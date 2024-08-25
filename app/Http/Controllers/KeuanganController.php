@@ -41,24 +41,15 @@ class KeuanganController extends Controller
 
     public function show_berkas(Pengajuan $pengajuan)
     {
-        $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)
-            ->where('kategori', 'Pengajuan PBJ')->get();
-
-        $pengajuan_kontrak = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kontrak')->get();
-
-        $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
-
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
+        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
 
-        // dd($berkas_pbj);
         return Inertia::render('Keuangan/ShowBerkas', [
             'title' => 'Detail Berkas',
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,
-            'berkasPBJ' => $berkas_pbj,
-            'berkasPK' => $pengajuan_kontrak,
-            'berkasBA' => $berita_acara,
-            'kuitansi' => $kuitansi,
+            'berkasKuitansi' => $kuitansi,
+            'berkasPembayaran' => $pembayaran,
         ]);
     }
 
@@ -82,15 +73,11 @@ class KeuanganController extends Controller
         $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan');
         $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan');
 
-
-
-
-        // $ids = array_unique($request->edited_id);
-        // // Update beberapa row sekaligus
-        // Document::whereIn('id', $ids)->update([
-        //     'is_valid' => null
-        // ]);
-
+        // FIXME?
+        // Update Stage jadi pembayaran ketika di upload spm?
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'stage' => 'pembayaran'
+        ]);
 
         // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
@@ -174,10 +161,11 @@ class KeuanganController extends Controller
         //Pengajuan Ketua Tim /Pengadaan
         $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
 
-
-        // Jika Diupload Ulang maka status dokumen kembali berubah dari tidak valid menjadi null/diproses
-        $ids = array_unique($request->edited_id);
-        // Update beberapa row sekaliguss
+        // FIXME?
+        // Update Stage jadi pembayaran ketika di upload spm?
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'stage' => 'pembayaran'
+        ]);
 
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
     }
@@ -231,5 +219,23 @@ class KeuanganController extends Controller
                 ]);
             }
         }
+    }
+
+
+    public function validasi(Request $request)
+    {
+        Document::where('id', $request->id)->update([
+            'is_valid' => $request->is_valid
+        ]);
+
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'stage' => 'diproses keuangan'
+        ]);
+
+        redirect()->back();
+    }
+
+    public function done() {
+        // TODO: Ini Parameter selesainy gimano tepatny??
     }
 }

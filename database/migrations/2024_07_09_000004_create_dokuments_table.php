@@ -23,7 +23,6 @@ return new class extends Migration
                 'Pengajuan Berkas ke divisi PPK',
                 'Pengajuan Berita Acara',
                 'Pengajuan Kuitansi',
-                'Berkas Pembayaran'
             ]);
 
             $table->string('tipe_file');

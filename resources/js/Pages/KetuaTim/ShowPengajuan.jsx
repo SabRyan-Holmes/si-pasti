@@ -29,9 +29,6 @@ export default function ShowPengajuan({
 }) {
     const props = usePage().props;
     // Function to get the key based on the value
-    const getKeyByValue = (object, value) => {
-        return Object.keys(object).find((key) => object[key] === value);
-    };
 
     const requiredBerkasKT = {
         kak: "Kerangka Ajuan Kerja",
@@ -89,17 +86,6 @@ export default function ShowPengajuan({
         });
     }
 
-    const [uploadedFiles, setUploadedFiles] = useState({});
-    const handleFileChange = (e, docType, fileKey) => {
-        const file = e.target.files[0];
-        if (file) {
-            setUploadedFiles((prev) => ({
-                ...prev,
-                [docType]: file.name,
-            }));
-            setData(fileKey, file); // Assuming setData sets the file data in your form
-        }
-    };
 
     const Toast = Swal.mixin({
         toast: true,
@@ -225,7 +211,7 @@ export default function ShowPengajuan({
                             setData={setData}
                             daftarBerkas={_berkasKT}
                             requiredBerkas={requiredBerkasKT}
-                            isDisabled={false}
+                            isDisabled={isDone}
                             submit={submit}
                         />
                     </div>

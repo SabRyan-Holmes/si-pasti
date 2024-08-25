@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
+import { useForm, usePage, router } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
-import { MdEditDocument } from "react-icons/md";
-import { IoIosSend } from "react-icons/io";
-import {
-    FaDownload,
-    FaFileCircleCheck,
-    FaRegFolder,
-    FaRegFolderOpen,
-    FaUpload,
-} from "react-icons/fa6";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { TiDocumentText } from "react-icons/ti";
 import { CgDetailsMore } from "react-icons/cg";
+import { TabelPengajuan } from "../Partials";
+
 
 export default function ShowPengajuan({
     title,
@@ -36,7 +27,7 @@ export default function ShowPengajuan({
         spm: "Surat Perintah Pembayaran(SPM)",
     };
 
-    const documentsPembayaran = Object.keys(requiredPembayaran).map((key) => {
+    const _berkasPembayaran = Object.keys(requiredPembayaran).map((key) => {
         const value = requiredPembayaran[key];
         return (
             berkasPembayaran.find((d) => d.jenis_dokumen === value) || {
@@ -95,6 +86,29 @@ export default function ShowPengajuan({
         }
     };
 
+
+    // Logika untuk mengecek apakah  smaa2 berisi
+    function cekKeyNamaBerisi(berkasDB, berkasRow) {
+        // Fungsi untuk mengecek apakah ada obj.nama yang berisi
+        const adaNamaBerisi = (arr) => {
+            return arr.some(obj => obj.nama && obj.nama.trim() !== "" && obj.nama.trim() !== null);
+        };
+
+        // Cek jika salah satu array berkasDB atau berkasRow memiliki obj.nama yang berisi
+        const isBerkasDBNamaValid = adaNamaBerisi(berkasDB);
+        const isBerkasRowNamaValid = adaNamaBerisi(berkasRow);
+
+        // Jika setidaknya salah satu dari berkasDB atau berkasRow berisi nama, return false
+        // Jika tidak ada sama sekali yang berisi, return true
+        return !(isBerkasDBNamaValid || isBerkasRowNamaValid);
+    }
+    const isDone = cekKeyNamaBerisi(berkasPembayaran, _berkasPembayaran);
+
+
+    const ketuaTim = pengajuan.created_by;
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
+
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -116,33 +130,6 @@ export default function ShowPengajuan({
         }
     }, [flash.message]);
 
-    // Logika untuk mengecek apakah  smaa2 berisi
-    function cekKeyNamaBerisi(berkasPembayaran, documentsPembayaran) {
-        // Cek panjang kedua array sama
-        if (berkasPembayaran.length !== documentsPembayaran.length) {
-            return false;
-        }
-
-        // Fungsi untuk mengecek apakah nilai dari key 'nama' tidak kosong, null, atau undefined
-        const isNamaValid = (obj) => obj.nama !== undefined && obj.nama !== null && obj.nama.trim() !== '';
-
-        // Cek semua elemen di 'berkasPembayaran'
-        const isBerkasNamaValid = berkasPembayaran.every(isNamaValid);
-
-        // Cek semua elemen di 'documentsPembayaran'
-        const isDocumentsNamaValid = documentsPembayaran.every(isNamaValid);
-
-        // Return true jika semua key 'nama' berisi nilai valid
-        return isBerkasNamaValid && isDocumentsNamaValid;
-    }
-
-    const hasil = cekKeyNamaBerisi(berkasPembayaran, documentsPembayaran);
-
-
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
-
     console.log("data : 👇");
     console.log(data);
 
@@ -158,7 +145,7 @@ export default function ShowPengajuan({
                     <div className="my-3 text-sm breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("keuangan.riwayat-pengajuan")}>
+                                <a href={route("riwayat-pengajuan")}>
                                     <IoDocumentTextOutline className="w-4 h-4 mr-2" />
                                     Riwayat Pengajuan
                                 </a>
@@ -221,337 +208,14 @@ export default function ShowPengajuan({
                             Berkas Surat Perintah Pembayaran
                         </h2>
                         {/* Tabel Berkas Pengajuan Pembayaran Start */}
-                        <form onSubmit={submit} enctype="multipart/form-data">
-                            <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
-                                {/* head */}
-                                <thead className="bg-secondary">
-                                    <tr className="text-sm ">
-                                        <th width="5%"></th>
-                                        <th width="30%">Nama Berkas</th>
-                                        <th width="35%">Berkas</th>
-                                        <th width="15%" className="text-center">
-                                            Status Saat Ini
-                                        </th>
-                                        <th width="15%" className="text-center">
-                                            Aksi
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {documentsPembayaran.map((berkas, i) => (
-                                        <tr>
-                                            <th className="text-primary">
-                                                {i + 1}
-                                            </th>
-                                            <td className="capitalize">
-                                                {berkas.jenis_dokumen}
-                                            </td>
-                                            {/* Kalo ada berkas */}
-                                            {berkas.nama ? (
-                                                <>
-                                                    <td className="text-sm capitalize">
-                                                        <div className="relative group">
-                                                            <a
-                                                                href={`/storage/${berkas.path}`}
-                                                                target="_blank"
-                                                                className="underline hover:text-primary text-primary decoration-primary"
-                                                            >
-                                                                {berkas.nama}.
-                                                                <span className="lowercase">
-                                                                    {
-                                                                        berkas.tipe_file
-                                                                    }
-                                                                </span>
-                                                            </a>
-
-                                                            {/* Kontainer untuk tombol "Lihat" dan "Download" */}
-                                                            <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
-                                                                {/* Tombol "Lihat" */}
-
-                                                                <a
-                                                                    href={`/storage/${berkas.path}`}
-                                                                    target="_blank"
-                                                                    className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                >
-                                                                    Lihat
-                                                                    <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                </a>
-
-                                                                {/* Tombol "Download" */}
-                                                                <a
-                                                                    href={`/storage/${berkas.path}`}
-                                                                    download={
-                                                                        berkas.nama
-                                                                    }
-                                                                    target="_blank"
-                                                                    className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                >
-                                                                    Unduh
-                                                                    <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
-                                                    <td className="text-center text-nowrap">
-                                                        {berkas.is_valid ==
-                                                            null && (
-                                                            <div className="label-base bg-secondary/10">
-                                                                Diproses
-                                                            </div>
-                                                        )}
-
-                                                        {berkas.is_valid ==
-                                                            true && (
-                                                            <div className="label-success">
-                                                                Valid
-                                                            </div>
-                                                        )}
-
-                                                        {berkas.is_valid ==
-                                                            false && (
-                                                            <div className="label-warning">
-                                                                Tidak Valid
-                                                            </div>
-                                                        )}
-                                                    </td>
-
-                                                    <td className="text-center text-nowrap">
-                                                        {berkas.is_valid ==
-                                                            null && (
-                                                            <a
-                                                                disabled
-                                                                className="mx-auto transition-all cursor-not-allowed action-btn text-hijau"
-                                                            >
-                                                                <FaUpload className="mx-1 mr-1 fill-hijau" />
-                                                                Upload
-                                                            </a>
-                                                        )}
-
-                                                        {berkas.is_valid ==
-                                                            true && (
-                                                            <a
-                                                                target="_blank"
-                                                                className="mx-auto transition-all action-btn text-hijau hover:scale-105"
-                                                            >
-                                                                <FaUpload className="mx-1 mr-1 fill-hijau" />
-                                                                Upload
-                                                            </a>
-                                                        )}
-
-                                                        {/* input  Hidden for Upload Ulang*/}
-                                                        <input
-                                                            id={
-                                                                berkas.jenis_dokumen
-                                                            }
-                                                            type="file"
-                                                            className="hidden"
-                                                            onChange={(e) => {
-                                                                handleFileChange(
-                                                                    e,
-                                                                    berkas.jenis_dokumen,
-                                                                    getKeyByValue(
-                                                                        requiredPembayaran,
-                                                                        berkas.jenis_dokumen
-                                                                    )
-                                                                );
-                                                                // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
-
-                                                                setisEdit(true)
-                                                                // Gunakan setData dengan cara yang benar
-                                                                setData(
-                                                                    (
-                                                                        prevData
-                                                                    ) => {
-                                                                        // Tambahkan berkas.id ke edited_id, pastikan tidak ada duplikat
-                                                                        const updatedEditedId =
-                                                                            [
-                                                                                ...prevData.edited_id,
-                                                                                berkas.id,
-                                                                            ].filter(
-                                                                                (
-                                                                                    v,
-                                                                                    i,
-                                                                                    a
-                                                                                ) =>
-                                                                                    a.indexOf(
-                                                                                        v
-                                                                                    ) ===
-                                                                                    i
-                                                                            );
-
-                                                                        return {
-                                                                            ...prevData,
-                                                                            edited_id:
-                                                                                updatedEditedId,
-                                                                        };
-                                                                    }
-                                                                );
-                                                            }}
-                                                        />
-
-                                                        {berkas.is_valid ==
-                                                            false &&
-                                                        uploadedFiles[
-                                                            berkas.jenis_dokumen
-                                                        ] ? (
-                                                            <label
-                                                                htmlFor={
-                                                                    berkas.jenis_dokumen
-                                                                }
-                                                                className="transition-all cursor-wait action-btn text-secondary hover:scale-105"
-                                                            >
-                                                                <FaFileCircleCheck className="mx-1 mr-1 fill-secondary" />
-                                                                <span>
-                                                                    Edit
-                                                                </span>
-                                                            </label>
-                                                        ) : (
-                                                            berkas.is_valid ==
-                                                                false && (
-                                                                <label
-                                                                    htmlFor={
-                                                                        berkas.jenis_dokumen
-                                                                    }
-                                                                    className="transition-all action-btn text-secondary hover:scale-105"
-                                                                >
-                                                                    <FaEdit className="mx-1 mr-1 fill-secondary" />
-                                                                    <span>
-                                                                        Edit
-                                                                    </span>
-                                                                </label>
-                                                            )
-                                                        )}
-                                                    </td>
-                                                </>
-                                            ) : (
-                                                // Kalo ga ada berkas
-                                                <>
-                                                    <td
-                                                        colSpan={2}
-                                                        className="text-center"
-                                                    >
-                                                        {uploadedFiles[
-                                                            berkas.jenis_dokumen
-                                                        ] ? (
-                                                            <span className="text-sm font-medium text-center capitalize text-secondary">
-                                                                {
-                                                                    uploadedFiles[
-                                                                        berkas
-                                                                            .jenis_dokumen
-                                                                    ]
-                                                                }
-                                                            </span>
-                                                        ) : (
-                                                            <div className="label-base bg-base-200">
-                                                                Berkas Belum
-                                                                Diajukan
-                                                            </div>
-                                                        )}
-                                                    </td>
-                                                    <td className="text-center">
-                                                        {/* input  Hidden for upload jika belum pernah diupload*/}
-
-                                                        <input
-                                                            id={
-                                                                berkas.jenis_dokumen
-                                                            }
-                                                            type="file"
-                                                            className="hidden"
-                                                            onChange={(e) => {
-                                                                handleFileChange(
-                                                                    e,
-                                                                    berkas.jenis_dokumen,
-                                                                    getKeyByValue(
-                                                                        requiredPembayaran,
-                                                                        berkas.jenis_dokumen
-                                                                    )
-                                                                );
-                                                                // is_valid kembali menjadi diproses jika sebelumnya tidak valid dan diupload ulang lagi
-
-                                                                // Jadikan isEdit
-                                                                setisEdit(true)
-
-                                                                // Gunakan setData dengan cara yang benar
-                                                                setData(
-                                                                    (
-                                                                        prevData
-                                                                    ) => {
-                                                                        // Tambahkan berkas.id ke edited_id, pastikan tidak ada duplikat
-                                                                        const updatedEditedId =
-                                                                            [
-                                                                                ...prevData.edited_id,
-                                                                                berkas.id,
-                                                                            ].filter(
-                                                                                (
-                                                                                    v,
-                                                                                    i,
-                                                                                    a
-                                                                                ) =>
-                                                                                    a.indexOf(
-                                                                                        v
-                                                                                    ) ===
-                                                                                    i
-                                                                            );
-
-                                                                        return {
-                                                                            ...prevData,
-                                                                            edited_id:
-                                                                                updatedEditedId,
-                                                                        };
-                                                                    }
-                                                                );
-                                                            }}
-                                                        />
-
-                                                        {/* Kalo Dicoba Upload */}
-                                                        {/* TODO: Logika Upload/Upload Ulang SPM */}
-                                                        {uploadedFiles[
-                                                            berkas.jenis_dokumen
-                                                        ] ? (
-                                                            <label
-                                                                htmlFor={
-                                                                    berkas.jenis_dokumen
-                                                                }
-                                                                className="transition-all cursor-wait action-btn text-secondary hover:scale-105"
-                                                            >
-                                                                <FaFileCircleCheck className="mx-1 mr-1 fill-secondary" />
-                                                                <span>
-                                                                    Unggah
-                                                                </span>
-                                                            </label>
-                                                        ) : (
-                                                            <label
-                                                                htmlFor={
-                                                                    berkas.jenis_dokumen
-                                                                }
-                                                                className="transition-all action-btn text-secondary hover:scale-105"
-                                                            >
-                                                                <FaFileUpload className="mx-1 mr-1 fill-secondary" />
-                                                                <span>
-                                                                    Unggah
-                                                                </span>
-                                                            </label>
-                                                        )}
-                                                    </td>
-                                                </>
-                                            )}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            {/* Button */}
-                            <div className="flex justify-end w-full mt-4 cursor-not-allowed">
-                                <button
-                                    type="submit"
-                                    disabled={hasil || isEdit ? true : false}
-                                    className="uppercase button-correct disabled:bg-accent"
-                                >
-                                    Ajukan Ulang
-                                    <IoIosSend />
-                                </button>
-                            </div>
-                        </form>
+                        <TabelPengajuan
+                            data={data}
+                            setData={setData}
+                            daftarBerkas={_berkasPembayaran}
+                            requiredBerkas={requiredPembayaran}
+                            isDisabled={!isDone}
+                            submit={submit}
+                        />
                     </div>
                 </main>
             </section>

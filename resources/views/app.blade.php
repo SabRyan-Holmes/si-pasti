@@ -14,6 +14,8 @@
     <link rel="shortcut icon" href="{{ asset('logo.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
     <!-- Scripts -->
     @routes
     @viteReactRefresh

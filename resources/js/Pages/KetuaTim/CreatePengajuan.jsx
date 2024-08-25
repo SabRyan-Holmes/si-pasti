@@ -67,6 +67,20 @@ export default function CreatePengajuan({ title, auth, flash }) {
     console.log(data);
 
     const namaTim = auth.user.nama_tim;
+
+    useEffect(() => {
+        console.log(namaTim.length)
+
+        if (namaTim.length == 1) {
+            setData('nama_tim', namaTim[0].nama_tim )
+            data.nama_tim = namaTim[0].nama_tim
+            console.log('data.nama_tim')
+            console.log(data.nama_tim)
+        }
+    }, []);
+
+
+
     return (
         <AuthenticatedLayout user={auth.user} title={title}>
             {/* content */}
@@ -112,7 +126,7 @@ export default function CreatePengajuan({ title, auth, flash }) {
                             onChange={(e) =>
                                 setData("nama_tim", e.target.value)
                             }
-                            defaultValue={""}
+                            defaultValue={data.nama_tim}
                         >
                             <option value={""}>Pilih Nama Tim</option>
                             {namaTim.map((tim, i) => (
@@ -155,14 +169,14 @@ export default function CreatePengajuan({ title, auth, flash }) {
                             className="my-2"
                         />
 
-                        <div class="relative inline-block border rounded-md border-primary/25 w-full focus:border-indigo-500 focus:ring-indigo-500  h-12 p-2">
+                        <div className="relative inline-block w-full h-12 p-2 border rounded-md border-primary/25 focus:border-indigo-500 focus:ring-indigo-500">
                             <input
                                 type="file"
                                 name="kak"
                                 onChange={(e) =>
                                     setData("kak", e.target.files[0])
                                 }
-                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/80 hu file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
+                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/85 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
                             />
                         </div>
                         <InputError message={errors.kak} className="mt-2" />
@@ -175,7 +189,7 @@ export default function CreatePengajuan({ title, auth, flash }) {
                             value="Form Permintaan"
                             className="my-2"
                         />
-                        <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                        <div className="relative inline-block w-full h-12 p-2 border rounded-md border-primary/25 focus:border-indigo-500 focus:ring-indigo-500">
                             <input
                                 type="file"
                                 name="form_permintaan"
@@ -185,13 +199,7 @@ export default function CreatePengajuan({ title, auth, flash }) {
                                         e.target.files[0]
                                     )
                                 }
-                                class="
-                                        file:absolute file:right-0
-                                        file:bg-primary/80 file:text-white file:border-0
-                                        file:py-1 file:px-3 file:rounded-full
-                                        file:shadow-sm file:shadow-blue-500/30
-                                        text-gray-600 text-sm
-                                    "
+                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/80 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
                             />
                         </div>
                         <InputError
@@ -207,7 +215,7 @@ export default function CreatePengajuan({ title, auth, flash }) {
                             value="Surat Permintaan"
                             className="my-2"
                         />
-                        <div class="relative inline-block border rounded-md border-primary/25 w-full focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
+                        <div className="relative inline-block w-full h-12 p-2 border rounded-md border-primary/25 focus:border-indigo-500 focus:ring-indigo-500">
                             <input
                                 type="file"
                                 name="surat_permintaan"
@@ -217,13 +225,7 @@ export default function CreatePengajuan({ title, auth, flash }) {
                                         e.target.files[0]
                                     )
                                 }
-                                class="
-                                        file:absolute file:right-0
-                                        file:bg-primary/80 file:text-white file:border-0
-                                        file:py-1 file:px-3 file:rounded-full
-                                        file:shadow-sm file:shadow-blue-500/30
-                                        text-gray-600 text-sm
-                                    "
+                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/80 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
                             />
                         </div>
                         <InputError
@@ -234,10 +236,7 @@ export default function CreatePengajuan({ title, auth, flash }) {
 
                     {/* Button */}
                     <div className="flex justify-end w-full pb-16 mt-4">
-                        <SuccessButton
-                            disabled={processing}
-                            type="submit"
-                        >
+                        <SuccessButton disabled={processing} type="submit">
                             Ajukan <IoIosSend className="w-5 h-5 ml-1" />
                         </SuccessButton>
                     </div>

@@ -26,7 +26,6 @@ Route::middleware(['auth'])->group(function () {
     });
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan', [AuthController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
-
 });
 
 
@@ -79,6 +78,7 @@ Route::middleware(['auth', 'pbj'])->prefix('pbj')->name('pbj.')->group(function 
     // Riwayat Pengajuan
     // Route::get('/riwayat-pengajuan/pengajuan', [PBJController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
     Route::get('/riwayat-pengajuan/show/{pengajuan:nama_kegiatan}', [PBJController::class, 'show_pengajuan'])->name('show-pengajuan');
+    Route::post('/unggah-berkas-ulang', [PBJController::class, 'ajukan_berkas_ulang'])->name('ajukan-berkas-ulang');
 
     // Validasi Berkas
     Route::post('/validasi/:id', [PBJController::class, 'validasi'])->name('validasi');
@@ -98,6 +98,10 @@ Route::middleware(['auth', 'keuangan'])->prefix('keuangan')->name('keuangan.')->
     // Riwayat Pengajuan
     // Route::get('/riwayat-pengajuan/pengajuan', [KeuanganController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
     Route::get('/riwayat-pengajuan/show/{pengajuan:nama_kegiatan}', [KeuanganController::class, 'show_pengajuan'])->name('show-pengajuan');
+
+    // FIXME:  Ini Perlu Validasi?
+    // Validasi Berkas
+    Route::post('/validasi/:id', [KeuanganController::class, 'validasi'])->name('validasi');
 });
 
 

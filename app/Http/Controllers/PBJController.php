@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PengajuanPPKStoreRequest;
+use App\Http\Requests\PPK\UnggahBerkasUlangRequest;
 use Inertia\Inertia;
 use App\Models\Pengajuan;
 use App\Models\Document;
@@ -109,8 +110,45 @@ class PBJController extends Controller
         $request->validated();
         $this->storeDocument($request, 'ban', 'BAN', 'Berita Acara Negoisasi', 'Pengajuan Berkas ke divisi PPK' );
         $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan', 'Pengajuan Berkas ke divisi PPK' );
+        // Update Stage Ketika diunggah berkas jadi pesanan selesai?
+        // TODO?
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'stage' => 'pesanan selesai'
+        ]);
 
         return redirect()->back()->with('message', 'Berkas Berhasil Diajukan');
+    }
+
+    public function ajukan_berkas_ulang(UnggahBerkasUlangRequest $request)
+    {
+        // dd($request);
+        $request->validated();
+        //Pengajuan Ketua Tim /Pengadaan Barang
+        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan');
+        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan');
+        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan');
+
+        // Pengajuan PBJ
+        $this->storeDocument($request, 'rancangan_kontrak', 'RC', 'Rancangan Kontrak', 'Pengajuan PBJ');
+        $this->storeDocument($request, 'spekteknis', 'SPEKTEKNIS', 'Spekteknis', 'Pengajuan PBJ');
+        $this->storeDocument($request, 'rab', 'RAB', 'RAB/HPS', 'Pengajuan PBJ');
+        $this->storeDocument($request, 'sppp', 'SPPP', 'Surat Penunjukan Penjabat Pengadaan(SPPP)', 'Pengajuan PBJ');
+
+        //Pengajuan Kontrak
+        $this->storeDocument($request, 'sppbj', 'SPPBJ', 'Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)', 'Pengajuan Kontrak');
+        $this->storeDocument($request, 'surat_kontrak', 'SK', 'Surat Kontrak/Surat Pesanan', 'Pengajuan Kontrak');
+
+        //pengajuan Berita Acara
+        $this->storeDocument($request, 'bast', 'BAST', 'Berita Acara Serah Terima(BAST)', 'Pengajuan Berita Acara');
+        $this->storeDocument($request, 'bap', 'BAP', 'Berita Acara Pembayaran(BAP)', 'Pengajuan Berita Acara');
+
+        //Pengajuan kuintansi
+        $this->storeDocument($request, 'kuitansi', 'KUITANSI', 'Kuitansi', 'Pengajuan Kuitansi');
+        $this->storeDocument($request, 'surat_pesanan', 'SP', 'Surat Pesanan', 'Pengajuan Kuitansi');
+
+
+        // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
+        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
     }
 
     private function storeDocument($request, $fileKey, $prefix, $jenisDokumen, $kategori)
@@ -198,8 +236,9 @@ class PBJController extends Controller
         $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
 
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
+        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
 
-        dd($berkas_kt);
+        // dd($berkas_kt);
         // dd($berkas_pbj);
         return Inertia::render('PBJ/ShowPengajuan', [
             'title' => 'Detail Riwayat Pengajuan',
@@ -210,7 +249,8 @@ class PBJController extends Controller
             'berkasPBJ' => $berkas_pbj,
             'berkasPK' => $pengajuan_kontrak,
             'berkasBA' => $berita_acara,
-            'kuitansi' => $kuitansi,
+            'berkasKuitansi' => $kuitansi,
+            'berkasPembayaran' => $pembayaran,
         ]);
     }
 
@@ -221,7 +261,7 @@ class PBJController extends Controller
         ]);
 
         Pengajuan::where('id', $request->pengajuan_id)->update([
-            'status' => 'diepesan pbj'
+            'stage' => 'diproses keuangan'
         ]);
 
         redirect()->back();

@@ -84,5 +84,12 @@ export default {
         ],
     },
 
-    plugins: [require("daisyui"), daisyui, forms],
+    plugins: [
+        require("daisyui"),
+        daisyui,
+        forms,
+        // require("flowbite/plugin")({
+        //     charts: true,
+        // }),
+    ],
 };

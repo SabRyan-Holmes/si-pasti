@@ -64,7 +64,7 @@ export default function TabelPengajuan({
                                             <a
                                                 // href={`/storage/${berkas.path}`}
                                                 target="_blank"
-                                                className="underline hover:text-primary text-primary decoration-primary"
+                                                className="underline cursor-pointer hover:text-primary text-primary decoration-primary"
                                             >
                                                 {berkas.nama}.
                                                 <span className="lowercase">

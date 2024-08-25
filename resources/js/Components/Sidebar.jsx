@@ -17,6 +17,8 @@ import NavLinkDashboard from "@/Components/NavLinkDashboard";
 import ApplicationLogo from "./ApplicationLogo";
 
 export default function Sidebar({ divisi, active }) {
+    console.log("active");
+    console.log(active);
     return (
         <div className="relative shadow-2xl drawer-side">
             <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
@@ -78,9 +80,7 @@ export default function Sidebar({ divisi, active }) {
                         <NavLinkDashboard
                             href={route("riwayat-pengajuan")}
                             active={
-                                route().current(
-                                    "riwayat-pengajuan"
-                                ) ||
+                                route().current("riwayat-pengajuan") ||
                                 active === "ketua-tim.show-pengajuan" ||
                                 active === "pegawai.edit" ||
                                 active === "pegawai.show"
@@ -102,8 +102,8 @@ export default function Sidebar({ divisi, active }) {
                             active={
                                 route().current("daftar-berkas") ||
                                 (typeof active === "string" &&
-                                    (active.indexOf("show-berkas") !== -1 ||
-                                        active.indexOf("unggah-berkas") !== -1))
+                                    (active.includes("show-berkas") ||
+                                        active.includes("unggah-berkas")))
                             }
                             className="relative z-20"
                         >

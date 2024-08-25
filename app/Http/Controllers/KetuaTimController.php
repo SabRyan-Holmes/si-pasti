@@ -56,11 +56,6 @@ class KetuaTimController extends Controller
 
 
         // Jika Diupload Ulang maka status dokumen kembali berubah dari tidak valid menjadi null/diproses
-        $ids = array_unique($request->edited_id);
-        // Update beberapa row sekaligus
-        Document::whereIn('id', $ids)->update([
-            'is_valid' => null
-        ]);
 
 
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');

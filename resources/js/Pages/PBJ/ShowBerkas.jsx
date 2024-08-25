@@ -191,40 +191,8 @@ export default function ShowBerkas({
             surat_pesanan: null,
         });
 
-    function submit(e) {
-        e.preventDefault(); // Mencegah perilaku default dari form submit
-        post(route("pbj.ajukan-berkas"), {
-            data: data,
-            _token: props.csrf_token,
-            _method: "POST",
-            forceFormData: true,
 
-            onSuccess: () => {
-                clearErrors();
-                console.log("Submit selesai dari On Success");
 
-                router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
-            },
-            onError: () => {
-                console.log("Gagal submit");
-            },
-            onFinish: () => {
-                console.log("Submit selesai");
-            },
-        });
-    }
-
-    const [uploadedFiles, setUploadedFiles] = useState({});
-    const handleFileChange = (e, docType, fileKey) => {
-        const file = e.target.files[0];
-        if (file) {
-            setUploadedFiles((prev) => ({
-                ...prev,
-                [docType]: file.name,
-            }));
-            setData(fileKey, file); // Assuming setData sets the file data in your form
-        }
-    };
 
     console.log("isi data");
     console.log(data);
@@ -257,7 +225,7 @@ export default function ShowBerkas({
     let gelar = ketuaTim.name.split(" / ")[1];
 
     // TODO: Hapus lagi nanti, cuman untuk tes
-    pengajuan.status = "selesai";
+    // pengajuan.status = "selesai";
     return (
         <AuthenticatedLayout
             user={auth.user}

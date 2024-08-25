@@ -36,7 +36,7 @@ export default function UnggahBerkas({
 
 
 
-
+    // TODO: Lanjutin Nanti
     function submit(e) {
         e.preventDefault();
         // post(
@@ -66,7 +66,7 @@ export default function UnggahBerkas({
 
 
     return (
-        <AuthenticatedLayout user={auth.user} title={title}>
+        <AuthenticatedLayout user={auth.user} title={title} current={route().current()}>
             {/* content */}
             <div className="mx-24">
                 <div className="mb-6">
@@ -123,9 +123,7 @@ export default function UnggahBerkas({
                         </div>
                     </div>
 
-                    <strong className="font-extrabold ">
-                        Pilih Berkas yang ingin diunggah
-                    </strong>
+
 
                     <div className="pb-5 max-w-screen-tablet">
                         {/* Pengajuan PBJ */}
@@ -141,7 +139,7 @@ export default function UnggahBerkas({
                                 <InputLabel
                                     htmlFor="spm"
                                     value="SPM(Surat Perintah Pembayaran"
-                                    className="my-2"
+                                    className="my-2 font-semibold"
                                 />
                                 <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
                                     <input
@@ -152,7 +150,7 @@ export default function UnggahBerkas({
                                         }
                                         class="
                                         file:absolute file:right-0
-                                        file:bg-primary/75 file:text-white file:border-0
+                                        file:bg-primary/85 file:text-white file:border-0
                                         file:py-1 file:px-3 file:rounded-full
                                         file:shadow-sm file:shadow-blue-500/30
                                         text-gray-600 text-sm
