@@ -11,8 +11,7 @@ import {
     PrimaryButton,
     SecondaryButton,
 } from "@/Components";
-import { FaArrowDown, FaCheck, FaDownload, FaEye } from "react-icons/fa6";
-import { IconContext } from "react-icons";
+import { FaCheck, FaDownload, FaEye } from "react-icons/fa6";
 
 export default function UnggahBerkas({
     title,
@@ -70,31 +69,6 @@ export default function UnggahBerkas({
         });
     }
 
-    // console.log(select);
-    console.log("isi data");
-    console.log(data);
-
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        },
-    });
-
-    useEffect(() => {
-        if (flash.message) {
-            Toast.fire({
-                icon: "success",
-                title: flash.message,
-            });
-        }
-    }, [flash.message]);
-
     // TODO : Validasi saat upload berkas belum jalann dgn baik kalo berkas ny bener2 dikosongin
     // useEffect(() => {
     //     if (Object.values(errors)[0]) {
@@ -145,17 +119,15 @@ export default function UnggahBerkas({
     };
 
     // Menghasilkan objek yang memetakan setiap field name ke apakah dokumen itu ada atau tidak
-    const _berkasPBJ = Object.fromEntries(
-        Object.entries(requiredBerkasPBJ).map(([fieldName, jenisDokumen]) => [
-            fieldName,
-            checkBerkas(berkasPBJ, jenisDokumen),
-        ])
-    );
+    // const _berkasPBJ = Object.fromEntries(
+    //     Object.entries(requiredBerkasPBJ).map(([fieldName, jenisDokumen]) => [
+    //         fieldName,
+    //         checkBerkas(berkasPBJ, jenisDokumen),
+    //     ])
+    // );
 
     const checkDocumentExists = (kategori, jenis_dokumen) => {
-        return kategori.find(
-            (doc) => doc.jenis_dokumen === jenis_dokumen
-        );
+        return kategori.find((doc) => doc.jenis_dokumen === jenis_dokumen);
     };
 
     function updateFileName(fieldName) {
@@ -172,8 +144,34 @@ export default function UnggahBerkas({
         }
     }
     const ketuaTim = pengajuan.created_by;
-    console.log("errors");
-    console.log(errors);
+
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+    });
+
+    useEffect(() => {
+        if (flash.message) {
+            Toast.fire({
+                icon: "success",
+                title: flash.message,
+            });
+        }
+    }, [flash.message]);
+
+    // console.log("errors");
+    // console.log(errors);
+    // console.log(select);
+    // console.log("isi data");
+    // console.log(data);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -185,7 +183,6 @@ export default function UnggahBerkas({
             <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
                 <div className="flex items-center justify-between">
                     <div className="mt-3 text-sm breadcrumbs">
-
                         <ul>
                             <li>
                                 <a href={route("daftar-berkas")}>
@@ -259,7 +256,7 @@ export default function UnggahBerkas({
                                 >
                                     {select ||
                                         "Pilih Berkas yang ingin diunggah"}
-                                        <IoIosArrowDown  className="w-5 h-5 fill-primary"/>
+                                    <IoIosArrowDown className="w-5 h-5 fill-primary" />
                                 </button>
                                 {openSelect && (
                                     <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg">
@@ -371,7 +368,8 @@ export default function UnggahBerkas({
                                             //     );
                                             // const existingDocument = checkDocumentExists(jenisDokumen);
                                             const existingDocument =
-                                                checkDocumentExists(berkasPBJ,
+                                                checkDocumentExists(
+                                                    berkasPBJ,
                                                     jenisDokumen
                                                 );
                                             const documentPath =
@@ -399,14 +397,14 @@ export default function UnggahBerkas({
                                                         {existingDocument ? (
                                                             <div className="flex items-center justify-between text-base">
                                                                 <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20"
-                                                                    >
-                                                                    <FaCheck className="w-4 h-4 fill-success " />
+                                                                    <div className="p-1 rounded-full bg-accent/20">
+                                                                        <FaCheck className="w-4 h-4 fill-success " />
                                                                     </div>
                                                                     <p>
                                                                         File
                                                                         sudah
-                                                                        diunggah :
+                                                                        diunggah
+                                                                        :
                                                                     </p>
                                                                     <a
                                                                         // href={`/storage/${documentPath}`}
@@ -421,34 +419,32 @@ export default function UnggahBerkas({
 
                                                                     {/* Kontainer untuk tombol "Lihat" dan "Download" */}
                                                                     <div className="relative bg-primary">
+                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
+                                                                            {/* Tombol "Lihat" */}
 
-                                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                        {/* Tombol "Lihat" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                                            >
+                                                                                Lihat
+                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                                            </a>
 
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                        >
-                                                                            Lihat
-                                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                        </a>
-
-                                                                        {/* Tombol "Download" */}
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            download={
-                                                                                existingDocument.nama
-                                                                            }
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                        >
-                                                                            Unduh
-                                                                            <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                        </a>
+                                                                            {/* Tombol "Download" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                download={
+                                                                                    existingDocument.nama
+                                                                                }
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
+                                                                            >
+                                                                                Unduh
+                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
+                                                                            </a>
+                                                                        </div>
                                                                     </div>
-                                                                    </div>
-
                                                                 </div>
 
                                                                 <div className="space-x-3">
@@ -548,7 +544,8 @@ export default function UnggahBerkas({
                                     {Object.entries(requiredBerkasPK).map(
                                         ([fieldName, jenisDokumen]) => {
                                             const existingDocument =
-                                                checkDocumentExists(berkasPK,
+                                                checkDocumentExists(
+                                                    berkasPK,
                                                     jenisDokumen
                                                 );
                                             const documentPath =
@@ -576,14 +573,14 @@ export default function UnggahBerkas({
                                                         {existingDocument ? (
                                                             <div className="flex items-center justify-between text-base">
                                                                 <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20"
-                                                                    >
-                                                                    <FaCheck className="w-4 h-4 fill-success " />
+                                                                    <div className="p-1 rounded-full bg-accent/20">
+                                                                        <FaCheck className="w-4 h-4 fill-success " />
                                                                     </div>
                                                                     <p>
                                                                         File
                                                                         sudah
-                                                                        diunggah :
+                                                                        diunggah
+                                                                        :
                                                                     </p>
                                                                     <a
                                                                         // href={`/storage/${documentPath}`}
@@ -598,34 +595,32 @@ export default function UnggahBerkas({
 
                                                                     {/* Kontainer untuk tombol "Lihat" dan "Download" */}
                                                                     <div className="relative bg-primary">
+                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
+                                                                            {/* Tombol "Lihat" */}
 
-                                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                        {/* Tombol "Lihat" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                                            >
+                                                                                Lihat
+                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                                            </a>
 
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                        >
-                                                                            Lihat
-                                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                        </a>
-
-                                                                        {/* Tombol "Download" */}
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            download={
-                                                                                existingDocument.nama
-                                                                            }
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                        >
-                                                                            Unduh
-                                                                            <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                        </a>
+                                                                            {/* Tombol "Download" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                download={
+                                                                                    existingDocument.nama
+                                                                                }
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
+                                                                            >
+                                                                                Unduh
+                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
+                                                                            </a>
+                                                                        </div>
                                                                     </div>
-                                                                    </div>
-
                                                                 </div>
 
                                                                 <div className="space-x-3">
@@ -725,7 +720,8 @@ export default function UnggahBerkas({
                                     {Object.entries(requiredBerkasBA).map(
                                         ([fieldName, jenisDokumen]) => {
                                             const existingDocument =
-                                                checkDocumentExists(berkasBA,
+                                                checkDocumentExists(
+                                                    berkasBA,
                                                     jenisDokumen
                                                 );
                                             const documentPath =
@@ -753,14 +749,14 @@ export default function UnggahBerkas({
                                                         {existingDocument ? (
                                                             <div className="flex items-center justify-between text-base">
                                                                 <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20"
-                                                                    >
-                                                                    <FaCheck className="w-4 h-4 fill-success " />
+                                                                    <div className="p-1 rounded-full bg-accent/20">
+                                                                        <FaCheck className="w-4 h-4 fill-success " />
                                                                     </div>
                                                                     <p>
                                                                         File
                                                                         sudah
-                                                                        diunggah :
+                                                                        diunggah
+                                                                        :
                                                                     </p>
                                                                     <a
                                                                         // href={`/storage/${documentPath}`}
@@ -775,34 +771,32 @@ export default function UnggahBerkas({
 
                                                                     {/* Kontainer untuk tombol "Lihat" dan "Download" */}
                                                                     <div className="relative bg-primary">
+                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
+                                                                            {/* Tombol "Lihat" */}
 
-                                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                        {/* Tombol "Lihat" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                                            >
+                                                                                Lihat
+                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                                            </a>
 
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                        >
-                                                                            Lihat
-                                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                        </a>
-
-                                                                        {/* Tombol "Download" */}
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            download={
-                                                                                existingDocument.nama
-                                                                            }
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                        >
-                                                                            Unduh
-                                                                            <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                        </a>
+                                                                            {/* Tombol "Download" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                download={
+                                                                                    existingDocument.nama
+                                                                                }
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
+                                                                            >
+                                                                                Unduh
+                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
+                                                                            </a>
+                                                                        </div>
                                                                     </div>
-                                                                    </div>
-
                                                                 </div>
 
                                                                 <div className="space-x-3">
@@ -902,7 +896,8 @@ export default function UnggahBerkas({
                                     {Object.entries(requiredKuitansi).map(
                                         ([fieldName, jenisDokumen]) => {
                                             const existingDocument =
-                                                checkDocumentExists(berkasKuitansi,
+                                                checkDocumentExists(
+                                                    berkasKuitansi,
                                                     jenisDokumen
                                                 );
                                             const documentPath =
@@ -930,14 +925,14 @@ export default function UnggahBerkas({
                                                         {existingDocument ? (
                                                             <div className="flex items-center justify-between text-base">
                                                                 <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20"
-                                                                    >
-                                                                    <FaCheck className="w-4 h-4 fill-success " />
+                                                                    <div className="p-1 rounded-full bg-accent/20">
+                                                                        <FaCheck className="w-4 h-4 fill-success " />
                                                                     </div>
                                                                     <p>
                                                                         File
                                                                         sudah
-                                                                        diunggah :
+                                                                        diunggah
+                                                                        :
                                                                     </p>
                                                                     <a
                                                                         // href={`/storage/${documentPath}`}
@@ -952,34 +947,32 @@ export default function UnggahBerkas({
 
                                                                     {/* Kontainer untuk tombol "Lihat" dan "Download" */}
                                                                     <div className="relative bg-primary">
+                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
+                                                                            {/* Tombol "Lihat" */}
 
-                                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                        {/* Tombol "Lihat" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
+                                                                            >
+                                                                                Lihat
+                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
+                                                                            </a>
 
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                        >
-                                                                            Lihat
-                                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                        </a>
-
-                                                                        {/* Tombol "Download" */}
-                                                                        <a
-                                                                            href={`/storage/${documentPath}`}
-                                                                            download={
-                                                                                existingDocument.nama
-                                                                            }
-                                                                            target="_blank"
-                                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                        >
-                                                                            Unduh
-                                                                            <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                        </a>
+                                                                            {/* Tombol "Download" */}
+                                                                            <a
+                                                                                href={`/storage/${documentPath}`}
+                                                                                download={
+                                                                                    existingDocument.nama
+                                                                                }
+                                                                                target="_blank"
+                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
+                                                                            >
+                                                                                Unduh
+                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
+                                                                            </a>
+                                                                        </div>
                                                                     </div>
-                                                                    </div>
-
                                                                 </div>
 
                                                                 <div className="space-x-3">

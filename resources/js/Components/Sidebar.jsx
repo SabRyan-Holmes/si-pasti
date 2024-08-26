@@ -1,18 +1,9 @@
-import {
-    MdAdminPanelSettings,
-    MdSpaceDashboard,
-    MdSwitchAccount,
-    MdOutlineEventAvailable,
-    MdOutlineDocumentScanner,
-} from "react-icons/md";
-import { FaNotesMedical } from "react-icons/fa6";
+import { MdSpaceDashboard } from "react-icons/md";
 import {
     HiDocumentPlus,
     HiDocumentDuplicate,
-    HiDocumentMagnifyingGlass,
     HiClipboardDocumentList,
 } from "react-icons/hi2";
-import logo from "../../assets/image/logo.png";
 import NavLinkDashboard from "@/Components/NavLinkDashboard";
 import ApplicationLogo from "./ApplicationLogo";
 
@@ -32,7 +23,7 @@ export default function Sidebar({ divisi, active }) {
                     <a href="/">
                         <ApplicationLogo className="mx-auto text-gray-500 fill-current w-7 h-7 aspect-square " />
                     </a>
-                    <strong className="text-xs italic font-bold text-slate-400">
+                    <strong className="text-xs italic font-bold text-secondary/60">
                         BPS Provinsi Jambi
                     </strong>
                 </div>

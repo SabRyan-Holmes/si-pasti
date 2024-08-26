@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { useForm, Link, Head, usePage } from "@inertiajs/react";
-
+import React, { useEffect, useState } from "react";
+import { useForm, usePage } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
@@ -10,13 +9,16 @@ import { IoIosSend } from "react-icons/io";
 import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
 import { FaRegFolder } from "react-icons/fa6";
+import Swal from "sweetalert2";
+import { FormUnggah } from "../Partials";
 
 export default function UnggahBerkas({
     title,
     auth,
     pengajuan,
+    berkasPembayaran,
+    flash,
 }) {
-    const [select, setSelect] = useState("");
     const props = usePage().props;
     const {
         data,
@@ -28,73 +30,90 @@ export default function UnggahBerkas({
         clearErrors,
         recentlySuccessful,
     } = useForm({
+        pengajuan_id: pengajuan.id,
         nama_kegiatan: "",
-        kak: null,
-        form_permintaan: null,
-        surat_permintaan: false,
+        // spm: null,
     });
 
-
+    const requiredPembayaran = {
+        spm: "Surat Perintah Pembayaran(SPM)",
+    };
 
     // TODO: Lanjutin Nanti
     function submit(e) {
         e.preventDefault();
-        // post(
-        //     route("ketua-tim.ajukan_pengajuan", data, {
-        //         _token: props.csrf_token,
-        //         _method: "POST",
-        //         preserveScroll: true,
-        //         onSuccess: () => {
-        //             reset(
-        //                 "name_kegiatan",
-        //                 "kak",
-        //                 "form_permintaan",
-        //                 "surat_permintaan"
-        //             );
-        //             clearErrors();
-        //         },
-        //         recentlySuccessful: () => {
-        //             console.log("Berhasil cuy")
-
-        //         }
-        //     })
-        // );
+        post(route("keuangan.ajukan-berkas"), {
+            forceFormData: true,
+            _token: props.csrf_token,
+            _method: "POST",
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                clearErrors();
+            },
+            onError: () => {
+                console.log(errors);
+            },
+        });
     }
     const ketuaTim = pengajuan.created_by;
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
 
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        },
+    });
+
+    useEffect(() => {
+        if (flash.message) {
+            Toast.fire({
+                icon: "success",
+                title: flash.message,
+            });
+        }
+    }, [flash.message]);
 
     return (
-        <AuthenticatedLayout user={auth.user} title={title} current={route().current()}>
+        <AuthenticatedLayout
+            user={auth.user}
+            title={title}
+            current={route().current()}
+        >
             {/* content */}
             <div className="mx-24">
                 <div className="mb-6">
-
                     <div className="flex justify-between mt-7">
-                    <div className="mt-3 text-sm breadcrumbs">
-                        <ul>
-                            <li>
-                                <a href={route("daftar-berkas")}>
-                                    <FaRegFolder className="w-4 h-4 mr-2 stroke-current" />
-                                    Daftar Berkas
-                                </a>
-                            </li>
+                        <div className="mt-3 text-sm breadcrumbs">
+                            <ul>
+                                <li>
+                                    <a href={route("daftar-berkas")}>
+                                        <FaRegFolder className="w-4 h-4 mr-2 stroke-current" />
+                                        Daftar Berkas
+                                    </a>
+                                </li>
 
-                            <li>
-                                <span className="inline-flex items-center gap-2">
-                                    {pengajuan.nama_kegiatan}
-                                </span>
-                            </li>
+                                <li>
+                                    <span className="inline-flex items-center gap-2">
+                                        {pengajuan.nama_kegiatan}
+                                    </span>
+                                </li>
 
-                            <li>
-                                <span className="inline-flex items-center gap-2">
-                                    <MdOutlineDriveFolderUpload className="w-4 h-4 stroke-current" />
-                                    Unggah Berkas
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
+                                <li>
+                                    <span className="inline-flex items-center gap-2">
+                                        <MdOutlineDriveFolderUpload className="w-4 h-4 stroke-current" />
+                                        Unggah Berkas
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
                         <SecondaryButton
                             onClick={() => window.history.back()}
                             className="capitalize bg-secondary/5 "
@@ -103,8 +122,6 @@ export default function UnggahBerkas({
                             <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                         </SecondaryButton>
                     </div>
-
-
 
                     <div class="mt-10 capitalize max-w-screen-phone text-nowrap mb-8">
                         <div class="grid grid-cols-2 gap-0">
@@ -123,58 +140,16 @@ export default function UnggahBerkas({
                         </div>
                     </div>
 
-
-
                     <div className="pb-5 max-w-screen-tablet">
                         {/* Pengajuan PBJ */}
-
-                        <form
-                            action=""
-                            onSubmit={submit}
-                            method="post"
-                            encType="multipart/form-data"
-                        >
-                            {/* Berita Acara Negoisasi */}
-                            <div className="my-3">
-                                <InputLabel
-                                    htmlFor="spm"
-                                    value="SPM(Surat Perintah Pembayaran"
-                                    className="my-2 font-semibold"
-                                />
-                                <div class="relative inline-block border rounded-md border-primary/25 w-full  focus:border-indigo-500 focus:ring-indigo-500 h-12 p-2">
-                                    <input
-                                        type="file"
-                                        name="spm"
-                                        onChange={(e) =>
-                                            setData("spm", e.target.files[0])
-                                        }
-                                        class="
-                                        file:absolute file:right-0
-                                        file:bg-primary/85 file:text-white file:border-0
-                                        file:py-1 file:px-3 file:rounded-full
-                                        file:shadow-sm file:shadow-blue-500/30
-                                        text-gray-600 text-sm
-                                    "
-                                    />
-                                </div>
-                                <InputError
-                                    message={errors.spm}
-                                    className="mt-2"
-                                />
-                            </div>
-
-                            {/* Button */}
-                            <div className="flex justify-end w-full mt-4">
-                                <PrimaryButton
-                                    disabled={processing}
-                                    type="submit"
-                                    className="bg-hijau"
-                                >
-                                    Ajukan
-                                    <IoIosSend className="w-5 h-5 ml-1" />
-                                </PrimaryButton>
-                            </div>
-                        </form>
+                        <FormUnggah
+                            setData={setData}
+                            requiredBerkas={requiredPembayaran}
+                            berkas={berkasPembayaran}
+                            processing={processing}
+                            errors={errors}
+                            submit={submit}
+                        />
                     </div>
                 </div>
             </div>

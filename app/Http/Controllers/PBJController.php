@@ -108,8 +108,8 @@ class PBJController extends Controller
 
 
         $request->validated();
-        $this->storeDocument($request, 'ban', 'BAN', 'Berita Acara Negoisasi', 'Pengajuan Berkas ke divisi PPK' );
-        $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan', 'Pengajuan Berkas ke divisi PPK' );
+        $this->storeDocument($request, 'ban', 'BAN', 'Berita Acara Negoisasi', 'Pengajuan Berkas ke divisi PPK');
+        $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan', 'Pengajuan Berkas ke divisi PPK');
         // Update Stage Ketika diunggah berkas jadi pesanan selesai?
         // TODO?
         Pengajuan::where('id', $request->pengajuan_id)->update([
@@ -145,6 +145,9 @@ class PBJController extends Controller
         //Pengajuan kuintansi
         $this->storeDocument($request, 'kuitansi', 'KUITANSI', 'Kuitansi', 'Pengajuan Kuitansi');
         $this->storeDocument($request, 'surat_pesanan', 'SP', 'Surat Pesanan', 'Pengajuan Kuitansi');
+
+        // Berkas Pembayaran
+        $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
 
 
         // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
@@ -260,10 +263,20 @@ class PBJController extends Controller
             'is_valid' => $request->is_valid
         ]);
 
-        Pengajuan::where('id', $request->pengajuan_id)->update([
-            'stage' => 'diproses keuangan'
-        ]);
+        $berkas = Document::find($request->id);
+        if ($berkas->kategori == "Pengajuan Kontrak") {
+            Pengajuan::where('id', $request->pengajuan_id)->update([
+                'stage' => 'dipesan PBJ'
+            ]);
+        }
+        redirect()->back();
+    }
 
+    public function order_done(Request $request)
+    {
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'stage' => 'pesanan selesai'
+        ]);
         redirect()->back();
     }
 }

@@ -5,7 +5,7 @@ import { MdEditDocument } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { Dropdown } from "@/Components";
 
-export default function TabelBerkas({ daftarBerkas, data, pengajuan, validasiLink }) {
+export default function TabelBerkas({ daftarBerkas, pengajuan, validasiLink }) {
     const [uploadedFiles, setUploadedFiles] = useState({});
 
     return (

@@ -82,13 +82,14 @@ Route::middleware(['auth', 'pbj'])->prefix('pbj')->name('pbj.')->group(function 
 
     // Validasi Berkas
     Route::post('/validasi/:id', [PBJController::class, 'validasi'])->name('validasi');
+    Route::post('/order-done/:id', [PBJController::class, 'order_done'])->name('order-done');
 });
 
 // Keuangan
 Route::middleware(['auth', 'keuangan'])->prefix('keuangan')->name('keuangan.')->group(function () {
     // Daftar Berkas
     // Route::get('/daftar-berkas/pengajuan', [KeuanganController::class, 'daftar_berkas'])->name('daftar-berkas');
-    Route::get('/show-berkas/{pengajuan:nama_kegiatan}', [KeuanganController::class, 'show_berkas'])->name('show-berkas');
+    // Route::get('/show-berkas/{pengajuan:nama_kegiatan}', [KeuanganController::class, 'show_berkas'])->name('show-berkas');
 
     // Unggah Berkas
     Route::get('/unggah-berkas/{pengajuan:nama_kegiatan}', [KeuanganController::class, 'unggah_berkas'])->name('unggah-berkas');
@@ -99,9 +100,8 @@ Route::middleware(['auth', 'keuangan'])->prefix('keuangan')->name('keuangan.')->
     // Route::get('/riwayat-pengajuan/pengajuan', [KeuanganController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
     Route::get('/riwayat-pengajuan/show/{pengajuan:nama_kegiatan}', [KeuanganController::class, 'show_pengajuan'])->name('show-pengajuan');
 
-    // FIXME:  Ini Perlu Validasi?
     // Validasi Berkas
-    Route::post('/validasi/:id', [KeuanganController::class, 'validasi'])->name('validasi');
+    // Route::post('/validasi/:id', [KeuanganController::class, 'validasi'])->name('validasi');
 });
 
 

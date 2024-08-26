@@ -41,6 +41,10 @@ export default function ShowPengajuan({
         surat_pesanan: "Surat Pesanan",
     };
 
+    const requiredPembayaran = {
+        spm: "Surat Perintah Pembayaran(SPM)",
+    };
+
     const _berkasPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
         const value = requiredBerkasPBJ[key];
         return (
@@ -93,8 +97,8 @@ export default function ShowPengajuan({
         );
     });
 
-    const _berkasPembayaran = Object.keys(requiredKuitansi).map((key) => {
-        const value = requiredKuitansi[key];
+    const _berkasPembayaran = Object.keys(requiredPembayaran).map((key) => {
+        const value = requiredPembayaran[key];
         return (
             berkasPembayaran.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
@@ -311,12 +315,12 @@ export default function ShowPengajuan({
                         <h2 className="mt-2 text-base font-semibold">
                             Berkas Pembayaran
                         </h2>
-                        {/* Tabel Berkas Kuitansi */}
+                        {/* Tabel Berkas Pembayaran */}
                         <TabelPengajuan
                             data={data}
                             setData={setData}
                             daftarBerkas={_berkasPembayaran}
-                            requiredBerkas={requiredKuitansi}
+                            requiredBerkas={requiredPembayaran}
                             isDisabled={isDoneKuitansi}
                             submit={submit}
                         />

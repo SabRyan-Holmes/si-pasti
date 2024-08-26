@@ -7,8 +7,13 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
 import { MdEditDocument } from "react-icons/md";
 import { IoIosArrowDown, IoIosSend } from "react-icons/io";
-import { Dropdown } from "@/Components";
-import { FaDownload, FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
+import { Dropdown, InputLabel, SuccessButton } from "@/Components";
+import {
+    FaCheck,
+    FaDownload,
+    FaRegFolder,
+    FaRegFolderOpen,
+} from "react-icons/fa6";
 import { TabelBerkas } from "../Partials";
 
 export default function ShowBerkas({
@@ -27,10 +32,6 @@ export default function ShowBerkas({
 }) {
     const props = usePage().props;
     // Function to get the key based on the value
-    const getKeyByValue = (object, value) => {
-        return Object.keys(object).find((key) => object[key] === value);
-    };
-
 
     const requiredBerkasKT = {
         kak: "Kerangka Ajuan Kerja",
@@ -167,36 +168,6 @@ export default function ShowBerkas({
         ..._berkasPembayaran,
     ];
 
-    const { data, setData, post, processing, errors, reset, clearErrors } =
-        useForm({
-            pengajuan_id: pengajuan.id,
-            nama_kegiatan: pengajuan.nama_kegiatan,
-
-            // Pengajuan PBJ
-            "rancangan kontrak": null,
-            spekteknis: null,
-            rab: null,
-            "surat penunjukan penjabat pengadaan": null,
-
-            // Pengajuan Kontrak
-            sppbj: null,
-            surat_kontrak: null,
-
-            // Pengajuan Berita Acara
-            bast: null,
-            bap: null,
-
-            // Pengajuan Kuitansi
-            berkasKuitansi: null,
-            surat_pesanan: null,
-        });
-
-
-
-
-    console.log("isi data");
-    console.log(data);
-
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -218,14 +189,12 @@ export default function ShowBerkas({
         }
     }, [flash.message]);
 
-    console.log("errors :");
-    console.log(errors);
     const ketuaTim = pengajuan.created_by;
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
 
     // TODO: Hapus lagi nanti, cuman untuk tes
-    // pengajuan.status = "selesai";
+    // pengajuan.stage = "pesanan selesai";
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -286,15 +255,38 @@ export default function ShowBerkas({
                             </div>
                         </div>
 
-                        {pengajuan.status == "selesai" && (
-                            <div className="mx-2 text-2xl label-success">
-                                Pemesanan Selesai
-                            </div>
-                        )}
+                        <SuccessButton
+                            className="relative mr-3 scale-110 hover:scale-[1.2] group transition-all duration-200 disabled:hover:scale-110"
+                            disabled={pengajuan.stage == "pesanan selesai"}
+                        >
+                            <Link
+                                as="button"
+                                href={route("pbj.order-done")}
+                                method="post"
+                                data={{ pengajuan_id: pengajuan.id }}
+                            >
+                                {pengajuan.stage == "pemesanan selesai" ? (
+                                    <span>Pemesanan Selesai</span>
+                                ) : (
+                                    <span>Konfirmasi Selesai</span>
+                                )}
+                                {pengajuan.stage == "pesanan selesai" ? (
+                                    ""
+                                ) : (
+                                    <FaCheck className="float-right w-4 h-4 ml-1" />
+                                )}
+                                {/* Absolute hover yang menampilkan Kata2 "Konfirmasi Pesanan Selesai" */}
+                                {pengajuan.stage !== "pesanan selesai" && (
+                                    <div className="absolute hidden scale-75 group-hover:flex bg-slate-700 text-white text-sm py-2 px-3 rounded bottom-[-50px] left-1/2 transform -translate-x-1/2 whitespace-nowrap after:content-[''] after:absolute after:left-1/2 after:bottom-full after:-translate-x-1/2 after:border-8 after:border-transparent after:border-b-gray-700">
+                                        Konfirmasi Pesanan Selesai
+                                    </div>
+                                )}
+                            </Link>
+                        </SuccessButton>
                     </div>
                 </div>
 
-                {pengajuan.status === "selesai" ? (
+                {pengajuan.stage === "pesanan selesai" ? (
                     <table className="table my-20 mt-3 border rounded-md border-primary/25 table-bordered">
                         {/* head */}
                         <thead className="bg-secondary">
@@ -391,15 +383,15 @@ export default function ShowBerkas({
                                             </div>
                                         )}
                                     </td>
-                                    <td className="w-full mx-auto text-center ">
+                                    <td className="w-full p-0 mx-auto ">
                                         {berkas.nama ? (
-                                            <div className="w-full label-success">
+                                            <div className=" label-success">
                                                 {pengajuan.status}
                                             </div>
                                         ) : (
-                                            <span className="label-base bg-base-300 text-nowrap">
+                                            <div className=" label-base bg-base-300 text-nowrap">
                                                 Berkas tidak diajukan
-                                            </span>
+                                            </div>
                                         )}
                                     </td>
                                 </tr>
@@ -418,7 +410,6 @@ export default function ShowBerkas({
                             <TabelBerkas
                                 daftarBerkas={_berkasPBJ}
                                 validasiLink={route("pbj.validasi")}
-                                data={data}
                                 pengajuan={pengajuan}
                             />
                         </div>
@@ -430,7 +421,6 @@ export default function ShowBerkas({
                             {/* Tabel Berkas Pemesanan/Kontrak */}
                             <TabelBerkas
                                 daftarBerkas={_berkasPK}
-                                data={data}
                                 validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
@@ -443,7 +433,6 @@ export default function ShowBerkas({
                             {/* Tabel Berkas Berita Acara */}
                             <TabelBerkas
                                 daftarBerkas={_berkasBA}
-                                data={data}
                                 validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
@@ -455,7 +444,6 @@ export default function ShowBerkas({
                             </h2>
                             <TabelBerkas
                                 daftarBerkas={berkasPK}
-                                data={data}
                                 validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
@@ -468,7 +456,6 @@ export default function ShowBerkas({
                             {/* Tabel Berkas Kuitansi */}
                             <TabelBerkas
                                 daftarBerkas={_berkasKuitansi}
-                                data={data}
                                 validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />
@@ -481,7 +468,6 @@ export default function ShowBerkas({
                             {/* Tabel Berkas Ketua Tim Start */}
                             <TabelBerkas
                                 daftarBerkas={_berkasPembayaran}
-                                data={data}
                                 validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />

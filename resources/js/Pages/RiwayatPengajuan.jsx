@@ -277,25 +277,25 @@ export default function RiwayatPengajuan({
                                                 className="group/item hover:bg-secondary/50 hover:cursor-pointer"
                                             >
                                                 <th>{i + 1}</th>
-                                                <td>
+                                                <td className="p-1">
                                                     <div className="flex-row items-center gap-3">
-                                                        <span className="font-bold">
+                                                        <span className="text-sm font-bold">
                                                             {name} {gelar}
                                                         </span>
-                                                        <span className="block text-xs opacity-50 text-nowrap ">
+                                                        <span className="block text-xs opacity-50 ">
                                                             {data.nama_tim}
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="font-medium capitalize">
+                                                <td className="p-1 text-sm font-medium capitalize">
                                                     {data.nama_kegiatan}
                                                 </td>
-                                                <td className="font-medium text-center">
+                                                <td className="p-1 text-sm text-center">
                                                     {moment(
                                                         data.created_at
                                                     ).format("LL")}
                                                 </td>
-                                                <td className="font-medium text-center">
+                                                <td className="p-1 font-medium text-center">
                                                     {data.status ==
                                                     "selesai" ? (
                                                         <span>
@@ -307,30 +307,32 @@ export default function RiwayatPengajuan({
                                                         <span>_</span>
                                                     )}
                                                 </td>
-                                                <td>
-                                                    {data.status ==
-                                                        "diproses" && (
-                                                        <div className="text-center bg-orange-50 label-base ">
-                                                            {data.status}
-                                                        </div>
-                                                    )}
+                                                <td className="p-1">
+                                                    <div className="flex-row items-center gap-3">
+                                                        {data.status ==
+                                                            "diproses" && (
+                                                            <div className="text-center bg-orange-50 label-base ">
+                                                                {data.status}
+                                                            </div>
+                                                        )}
 
-                                                    {data.status ==
-                                                        "selesai" && (
-                                                        <div className="text-center bg-orange-50 label-success ">
-                                                            {data.status}
-                                                        </div>
-                                                    )}
+                                                        {data.status ==
+                                                            "selesai" && (
+                                                            <div className="text-center bg-orange-50 label-success ">
+                                                                {data.status}
+                                                            </div>
+                                                        )}
 
-                                                    {data.status ==
-                                                        "ditolak" && (
-                                                        <div className="text-center bg-orange-50 label-success ">
-                                                            {data.status}
-                                                        </div>
-                                                    )}
+                                                        {data.status ==
+                                                            "ditolak" && (
+                                                            <div className="text-center bg-orange-50 label-success ">
+                                                                {data.status}
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </td>
-                                                <td className="p-0 m-0">
-                                                    <div className="text-xs text-center text-nowrap label-base bg-base-200 ">
+                                                <td>
+                                                    <div className="mt-1 text-xs text-center label-base bg-base-100 text-nowrap">
                                                         {data.stage}
                                                     </div>
                                                 </td>

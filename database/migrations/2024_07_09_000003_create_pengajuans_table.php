@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['diproses',  'ditolak', 'selesai']);
-            $table->enum('stage', ['diajukan ketua tim', 'diproses ppk', 'dipesan pbj', 'pesanan selesai', 'pembayaran', 'diproses keuangan', 'selesai']);
+            $table->enum('stage', ['diajukan ketua tim', 'diproses ppk', 'dipesan pbj', 'pesanan selesai', 'pembayaran', 'selesai']);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
 
@@ -34,3 +34,8 @@ return new class extends Migration
         Schema::dropIfExists('processes');
     }
 };
+
+
+
+
+

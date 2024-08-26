@@ -10,9 +10,14 @@ use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\CheckPayments;
+
 
 class KeuanganController extends Controller
 {
+
+    use CheckPayments;
+
     public function daftar_berkas()
     {
         $pengajuans = Pengajuan::latest();
@@ -57,29 +62,28 @@ class KeuanganController extends Controller
     public function unggah_berkas(Pengajuan $pengajuan)
     {
 
+        $berkasPembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
+
         // dd($pengajuan);
         return Inertia::render('Keuangan/UnggahBerkas', [
             'title' => 'Pengajuan berkas ke divisi PBJ',
             'pengajuan' => $pengajuan,
+            'berkasPembayaran' => $berkasPembayaran
         ]);
     }
 
     public function ajukan_berkas(UnggahBerkasStoreRequest $request)
     {
         // dd($request);
-        $request->validated();
-        //Pengajuan Ketua Tim /Pengadaan Barang
-        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan');
-        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan');
-        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan');
+        $rule = [
+            'pengajuan_id' => ['required', 'integer'],
+            'nama_kegiatan' => ['required', 'string'],
+            'spm' => ['required', 'file', 'mimes:pdf', 'max:15192']
+        ];
 
-        // FIXME?
-        // Update Stage jadi pembayaran ketika di upload spm?
-        Pengajuan::where('id', $request->pengajuan_id)->update([
-            'stage' => 'pembayaran'
-        ]);
+        $request->validate($rule);
 
-        // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
+        $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
     }
 
@@ -161,12 +165,6 @@ class KeuanganController extends Controller
         //Pengajuan Ketua Tim /Pengadaan
         $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
 
-        // FIXME?
-        // Update Stage jadi pembayaran ketika di upload spm?
-        Pengajuan::where('id', $request->pengajuan_id)->update([
-            'stage' => 'pembayaran'
-        ]);
-
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
     }
 
@@ -219,23 +217,13 @@ class KeuanganController extends Controller
                 ]);
             }
         }
+        // Update Stage jadi pembayaran jika sudah mengirim BA, kuitansi oleh PPK, & spm oleh keuangan
+        $this->checkPaymentStatus($request->pengajuan_id, null, true);
     }
 
 
-    public function validasi(Request $request)
+    public function done()
     {
-        Document::where('id', $request->id)->update([
-            'is_valid' => $request->is_valid
-        ]);
-
-        Pengajuan::where('id', $request->pengajuan_id)->update([
-            'stage' => 'diproses keuangan'
-        ]);
-
-        redirect()->back();
-    }
-
-    public function done() {
         // TODO: Ini Parameter selesainy gimano tepatny??
     }
 }

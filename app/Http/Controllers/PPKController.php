@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
 use App\Http\Requests\PPK\UnggahBerkasUlangRequest;
 use Illuminate\Support\Facades\Auth;
-
+use App\Traits\CheckPayments;
 
 class PPKController extends Controller
 {
@@ -18,6 +18,7 @@ class PPKController extends Controller
     /**
      * Display the specified resource.
      */
+    use CheckPayments;
 
     public function daftar_berkas()
     {
@@ -190,7 +191,13 @@ class PPKController extends Controller
                     'submitted_by' => Auth::user()->id,
                 ]);
             }
+
+            if ($kategori == 'Pengajuan Berita Acara' || $kategori == 'Pengajuan Kuitansi') {
+                // Check dan update stage ke pembayaran nantinya jika syarat terpenuhi
+                $this->checkPaymentStatus($request->pengajuan_id, true, null);
+            }
         }
+
     }
 
 
@@ -254,4 +261,6 @@ class PPKController extends Controller
         redirect()->back()->with('message', 'Berhasil Diperbarui');
 
     }
+
+
 }

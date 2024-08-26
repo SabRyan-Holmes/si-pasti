@@ -236,7 +236,7 @@ export default function DaftarBerkas({
                                             Tanggal Pengajuan
                                         </th>
                                         <th className="text-center">
-                                            Tanggal Disetujui
+                                            Tanggal Selesai
                                         </th>
                                         <th className="text-center">
                                             Status/Stage
@@ -441,7 +441,7 @@ export default function DaftarBerkas({
                                                     {auth.user.divisi ===
                                                         "Keuangan" && (
                                                         <>
-                                                            <Link
+                                                            {/* <Link
                                                                 as="a"
                                                                 href={route(
                                                                     "keuangan.show-berkas",
@@ -454,7 +454,7 @@ export default function DaftarBerkas({
                                                                 </span>
                                                                 <TbPencilCheck className="fill-hijau/75 group-hover/item:fill-white" />
                                                             </Link>
-                                                            <span className="inline-block mx-1"></span>
+                                                            <span className="inline-block mx-1"></span> */}
                                                             <Link
                                                                 as="a"
                                                                 href={route(

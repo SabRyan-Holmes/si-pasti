@@ -19,9 +19,9 @@ return new class extends Migration
                 'Pengajuan Permintaan Pengadaan',
                 'Pengajuan PBJ',
                 'Pengajuan Kontrak',
-                'Berkas Pembayaran',
                 'Pengajuan Berkas ke divisi PPK',
                 'Pengajuan Berita Acara',
+                'Berkas Pembayaran',
                 'Pengajuan Kuitansi',
             ]);
 
