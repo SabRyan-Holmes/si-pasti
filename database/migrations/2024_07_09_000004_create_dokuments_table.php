@@ -21,8 +21,8 @@ return new class extends Migration
                 'Pengajuan Kontrak',
                 'Pengajuan Berkas ke divisi PPK',
                 'Pengajuan Berita Acara',
-                'Berkas Pembayaran',
                 'Pengajuan Kuitansi',
+                'Berkas Pembayaran',
             ]);
 
             $table->string('tipe_file');
@@ -38,9 +38,15 @@ return new class extends Migration
                 'Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)',
                 'Surat Kontrak/Surat Pesanan',
                 'Berita Acara Serah Terima(BAST)',
+                // Pengajuan ke PPK
+                'Berita Acara Negoisasi',
+                'Berita Acara Hasil Pemilihan(BAHP)',
+                // Kuitansi
                 'Berita Acara Pembayaran(BAP)',
-                'Surat Perintah Pembayaran(SPM)',
                 'Surat Pesanan',
+                // Pembayaran
+                'Surat Perintah Pembayaran(SPM)',
+
             ]);
             $table->string('path');
             $table->boolean('is_valid')->nullable(); //If Null = Menunggu Validasi

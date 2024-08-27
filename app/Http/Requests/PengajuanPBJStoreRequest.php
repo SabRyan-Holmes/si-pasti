@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PengajuanPPKStoreRequest extends FormRequest
+class PengajuanPBJStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,22 @@ class PengajuanPPKStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ban' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
-            'bahp' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'pengajuan_id' => ['required', 'integer'],
+            'nama_kegiatan' => ['required', 'string'],
+
+            // Pengajuan PBJ
+
+            'rancangan_kontrak' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'spekteknis' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'rab' => ['nullable', 'file',  'mimes:pdf', 'max:15192'],
+            'sppp' => ['nullable', 'file',  'mimes:pdf', 'max:15192'],
 
             // Rule kustom untuk memastikan salah satu berkas harus diupload
             // Menggunakan required_without_all
-            'ban' => ['required_without_all:bahp', 'file', 'mimes:pdf', 'max:15192'],
-            'bahp' => ['required_without_all:ban', 'file', 'mimes:pdf', 'max:15192'],
-
+            'rancangan_kontrak' => ['required_without_all:spekteknis,rab, sppp', 'file', 'mimes:pdf', 'max:15192'],
+            'spekteknis' => ['required_without_all:rancangan_kontrak,rab,sppp,', 'file', 'mimes:pdf', 'max:15192'],
+            'rab' => ['required_without_all:rancangan_kontrak,spekteknis,sppp,', 'file', 'mimes:pdf', 'max:15192'],
+            'sppp' => ['required_without_all:rancangan_kontrak,spekteknis,rab,', 'file', 'mimes:pdf', 'max:15192'],
         ];
     }
 
@@ -42,7 +50,7 @@ class PengajuanPPKStoreRequest extends FormRequest
             'max' => 'Kolom :attribute tidak boleh lebih dari :max karakter.',
             'file' => 'Kolom :attribute harus berupa file.',
             'mimes' => 'Kolom :attribute harus berupa dokumen PDF.',
-            'required_without_all' => 'Salah satu dari Berkas harus diupload.',
+            'required_without_all' => 'Salah satu dari berkas harus diupload.',
 
         ];
     }

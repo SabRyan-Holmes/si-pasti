@@ -84,6 +84,8 @@ class KeuanganController extends Controller
         $request->validate($rule);
 
         $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
+        // Update Stage jadi pembayaran jika sudah mengirim BA, kuitansi oleh PPK, & spm oleh keuangan
+        $this->checkPaymentStatus($request->pengajuan_id, true, true);
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
     }
 
@@ -164,7 +166,10 @@ class KeuanganController extends Controller
         $request->validate($rule);
         //Pengajuan Ketua Tim /Pengadaan
         $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
-
+        // Update Stage jadi pembayaran jika sudah mengirim BA, kuitansi oleh PPK, & spm oleh keuangan
+        Pengajuan::where('id', $request->pengajuan_id)->update([
+            'stage' => "pembayaran"
+        ]);
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
     }
 
@@ -201,6 +206,7 @@ class KeuanganController extends Controller
                 $existingDocument->update([
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
+                    'is_valid' => null,
                     'jenis_dokumen' => $jenisDokumen,
                     'submitted_by' => Auth::user()->id,
                 ]);
@@ -217,13 +223,5 @@ class KeuanganController extends Controller
                 ]);
             }
         }
-        // Update Stage jadi pembayaran jika sudah mengirim BA, kuitansi oleh PPK, & spm oleh keuangan
-        $this->checkPaymentStatus($request->pengajuan_id, null, true);
-    }
-
-
-    public function done()
-    {
-        // TODO: Ini Parameter selesainy gimano tepatny??
     }
 }

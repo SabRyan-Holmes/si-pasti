@@ -4,14 +4,10 @@ import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
-import { IoIosArrowDown, IoIosSend } from "react-icons/io";
-import {
-    InputError,
-    InputLabel,
-    PrimaryButton,
-    SecondaryButton,
-} from "@/Components";
-import { FaCheck, FaDownload, FaEye } from "react-icons/fa6";
+import { IoIosArrowDown } from "react-icons/io";
+import { InputLabel, SecondaryButton } from "@/Components";
+import { FaCheck } from "react-icons/fa6";
+import { FormUnggah } from "../Partials";
 
 export default function UnggahBerkas({
     title,
@@ -29,33 +25,32 @@ export default function UnggahBerkas({
         useForm({
             pengajuan_id: pengajuan.id,
             nama_kegiatan: pengajuan.nama_kegiatan,
-
             // Pengajuan PBJ
-            rancangan_kontrak: null,
-            spekteknis: null,
-            rab: null,
-            sppp: null,
+            // rancangan_kontrak: null,
+            // spekteknis: null,
+            // rab: null,
+            // sppp: null,
 
             // Pengajuan Kontrak
-            sppbj: null,
-            surat_kontrak: null,
+            // sppbj: null,
+            // surat_kontrak: null,
 
             // Pengajuan Berita Acara
-            bast: null,
-            bap: null,
+            // bast: null,
+            // bap: null,
 
             // Pengajuan Kuitansi
-            kuintansi: null,
-            surat_pesanan: null,
+            // kuintansi: null,
+            // surat_pesanan: null,
         });
 
     function submit(e) {
         e.preventDefault();
-        post(route("ppk.ajukan-berkas"), {
+        post(route(submitLink), {
             _token: props.csrf_token,
             _method: "POST",
             forceFormData: true,
-            preserveState: false,
+            preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
                 reset();
@@ -66,29 +61,13 @@ export default function UnggahBerkas({
                 //     location.reload();
                 // }, 5000);
             },
+            onError: () => {
+                console.log(errors);
+            },
         });
     }
 
-    // TODO : Validasi saat upload berkas belum jalann dgn baik kalo berkas ny bener2 dikosongin
-    // useEffect(() => {
-    //     if (Object.values(errors)[0]) {
-    //         Toast.fire({
-    //             icon: "warning",
-    //             title: Object.values(errors)[0],
-    //         });
-    //     }
-    // }, [errors]);
-
     const [openSelect, setOpenSelect] = useState(false);
-
-    const options = [
-        {
-            value: "Pengajuan PBJ",
-            label: "Pengajuan PBJ",
-            icon: <FaCheck className="w-4 h-4" />,
-        },
-        // Tambahkan opsi lain di sini dengan ikon yang diinginkan
-    ];
 
     const requiredBerkasPBJ = {
         rancangan_kontrak: "Rancangan Kontrak",
@@ -118,33 +97,9 @@ export default function UnggahBerkas({
         return kategori.find((doc) => doc.jenis_dokumen === jenis_dokumen);
     };
 
-    // Menghasilkan objek yang memetakan setiap field name ke apakah dokumen itu ada atau tidak
-    // const _berkasPBJ = Object.fromEntries(
-    //     Object.entries(requiredBerkasPBJ).map(([fieldName, jenisDokumen]) => [
-    //         fieldName,
-    //         checkBerkas(berkasPBJ, jenisDokumen),
-    //     ])
-    // );
-
-    const checkDocumentExists = (kategori, jenis_dokumen) => {
-        return kategori.find((doc) => doc.jenis_dokumen === jenis_dokumen);
-    };
-
-    function updateFileName(fieldName) {
-        const fileInput = document.getElementById(fieldName);
-        const fileNameDisplay = document.getElementById(
-            fieldName + "_filename"
-        );
-        const file = fileInput.files[0];
-
-        if (file) {
-            fileNameDisplay.textContent = file.name;
-        } else {
-            fileNameDisplay.textContent = "Tidak ada file yang dipilih";
-        }
-    }
     const ketuaTim = pengajuan.created_by;
-
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
 
     const Toast = Swal.mixin({
         toast: true,
@@ -167,11 +122,33 @@ export default function UnggahBerkas({
         }
     }, [flash.message]);
 
-    // console.log("errors");
-    // console.log(errors);
-    // console.log(select);
-    // console.log("isi data");
-    // console.log(data);
+    console.log("errors");
+    console.log(errors);
+    console.log(select);
+    console.log("isi data");
+    console.log(data);
+
+    const [submitLink, setSubmitLink] = useState('')
+
+    useEffect(() => {
+        switch (select) {
+            case "Pengajuan PBJ":
+                setSubmitLink("ppk.ajukan-berkas-pbj");
+                break;
+            case "Pengajuan Kontrak":
+                setSubmitLink("ppk.ajukan-berkas-kontrak");
+                break;
+            case "Pengajuan Berita Acara":
+                setSubmitLink("ppk.ajukan-berkas-ba");
+                break;
+            case "Pengajuan Kuitansi":
+                setSubmitLink("ppk.ajukan-berkas-kuitansi");
+                break;
+            default:
+                return;
+        }
+    }, [select]);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -180,7 +157,7 @@ export default function UnggahBerkas({
         >
             <Head title={title} />
             {/* content */}
-            <section className="px-12 mx-auto phone:h-screen laptop:h-full max-w-screen-laptop">
+            <section className="px-12 mx-auto mb-16 phone:h-screen laptop:h-full max-w-screen-laptop">
                 <div className="flex items-center justify-between">
                     <div className="mt-3 text-sm breadcrumbs">
                         <ul>
@@ -227,18 +204,24 @@ export default function UnggahBerkas({
                 <div className="px-12 mx-auto mt-10">
                     {/* Dro */}
                     <div className="mx-auto ">
-                        <h4 className="mt-6 font-extrabold">
-                            Nama Kegiatan:
-                            <span className="mx-1 font-normal capitalize">
-                                {pengajuan.nama_kegiatan}
-                            </span>
-                        </h4>
-                        <h4 className="mt-2 mb-3 font-extrabold">
-                            Ketua Tim:
-                            <span className="mx-1 font-normal capitalize ">
-                                {ketuaTim.name}
-                            </span>
-                        </h4>
+                        <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
+                            <div class="grid grid-cols-2 gap-0">
+                                <span class="mr-1 font-bold">
+                                    Nama Kegiatan
+                                </span>
+                                <span>: {pengajuan.nama_kegiatan}</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-0">
+                                <span class="mr-1 font-bold">Ketua Tim </span>
+                                <span>
+                                    : {nama} {gelar}{" "}
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-0">
+                                <span class="mr-1 font-bold">Nama Tim</span>
+                                <span>: {pengajuan.nama_tim}</span>
+                            </div>
+                        </div>
 
                         <div className="pb-5 max-w-screen-tablet">
                             <InputLabel
@@ -263,7 +246,7 @@ export default function UnggahBerkas({
                                         <li
                                             className="px-2 py-2 text-sm text-gray-500 cursor-pointer hover:bg-gray-100"
                                             onClick={() =>
-                                                setSelectedOption(
+                                                setSelect(
                                                     "Pilih Berkas yang ingin diunggah"
                                                 )
                                             }
@@ -355,711 +338,50 @@ export default function UnggahBerkas({
 
                             {/* Pengajuan PBJ */}
                             {select == "Pengajuan PBJ" && (
-                                <form
-                                    onSubmit={submit}
-                                    method="post"
-                                    encType="multipart/form-data"
-                                >
-                                    {Object.entries(requiredBerkasPBJ).map(
-                                        ([fieldName, jenisDokumen]) => {
-                                            // const existingDocument =
-                                            //     checkBerkas(berkasPBJ,
-                                            //         jenisDokumen
-                                            //     );
-                                            // const existingDocument = checkDocumentExists(jenisDokumen);
-                                            const existingDocument =
-                                                checkDocumentExists(
-                                                    berkasPBJ,
-                                                    jenisDokumen
-                                                );
-                                            const documentPath =
-                                                (
-                                                    (existingDocument &&
-                                                        berkasPBJ) ||
-                                                    []
-                                                ).find(
-                                                    (doc) =>
-                                                        doc.jenis_dokumen ===
-                                                        jenisDokumen
-                                                )?.path || "";
-
-                                            return (
-                                                <div
-                                                    className="my-3"
-                                                    key={fieldName}
-                                                >
-                                                    <InputLabel
-                                                        htmlFor={fieldName}
-                                                        value={jenisDokumen}
-                                                        className="my-2"
-                                                    />
-                                                    <div className="relative inline-block w-full h-12 p-2 border rounded-md border-primary/25 focus:border-indigo-500 focus:ring-indigo-500">
-                                                        {existingDocument ? (
-                                                            <div className="flex items-center justify-between text-base">
-                                                                <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20">
-                                                                        <FaCheck className="w-4 h-4 fill-success " />
-                                                                    </div>
-                                                                    <p>
-                                                                        File
-                                                                        sudah
-                                                                        diunggah
-                                                                        :
-                                                                    </p>
-                                                                    <a
-                                                                        // href={`/storage/${documentPath}`}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="underline text-primary"
-                                                                    >
-                                                                        {
-                                                                            existingDocument.nama
-                                                                        }
-                                                                    </a>
-
-                                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
-                                                                    <div className="relative bg-primary">
-                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                            {/* Tombol "Lihat" */}
-
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                            >
-                                                                                Lihat
-                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                            </a>
-
-                                                                            {/* Tombol "Download" */}
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                download={
-                                                                                    existingDocument.nama
-                                                                                }
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                            >
-                                                                                Unduh
-                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="space-x-3">
-                                                                    <span
-                                                                        id={
-                                                                            fieldName +
-                                                                            "_filename"
-                                                                        }
-                                                                        class="mt-2 text-gray-700 text-sm"
-                                                                    >
-                                                                        {""}
-                                                                    </span>
-                                                                    {/* /Label utnuk input file  */}
-                                                                    <label
-                                                                        htmlFor={
-                                                                            fieldName
-                                                                        }
-                                                                        className="px-3 py-1 text-sm text-white border-0 rounded-full shadow-sm bg-primary/85 shadow-blue-500/30"
-                                                                    >
-                                                                        Pilih
-                                                                        File
-                                                                    </label>
-
-                                                                    <div className="">
-                                                                        <input
-                                                                            type="file"
-                                                                            name={
-                                                                                fieldName
-                                                                            }
-                                                                            id={
-                                                                                fieldName
-                                                                            }
-                                                                            onChange={(
-                                                                                e
-                                                                            ) => {
-                                                                                setData(
-                                                                                    fieldName,
-                                                                                    e
-                                                                                        .target
-                                                                                        .files[0]
-                                                                                );
-                                                                                updateFileName(
-                                                                                    fieldName
-                                                                                );
-                                                                            }}
-                                                                            className="hidden"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <input
-                                                                type="file"
-                                                                name={fieldName}
-                                                                onChange={(e) =>
-                                                                    setData(
-                                                                        fieldName,
-                                                                        e.target
-                                                                            .files[0]
-                                                                    )
-                                                                }
-                                                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/85 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                    <InputError
-                                                        message={
-                                                            errors[fieldName]
-                                                        }
-                                                        className="mt-2"
-                                                    />
-                                                </div>
-                                            );
-                                        }
-                                    )}
-
-                                    {/* Button */}
-                                    <div className="flex justify-end w-full mt-4">
-                                        <PrimaryButton
-                                            disabled={processing}
-                                            type="submit"
-                                        >
-                                            Ajukan
-                                            <IoIosSend className="w-5 h-5 ml-1" />
-                                        </PrimaryButton>
-                                    </div>
-                                </form>
+                                <FormUnggah
+                                    setData={setData}
+                                    requiredBerkas={requiredBerkasPBJ}
+                                    berkas={berkasPBJ}
+                                    processing={processing}
+                                    errors={errors}
+                                    submit={submit}
+                                />
                             )}
 
                             {/* Pengajuan Kontrak */}
                             {select == "Pengajuan Kontrak" && (
-                                <form
-                                    onSubmit={submit}
-                                    method="post"
-                                    encType="multipart/form-data"
-                                >
-                                    {Object.entries(requiredBerkasPK).map(
-                                        ([fieldName, jenisDokumen]) => {
-                                            const existingDocument =
-                                                checkDocumentExists(
-                                                    berkasPK,
-                                                    jenisDokumen
-                                                );
-                                            const documentPath =
-                                                (
-                                                    (existingDocument &&
-                                                        berkasPK) ||
-                                                    []
-                                                ).find(
-                                                    (doc) =>
-                                                        doc.jenis_dokumen ===
-                                                        jenisDokumen
-                                                )?.path || "";
-
-                                            return (
-                                                <div
-                                                    className="my-3"
-                                                    key={fieldName}
-                                                >
-                                                    <InputLabel
-                                                        htmlFor={fieldName}
-                                                        value={jenisDokumen}
-                                                        className="my-2"
-                                                    />
-                                                    <div className="relative inline-block w-full h-12 p-2 border rounded-md border-primary/25 focus:border-indigo-500 focus:ring-indigo-500">
-                                                        {existingDocument ? (
-                                                            <div className="flex items-center justify-between text-base">
-                                                                <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20">
-                                                                        <FaCheck className="w-4 h-4 fill-success " />
-                                                                    </div>
-                                                                    <p>
-                                                                        File
-                                                                        sudah
-                                                                        diunggah
-                                                                        :
-                                                                    </p>
-                                                                    <a
-                                                                        // href={`/storage/${documentPath}`}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="underline text-primary"
-                                                                    >
-                                                                        {
-                                                                            existingDocument.nama
-                                                                        }
-                                                                    </a>
-
-                                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
-                                                                    <div className="relative bg-primary">
-                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                            {/* Tombol "Lihat" */}
-
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                            >
-                                                                                Lihat
-                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                            </a>
-
-                                                                            {/* Tombol "Download" */}
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                download={
-                                                                                    existingDocument.nama
-                                                                                }
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                            >
-                                                                                Unduh
-                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="space-x-3">
-                                                                    <span
-                                                                        id={
-                                                                            fieldName +
-                                                                            "_filename"
-                                                                        }
-                                                                        class="mt-2 text-gray-700 text-sm"
-                                                                    >
-                                                                        {""}
-                                                                    </span>
-                                                                    {/* /Label utnuk input file  */}
-                                                                    <label
-                                                                        htmlFor={
-                                                                            fieldName
-                                                                        }
-                                                                        className="px-3 py-1 text-sm text-white border-0 rounded-full shadow-sm bg-primary/85 shadow-blue-500/30"
-                                                                    >
-                                                                        Pilih
-                                                                        File
-                                                                    </label>
-
-                                                                    <div className="">
-                                                                        <input
-                                                                            type="file"
-                                                                            name={
-                                                                                fieldName
-                                                                            }
-                                                                            id={
-                                                                                fieldName
-                                                                            }
-                                                                            onChange={(
-                                                                                e
-                                                                            ) => {
-                                                                                setData(
-                                                                                    fieldName,
-                                                                                    e
-                                                                                        .target
-                                                                                        .files[0]
-                                                                                );
-                                                                                updateFileName(
-                                                                                    fieldName
-                                                                                );
-                                                                            }}
-                                                                            className="hidden"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <input
-                                                                type="file"
-                                                                name={fieldName}
-                                                                onChange={(e) =>
-                                                                    setData(
-                                                                        fieldName,
-                                                                        e.target
-                                                                            .files[0]
-                                                                    )
-                                                                }
-                                                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/85 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                    <InputError
-                                                        message={
-                                                            errors[fieldName]
-                                                        }
-                                                        className="mt-2"
-                                                    />
-                                                </div>
-                                            );
-                                        }
-                                    )}
-
-                                    {/* Button */}
-                                    <div className="flex justify-end w-full mt-4">
-                                        <PrimaryButton
-                                            disabled={processing}
-                                            type="submit"
-                                        >
-                                            Ajukan
-                                            <IoIosSend className="w-5 h-5 ml-1" />
-                                        </PrimaryButton>
-                                    </div>
-                                </form>
+                                <FormUnggah
+                                    setData={setData}
+                                    requiredBerkas={requiredBerkasPK}
+                                    berkas={berkasPK}
+                                    processing={processing}
+                                    errors={errors}
+                                    submit={submit}
+                                />
                             )}
 
                             {/* Pengajuan Berita Acara */}
                             {select == "Pengajuan Berita Acara" && (
-                                <form
-                                    onSubmit={submit}
-                                    method="post"
-                                    encType="multipart/form-data"
-                                >
-                                    {Object.entries(requiredBerkasBA).map(
-                                        ([fieldName, jenisDokumen]) => {
-                                            const existingDocument =
-                                                checkDocumentExists(
-                                                    berkasBA,
-                                                    jenisDokumen
-                                                );
-                                            const documentPath =
-                                                (
-                                                    (existingDocument &&
-                                                        berkasBA) ||
-                                                    []
-                                                ).find(
-                                                    (doc) =>
-                                                        doc.jenis_dokumen ===
-                                                        jenisDokumen
-                                                )?.path || "";
-
-                                            return (
-                                                <div
-                                                    className="my-3"
-                                                    key={fieldName}
-                                                >
-                                                    <InputLabel
-                                                        htmlFor={fieldName}
-                                                        value={jenisDokumen}
-                                                        className="my-2"
-                                                    />
-                                                    <div className="relative inline-block w-full h-12 p-2 border rounded-md border-primary/25 focus:border-indigo-500 focus:ring-indigo-500">
-                                                        {existingDocument ? (
-                                                            <div className="flex items-center justify-between text-base">
-                                                                <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20">
-                                                                        <FaCheck className="w-4 h-4 fill-success " />
-                                                                    </div>
-                                                                    <p>
-                                                                        File
-                                                                        sudah
-                                                                        diunggah
-                                                                        :
-                                                                    </p>
-                                                                    <a
-                                                                        // href={`/storage/${documentPath}`}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="underline text-primary"
-                                                                    >
-                                                                        {
-                                                                            existingDocument.nama
-                                                                        }
-                                                                    </a>
-
-                                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
-                                                                    <div className="relative bg-primary">
-                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                            {/* Tombol "Lihat" */}
-
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                            >
-                                                                                Lihat
-                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                            </a>
-
-                                                                            {/* Tombol "Download" */}
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                download={
-                                                                                    existingDocument.nama
-                                                                                }
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                            >
-                                                                                Unduh
-                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="space-x-3">
-                                                                    <span
-                                                                        id={
-                                                                            fieldName +
-                                                                            "_filename"
-                                                                        }
-                                                                        class="mt-2 text-gray-700 text-sm"
-                                                                    >
-                                                                        {""}
-                                                                    </span>
-                                                                    {/* /Label utnuk input file  */}
-                                                                    <label
-                                                                        htmlFor={
-                                                                            fieldName
-                                                                        }
-                                                                        className="px-3 py-1 text-sm text-white border-0 rounded-full shadow-sm bg-primary/85 shadow-blue-500/30"
-                                                                    >
-                                                                        Pilih
-                                                                        File
-                                                                    </label>
-
-                                                                    <div className="">
-                                                                        <input
-                                                                            type="file"
-                                                                            name={
-                                                                                fieldName
-                                                                            }
-                                                                            id={
-                                                                                fieldName
-                                                                            }
-                                                                            onChange={(
-                                                                                e
-                                                                            ) => {
-                                                                                setData(
-                                                                                    fieldName,
-                                                                                    e
-                                                                                        .target
-                                                                                        .files[0]
-                                                                                );
-                                                                                updateFileName(
-                                                                                    fieldName
-                                                                                );
-                                                                            }}
-                                                                            className="hidden"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <input
-                                                                type="file"
-                                                                name={fieldName}
-                                                                onChange={(e) =>
-                                                                    setData(
-                                                                        fieldName,
-                                                                        e.target
-                                                                            .files[0]
-                                                                    )
-                                                                }
-                                                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/85 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                    <InputError
-                                                        message={
-                                                            errors[fieldName]
-                                                        }
-                                                        className="mt-2"
-                                                    />
-                                                </div>
-                                            );
-                                        }
-                                    )}
-
-                                    {/* Button */}
-                                    <div className="flex justify-end w-full mt-4">
-                                        <PrimaryButton
-                                            disabled={processing}
-                                            type="submit"
-                                        >
-                                            Ajukan
-                                            <IoIosSend className="w-5 h-5 ml-1" />
-                                        </PrimaryButton>
-                                    </div>
-                                </form>
+                                <FormUnggah
+                                    setData={setData}
+                                    requiredBerkas={requiredBerkasBA}
+                                    berkas={berkasBA}
+                                    processing={processing}
+                                    errors={errors}
+                                    submit={submit}
+                                />
                             )}
 
                             {/* Pengajuan Kuitansi */}
                             {select == "Pengajuan Kuitansi" && (
-                                <form
-                                    onSubmit={submit}
-                                    method="post"
-                                    encType="multipart/form-data"
-                                >
-                                    {Object.entries(requiredKuitansi).map(
-                                        ([fieldName, jenisDokumen]) => {
-                                            const existingDocument =
-                                                checkDocumentExists(
-                                                    berkasKuitansi,
-                                                    jenisDokumen
-                                                );
-                                            const documentPath =
-                                                (
-                                                    (existingDocument &&
-                                                        berkasKuitansi) ||
-                                                    []
-                                                ).find(
-                                                    (doc) =>
-                                                        doc.jenis_dokumen ===
-                                                        jenisDokumen
-                                                )?.path || "";
-
-                                            return (
-                                                <div
-                                                    className="my-3"
-                                                    key={fieldName}
-                                                >
-                                                    <InputLabel
-                                                        htmlFor={fieldName}
-                                                        value={jenisDokumen}
-                                                        className="my-2"
-                                                    />
-                                                    <div className="relative inline-block w-full h-12 p-2 border rounded-md border-primary/25 focus:border-indigo-500 focus:ring-indigo-500">
-                                                        {existingDocument ? (
-                                                            <div className="flex items-center justify-between text-base">
-                                                                <div className="flex items-center justify-start gap-3 mt-1 text-sm cursor-pointer group">
-                                                                    <div className="p-1 rounded-full bg-accent/20">
-                                                                        <FaCheck className="w-4 h-4 fill-success " />
-                                                                    </div>
-                                                                    <p>
-                                                                        File
-                                                                        sudah
-                                                                        diunggah
-                                                                        :
-                                                                    </p>
-                                                                    <a
-                                                                        // href={`/storage/${documentPath}`}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="underline text-primary"
-                                                                    >
-                                                                        {
-                                                                            existingDocument.nama
-                                                                        }
-                                                                    </a>
-
-                                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
-                                                                    <div className="relative bg-primary">
-                                                                        <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 -left-24 -bottom-11 group-hover:opacity-100 ">
-                                                                            {/* Tombol "Lihat" */}
-
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                                            >
-                                                                                Lihat
-                                                                                <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                                            </a>
-
-                                                                            {/* Tombol "Download" */}
-                                                                            <a
-                                                                                href={`/storage/${documentPath}`}
-                                                                                download={
-                                                                                    existingDocument.nama
-                                                                                }
-                                                                                target="_blank"
-                                                                                className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                                            >
-                                                                                Unduh
-                                                                                <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="space-x-3">
-                                                                    <span
-                                                                        id={
-                                                                            fieldName +
-                                                                            "_filename"
-                                                                        }
-                                                                        class="mt-2 text-gray-700 text-sm"
-                                                                    >
-                                                                        {""}
-                                                                    </span>
-                                                                    {/* /Label utnuk input file  */}
-                                                                    <label
-                                                                        htmlFor={
-                                                                            fieldName
-                                                                        }
-                                                                        className="px-3 py-1 text-sm text-white border-0 rounded-full shadow-sm bg-primary/85 shadow-blue-500/30"
-                                                                    >
-                                                                        Pilih
-                                                                        File
-                                                                    </label>
-
-                                                                    <div className="">
-                                                                        <input
-                                                                            type="file"
-                                                                            name={
-                                                                                fieldName
-                                                                            }
-                                                                            id={
-                                                                                fieldName
-                                                                            }
-                                                                            onChange={(
-                                                                                e
-                                                                            ) => {
-                                                                                setData(
-                                                                                    fieldName,
-                                                                                    e
-                                                                                        .target
-                                                                                        .files[0]
-                                                                                );
-                                                                                updateFileName(
-                                                                                    fieldName
-                                                                                );
-                                                                            }}
-                                                                            className="hidden"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <input
-                                                                type="file"
-                                                                name={fieldName}
-                                                                onChange={(e) =>
-                                                                    setData(
-                                                                        fieldName,
-                                                                        e.target
-                                                                            .files[0]
-                                                                    )
-                                                                }
-                                                                className="text-sm text-gray-600 file:absolute file:right-0 file:bg-primary/85 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                    <InputError
-                                                        message={
-                                                            errors[fieldName]
-                                                        }
-                                                        className="mt-2"
-                                                    />
-                                                </div>
-                                            );
-                                        }
-                                    )}
-
-                                    {/* Button */}
-                                    <div className="flex justify-end w-full mt-4">
-                                        <PrimaryButton
-                                            disabled={processing}
-                                            type="submit"
-                                        >
-                                            Ajukan
-                                            <IoIosSend className="w-5 h-5 ml-1" />
-                                        </PrimaryButton>
-                                    </div>
-                                </form>
+                                <FormUnggah
+                                    setData={setData}
+                                    requiredBerkas={requiredKuitansi}
+                                    berkas={berkasKuitansi}
+                                    processing={processing}
+                                    errors={errors}
+                                    submit={submit}
+                                />
                             )}
                         </div>
                     </div>

@@ -34,10 +34,6 @@ class Pengajuan extends Model
                 });
         });
 
-        // Berdasarkan Divisi
-        // $query->when($filters['byStatus'] ?? false, function ($query, $byStatus) {
-        //     $query->where('status', $byStatus);
-        // });
 
         // Berdasarkan Status
         $query->when(

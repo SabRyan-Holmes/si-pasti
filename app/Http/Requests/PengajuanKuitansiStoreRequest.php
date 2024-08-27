@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PengajuanPPKStoreRequest extends FormRequest
+class PengajuanKuitansiStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,16 @@ class PengajuanPPKStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ban' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
-            'bahp' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'pengajuan_id' => ['required', 'integer'],
+            'nama_kegiatan' => ['required', 'string'],
 
-            // Rule kustom untuk memastikan salah satu berkas harus diupload
+            // // Pengajuan Kuitansi
+            'kuitansi' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_pesanan' => ['nullable', 'file', 'mimes:pdf', 'max:15192'],
+
             // Menggunakan required_without_all
-            'ban' => ['required_without_all:bahp', 'file', 'mimes:pdf', 'max:15192'],
-            'bahp' => ['required_without_all:ban', 'file', 'mimes:pdf', 'max:15192'],
+            'kuitansi' => ['required_without_all:surat_pesanan', 'file', 'mimes:pdf', 'max:15192'],
+            'surat_pesanan' => ['required_without_all:kuitansi', 'file', 'mimes:pdf', 'max:15192'],
 
         ];
     }
@@ -42,8 +45,7 @@ class PengajuanPPKStoreRequest extends FormRequest
             'max' => 'Kolom :attribute tidak boleh lebih dari :max karakter.',
             'file' => 'Kolom :attribute harus berupa file.',
             'mimes' => 'Kolom :attribute harus berupa dokumen PDF.',
-            'required_without_all' => 'Salah satu dari Berkas harus diupload.',
-
+            'required_without_all' => 'Salah satu dari berkas harus diupload.',
         ];
     }
 }

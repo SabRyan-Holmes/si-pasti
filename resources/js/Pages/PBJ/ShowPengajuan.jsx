@@ -6,13 +6,14 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
 import { TabelPengajuan } from "../Partials";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { TiDocumentText } from "react-icons/ti";
 
 export default function ShowPengajuan({
     title,
     auth,
     flash,
     pengajuan,
-    ketuaTim,
     berkasPBJ,
     berkasPK,
     berkasBA,
@@ -205,6 +206,9 @@ export default function ShowPengajuan({
             });
         }
     }, [flash.message]);
+    const ketuaTim = pengajuan.created_by;
+    let nama = ketuaTim.name.split(" / ")[0];
+    let gelar = ketuaTim.name.split(" / ")[1];
 
     console.log("errors :");
     console.log(errors);
@@ -222,14 +226,14 @@ export default function ShowPengajuan({
                     <div className="my-3 text-sm capitalize breadcrumbs">
                         <ul>
                             <li>
-                                <a href={route("riwayat-pengajuan")}>
-                                    <FaRegFolder className="w-4 h-4 mr-2" />
+                                <a href={route("daftar-berkas")}>
+                                    <IoDocumentTextOutline className="w-4 h-4 mr-2" />
                                     Riwayat Pengajuan
                                 </a>
                             </li>
                             <li>
                                 <a>
-                                    <FaRegFolderOpen className="w-4 h-4 mr-2" />
+                                    <TiDocumentText className="w-4 h-4 mr-1" />
                                     {pengajuan.nama_kegiatan}
                                 </a>
                             </li>
@@ -246,18 +250,28 @@ export default function ShowPengajuan({
                         <RiArrowGoBackFill className="w-3 h-3 ml-2 fill-secondary" />
                     </SecondaryButton>
                 </div>
-                <div class="max-w-screen-phone  mt-5">
-                    <div class="grid grid-cols-2 gap-0">
-                        <span class="mr-1 font-bold">Nama Kegiatan</span>
-                        <span>: {pengajuan.nama_kegiatan}</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-0">
-                        <span class="mr-1  font-bold">Ketua TIM</span>
-                        <span>: {ketuaTim.name}</span>
-                    </div>
-                </div>
 
                 <main className="px-7">
+                    <div className="mt-10 capitalize max-w-screen-phone text-nowrap">
+                        <div className="grid grid-cols-2 gap-0">
+                            <span className="mr-1 font-bold">
+                                Nama Kegiatan
+                            </span>
+                            <span>: {pengajuan.nama_kegiatan}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-0">
+                            <span className="mr-1 font-bold">
+                                Ketua TIM /NIP
+                            </span>
+                            <span>
+                                : {nama} {gelar}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-0">
+                            <span className="mr-1 font-bold">Nama Tim</span>
+                            <span>: {pengajuan.nama_tim}</span>
+                        </div>
+                    </div>
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">
                             Berkas Pengajuan PBJ

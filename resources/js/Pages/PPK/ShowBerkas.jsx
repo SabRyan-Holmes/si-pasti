@@ -154,12 +154,14 @@ export default function ShowBerkas({
                                 <span>: {pengajuan.nama_tim}</span>
                             </div>
                         </div>
-                        <SuccessButton
-                            className="relative mr-3 scale-110 hover:scale-[1.2] group transition-all duration-200 disabled:text-black disabled:text-opacity-100 disabled:hover:scale-110"
-                            disabled={pengajuan.stage == "pesanan selesai"}
-                        >
-                            <span>Pemesanan Selesai</span>
-                        </SuccessButton>
+                        {pengajuan.stage == "pesanan selesai" && (
+                            <SuccessButton
+                                className="relative mr-3 scale-110 hover:scale-[1.2] group transition-all duration-200 disabled:text-black disabled:text-opacity-100 disabled:hover:scale-110"
+                                disabled={pengajuan.stage == "pesanan selesai"}
+                            >
+                                <span>Pemesanan Selesai</span>
+                            </SuccessButton>
+                        )}
                     </div>
                 </div>
 

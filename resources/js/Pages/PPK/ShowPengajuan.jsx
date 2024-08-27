@@ -271,7 +271,6 @@ export default function ShowPengajuan({
                         </h2>
                         {/* Tabel Berkas Pengajuan PBJ */}
                         <TabelPengajuan
-                            data={data}
                             setData={setData}
                             daftarBerkas={_berkasPBJ}
                             requiredBerkas={requiredBerkasPBJ}
@@ -280,11 +279,10 @@ export default function ShowPengajuan({
                         />
 
                         <h2 className="mt-2 text-base font-semibold ">
-                            Berkas Berkas Pemesanan
+                            Berkas Pemesanan/Pengajuan Kontrak
                         </h2>
                         {/* Tabel Berkas Pemesanan /Pengajuan Kontrak*/}
                         <TabelPengajuan
-                            data={data}
                             setData={setData}
                             daftarBerkas={_berkasPK}
                             requiredBerkas={requiredBerkasPK}
@@ -297,7 +295,6 @@ export default function ShowPengajuan({
                         </h2>
                         {/* Tabel Berkas Berita Acara */}
                         <TabelPengajuan
-                            data={data}
                             setData={setData}
                             daftarBerkas={_berkasBA}
                             requiredBerkas={requiredBerkasBA}
@@ -310,7 +307,6 @@ export default function ShowPengajuan({
                         </h2>
                         {/* Tabel Berkas Kuitansi */}
                         <TabelPengajuan
-                            data={data}
                             setData={setData}
                             daftarBerkas={_berkasKuitansi}
                             requiredBerkas={requiredKuitansi}

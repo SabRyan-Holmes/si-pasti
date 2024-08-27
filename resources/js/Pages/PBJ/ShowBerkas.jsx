@@ -195,6 +195,10 @@ export default function ShowBerkas({
 
     // TODO: Hapus lagi nanti, cuman untuk tes
     // pengajuan.stage = "pesanan selesai";
+
+
+    // FIXME: Ini kalo ditampilin semua tu kalo pengajuan stage ny pas pesanan selesai be atau juga seteahjh pesanan selesai, kayak pembayaran dan selesai juga
+    //  Terus kalo misalkan udah ditampilin semua, itu kan tombol validasiny jadi hilang, kek mano pbj menvalidasiny kalo gitu?
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -433,17 +437,6 @@ export default function ShowBerkas({
                             {/* Tabel Berkas Berita Acara */}
                             <TabelBerkas
                                 daftarBerkas={_berkasBA}
-                                validasiLink={route("pbj.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
-
-                        <div className="pb-20 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berkas Pemesanan/ Kontrak
-                            </h2>
-                            <TabelBerkas
-                                daftarBerkas={berkasPK}
                                 validasiLink={route("pbj.validasi")}
                                 pengajuan={pengajuan}
                             />

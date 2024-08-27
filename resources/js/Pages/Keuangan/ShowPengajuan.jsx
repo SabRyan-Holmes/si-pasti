@@ -18,10 +18,6 @@ export default function ShowPengajuan({
 }) {
     const props = usePage().props;
     const [isEdit, setisEdit] = useState(false)
-    // Function to get the key based on the value
-    const getKeyByValue = (object, value) => {
-        return Object.keys(object).find((key) => object[key] === value);
-    };
 
     const requiredPembayaran = {
         spm: "Surat Perintah Pembayaran(SPM)",
@@ -39,6 +35,7 @@ export default function ShowPengajuan({
             }
         );
     });
+
     const { data, setData, post, processing, errors, reset, clearErrors } =
         useForm({
             pengajuan_id: pengajuan.id,
@@ -74,17 +71,7 @@ export default function ShowPengajuan({
         });
     }
 
-    const [uploadedFiles, setUploadedFiles] = useState({});
-    const handleFileChange = (e, docType, fileKey) => {
-        const file = e.target.files[0];
-        if (file) {
-            setUploadedFiles((prev) => ({
-                ...prev,
-                [docType]: file.name,
-            }));
-            setData(fileKey, file); // Assuming setData sets the file data in your form
-        }
-    };
+
 
 
     // Logika untuk mengecek apakah  smaa2 berisi
@@ -100,7 +87,7 @@ export default function ShowPengajuan({
 
         // Jika setidaknya salah satu dari berkasDB atau berkasRow berisi nama, return false
         // Jika tidak ada sama sekali yang berisi, return true
-        return !(isBerkasDBNamaValid || isBerkasRowNamaValid);
+        return (isBerkasDBNamaValid || isBerkasRowNamaValid);
     }
     const isDone = cekKeyNamaBerisi(berkasPembayaran, _berkasPembayaran);
 
@@ -213,7 +200,7 @@ export default function ShowPengajuan({
                             setData={setData}
                             daftarBerkas={_berkasPembayaran}
                             requiredBerkas={requiredPembayaran}
-                            isDisabled={!isDone}
+                            isDisabled={isDone}
                             submit={submit}
                         />
                     </div>

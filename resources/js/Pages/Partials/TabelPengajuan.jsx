@@ -1,5 +1,4 @@
 import { SuccessButton } from "@/Components";
-import { usePage } from "@inertiajs/react";
 import React, { useState } from "react";
 import { FaEdit, FaFileUpload } from "react-icons/fa";
 import { FaDownload, FaEye, FaFileCircleCheck } from "react-icons/fa6";
@@ -8,12 +7,10 @@ import { IoIosSend } from "react-icons/io";
 export default function TabelPengajuan({
     daftarBerkas,
     submit,
-    data,
     requiredBerkas,
     setData,
     isDisabled,
 }) {
-    const props = usePage().props;
     // Function to get the key based on the value
     const getKeyByValue = (object, value) => {
         return Object.keys(object).find((key) => object[key] === value);

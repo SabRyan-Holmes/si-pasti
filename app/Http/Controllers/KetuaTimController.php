@@ -93,6 +93,7 @@ class KetuaTimController extends Controller
                 $existingDocument->update([
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
+                    'is_valid' => null,
                     'jenis_dokumen' => $jenisDokumen,
                     'submitted_by' => Auth::user()->id,
                 ]);

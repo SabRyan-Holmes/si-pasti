@@ -190,9 +190,9 @@ export default function DaftarBerkas({
 
                             <div className="w-[21rem]">
                                 <InputLabel
-                                    value="Nama Kegiatan"
+                                    value="Nama Kegiatan/Ketua/Tim"
                                     Htmlfor="search"
-                                    className="max-w-sm ml-1 text-lg"
+                                    className="max-w-sm ml-1 text-lg font-bold"
                                 />
 
                                 <label
@@ -214,7 +214,7 @@ export default function DaftarBerkas({
                                         }
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
-                                        placeholder="Cari nama ketua tim/nama kegiatan.."
+                                        placeholder="Cari nama kegiatan/ketua/tim.."
                                     />
                                     <button
                                         type="submit"
@@ -281,7 +281,7 @@ export default function DaftarBerkas({
                                                     "selesai" ? (
                                                         <span>
                                                             {moment(
-                                                                data.updated_at
+                                                                data.end_date
                                                             ).format("LL")}
                                                         </span>
                                                     ) : (
@@ -387,21 +387,21 @@ export default function DaftarBerkas({
                                                         auth.user.divisi ===
                                                             "PBJ" &&
                                                         data.status ===
-                                                            "selesai" && ( ''
-                                                            // <Link
-                                                            //     as="a"
-                                                            //     href={route(
-                                                            //         "pbj.berkas-done",
-                                                            //         data.nama_kegiatan
-                                                            //     )}
-                                                            //     className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
-                                                            // >
-                                                            //     <span>
-                                                            //         Unggah
-                                                            //     </span>
-                                                            //     <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
-                                                            // </Link>
-                                                        )
+                                                            "selesai" &&
+                                                        ""
+                                                        // <Link
+                                                        //     as="a"
+                                                        //     href={route(
+                                                        //         "pbj.berkas-done",
+                                                        //         data.nama_kegiatan
+                                                        //     )}
+                                                        //     className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
+                                                        // >
+                                                        //     <span>
+                                                        //         Unggah
+                                                        //     </span>
+                                                        //     <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
+                                                        // </Link>
                                                     )}
 
                                                     {/* Divisi PPK */}

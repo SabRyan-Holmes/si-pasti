@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PengajuanBAStoreRequest;
+use App\Http\Requests\PengajuanKontrakStoreRequest;
+use App\Http\Requests\PengajuanKuitansiStoreRequest;
+use App\Http\Requests\PengajuanPBJStoreRequest;
 use Inertia\Inertia;
 use App\Models\Pengajuan;
 use App\Models\Document;
@@ -11,6 +15,7 @@ use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
 use App\Http\Requests\PPK\UnggahBerkasUlangRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\CheckPayments;
+use Illuminate\Support\Facades\Log;
 
 class PPKController extends Controller
 {
@@ -77,33 +82,67 @@ class PPKController extends Controller
         ]);
     }
 
-    public function ajukan_berkas(UnggahBerkasStoreRequest $request)
+    public function ajukan_berkas_pbj(PengajuanPBJStoreRequest $request)
     {
-        // dd($request);
         $request->validated();
-        //Pengajuan Ketua Tim /Pengadaan Barang
-        $this->storeDocument($request, 'kak', 'KAK', 'Kerangka Ajuan Kerja', 'Pengajuan Permintaan Pengadaan');
-        $this->storeDocument($request, 'form_permintaan', 'FP', 'Form Permintaan', 'Pengajuan Permintaan Pengadaan');
-        $this->storeDocument($request, 'surat_permintaan', 'SP', 'Surat Permintaan', 'Pengajuan Permintaan Pengadaan');
-
-        // Pengajuan PBJ
         $this->storeDocument($request, 'rancangan_kontrak', 'RC', 'Rancangan Kontrak', 'Pengajuan PBJ');
         $this->storeDocument($request, 'spekteknis', 'SPEKTEKNIS', 'Spekteknis', 'Pengajuan PBJ');
         $this->storeDocument($request, 'rab', 'RAB', 'RAB/HPS', 'Pengajuan PBJ');
         $this->storeDocument($request, 'sppp', 'SPPP', 'Surat Penunjukan Penjabat Pengadaan(SPPP)', 'Pengajuan PBJ');
-
+        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
+    }
+    public function ajukan_berkas_kontrak(PengajuanKontrakStoreRequest $request)
+    {
+        $request->validated();
         //Pengajuan Kontrak
         $this->storeDocument($request, 'sppbj', 'SPPBJ', 'Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)', 'Pengajuan Kontrak');
         $this->storeDocument($request, 'surat_kontrak', 'SK', 'Surat Kontrak/Surat Pesanan', 'Pengajuan Kontrak');
+        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
+    }
 
-        //Pengajuan Berita Acara
+    public function ajukan_berkas_ba(PengajuanBAStoreRequest $request)
+    {
+        $request->validated();
         $this->storeDocument($request, 'bast', 'BAST', 'Berita Acara Serah Terima(BAST)', 'Pengajuan Berita Acara');
         $this->storeDocument($request, 'bap', 'BAP', 'Berita Acara Pembayaran(BAP)', 'Pengajuan Berita Acara');
+        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
+    }
 
-        //Pengajuan kuintansi
+    public function ajukan_berkas_kuitansi(PengajuanKuitansiStoreRequest $request)
+    {
+        $request->validated();
         $this->storeDocument($request, 'kuitansi', 'KUITANSI', 'Kuitansi', 'Pengajuan Kuitansi');
         $this->storeDocument($request, 'surat_pesanan', 'SP', 'Surat Pesanan', 'Pengajuan Kuitansi');
+        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
+    }
 
+    public function ajukan_berkas(Request $request)
+    {
+        Log::info('Request received', $request->all());
+        dd($request);
+        if ($request->kategori === "Pengajuan PBJ") {
+            $pbjRequest->validated();
+            $this->storeDocument($request, 'rancangan_kontrak', 'RC', 'Rancangan Kontrak', 'Pengajuan PBJ');
+            $this->storeDocument($request, 'spekteknis', 'SPEKTEKNIS', 'Spekteknis', 'Pengajuan PBJ');
+            $this->storeDocument($request, 'rab', 'RAB', 'RAB/HPS', 'Pengajuan PBJ');
+            $this->storeDocument($request, 'sppp', 'SPPP', 'Surat Penunjukan Penjabat Pengadaan(SPPP)', 'Pengajuan PBJ');
+        } else if ($request->kategori === "Pengajuan Kontrak") {
+            dd($kontrakRequest);
+            $kontrakRequest->validated();
+            //Pengajuan Kontrak
+            $this->storeDocument($request, 'sppbj', 'SPPBJ', 'Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)', 'Pengajuan Kontrak');
+            $this->storeDocument($request, 'surat_kontrak', 'SK', 'Surat Kontrak/Surat Pesanan', 'Pengajuan Kontrak');
+        } else if ($request->kategori == "Pengajuan Berita Acara") {
+            //Pengajuan Berita Acara
+            $baRequest->validated();
+            $this->storeDocument($request, 'bast', 'BAST', 'Berita Acara Serah Terima(BAST)', 'Pengajuan Berita Acara');
+            $this->storeDocument($request, 'bap', 'BAP', 'Berita Acara Pembayaran(BAP)', 'Pengajuan Berita Acara');
+        } else if ($request->kategori == "Pengajuan Kuitansi") {
+            $kuitansiRequest->validated();
+            //Pengajuan kuintansi
+            $this->storeDocument($request, 'kuitansi', 'KUITANSI', 'Kuitansi', 'Pengajuan Kuitansi');
+            $this->storeDocument($request, 'surat_pesanan', 'SP', 'Surat Pesanan', 'Pengajuan Kuitansi');
+        }
 
         // $ids = array_unique($request->edited_id);
         // // Update beberapa row sekaligus
@@ -143,6 +182,7 @@ class PPKController extends Controller
         $this->storeDocument($request, 'kuitansi', 'KUITANSI', 'Kuitansi', 'Pengajuan Kuitansi');
         $this->storeDocument($request, 'surat_pesanan', 'SP', 'Surat Pesanan', 'Pengajuan Kuitansi');
 
+        // Bikin jadi diproses lagi dr tidak valid
 
         // return redirect()->back()->with('message', 'Pengajuan berhasil diajukan');
         return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
@@ -172,10 +212,11 @@ class PPKController extends Controller
                 // Menghapus file sebelumnya
                 Storage::delete('/storage/' . $existingDocument->path);
 
-                // Mengupdate dokumen yang sudah ada
+                // Mengupdate dokumen yang sudah ada dan membuat ny is_valid menjadi null
                 $existingDocument->update([
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
+                    'is_valid' => null,
                     'jenis_dokumen' => $jenisDokumen,
                     'submitted_by' => Auth::user()->id,
                 ]);
@@ -194,10 +235,11 @@ class PPKController extends Controller
 
             if ($kategori == 'Pengajuan Berita Acara' || $kategori == 'Pengajuan Kuitansi') {
                 // Check dan update stage ke pembayaran nantinya jika syarat terpenuhi
-                $this->checkPaymentStatus($request->pengajuan_id, true, null);
+                Pengajuan::where('id', $request->pengajuan_id)->update([
+                    'stage' => "pembayaran"
+                ]);
             }
         }
-
     }
 
 
@@ -259,8 +301,5 @@ class PPKController extends Controller
             'stage' => 'diproses ppk'
         ]);
         redirect()->back()->with('message', 'Berhasil Diperbarui');
-
     }
-
-
 }

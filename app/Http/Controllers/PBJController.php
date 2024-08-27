@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PengajuanPPKStoreRequest;
+use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
 use App\Http\Requests\PPK\UnggahBerkasUlangRequest;
 use Inertia\Inertia;
 use App\Models\Pengajuan;
@@ -53,7 +54,7 @@ class PBJController extends Controller
         $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
 
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
-        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Pembayaran')->get();
+        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
 
         // Menggabungkan semua koleksi ke dalam satu array
         $all_documents = $berkas_pbj
@@ -105,17 +106,9 @@ class PBJController extends Controller
 
     public function ajukan_berkas(PengajuanPPKStoreRequest $request)
     {
-
-
         $request->validated();
         $this->storeDocument($request, 'ban', 'BAN', 'Berita Acara Negoisasi', 'Pengajuan Berkas ke divisi PPK');
         $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan', 'Pengajuan Berkas ke divisi PPK');
-        // Update Stage Ketika diunggah berkas jadi pesanan selesai?
-        // TODO?
-        Pengajuan::where('id', $request->pengajuan_id)->update([
-            'stage' => 'pesanan selesai'
-        ]);
-
         return redirect()->back()->with('message', 'Berkas Berhasil Diajukan');
     }
 
@@ -183,6 +176,7 @@ class PBJController extends Controller
                 $existingDocument->update([
                     'tipe_file' => $request->file($fileKey)->getClientOriginalExtension(),
                     'path' => $filePath,
+                    'is_valid' => null,
                     'jenis_dokumen' => $jenisDokumen,
                     'submitted_by' => Auth::user()->id,
                 ]);
@@ -246,7 +240,6 @@ class PBJController extends Controller
         return Inertia::render('PBJ/ShowPengajuan', [
             'title' => 'Detail Riwayat Pengajuan',
             'pengajuan' => $pengajuan,
-            'ketuaTim' => $pengajuan->created_by,
             'berkasKT' => $berkas_kt,
             'berkasPPK' => $berkas_ppk,
             'berkasPBJ' => $berkas_pbj,
@@ -269,6 +262,16 @@ class PBJController extends Controller
                 'stage' => 'dipesan PBJ'
             ]);
         }
+
+        // FIXME: ini jadi selesai ny kalo kategori pengajuan kuitansi, ato khusus berkas kuitansi?
+        if ($berkas->kategori == "Pengajuan Kuitansi") {
+            Pengajuan::where('id', $request->pengajuan_id)->update([
+                'stage' => 'selesai',
+                'status' => 'selesai',
+                'end_data' => now()
+            ]);
+        }
+
         redirect()->back();
     }
 

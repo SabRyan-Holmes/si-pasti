@@ -52,7 +52,10 @@ Route::middleware(['auth', 'ppk'])->prefix('ppk')->name('ppk.')->group(function 
 
     // Unggah Berkas
     Route::get('/unggah-berkas/{pengajuan:nama_kegiatan}', [PPKController::class, 'unggah_berkas'])->name('unggah-berkas');
-    Route::post('/unggah-berkas', [PPKController::class, 'ajukan_berkas'])->name('ajukan-berkas');
+    Route::post('/ajukan-berkas-pbj', [PPKController::class, 'ajukan_berkas_pbj'])->name('ajukan-berkas-pbj');
+    Route::post('/ajukan-berkas-kontrak-', [PPKController::class, 'ajukan_berkas_kontrak'])->name('ajukan-berkas-kontrak');
+    Route::post('/ajukan-berkas-ba-', [PPKController::class, 'ajukan_berkas_ba'])->name('ajukan-berkas-ba');
+    Route::post('/ajukan-berkas-kuitansi-', [PPKController::class, 'ajukan_berkas_kuitansi'])->name('ajukan-berkas-kuitansi');
 
     // Riwayat Pengajuan
     // Route::get('/riwayat-pengajuan/pengajuan', [PPKController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');

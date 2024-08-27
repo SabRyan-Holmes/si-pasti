@@ -205,7 +205,7 @@ export default function RiwayatPengajuan({
 
                             <div className="w-[21rem]">
                                 <InputLabel
-                                    value="Nama Kegiatan"
+                                    value="Nama Kegiatan/Ketua/Tim"
                                     Htmlfor="search"
                                     className="max-w-sm ml-1 text-lg"
                                 />
@@ -229,7 +229,7 @@ export default function RiwayatPengajuan({
                                         }
                                         name="search"
                                         className="w-full p-4 py-[13px] pl-10 text-sm placeholder:text-accent text-gray-900 border border-gradient rounded-md placeholder:text-xs"
-                                        placeholder="Cari nama ketua tim/nama kegiatan.."
+                                        placeholder="Cari nama kegiatan/ketua/tim.."
                                     />
                                     <button
                                         type="submit"
@@ -300,7 +300,7 @@ export default function RiwayatPengajuan({
                                                     "selesai" ? (
                                                         <span>
                                                             {moment(
-                                                                data.updated_at
+                                                                data.end_date
                                                             ).format("LL")}
                                                         </span>
                                                     ) : (
