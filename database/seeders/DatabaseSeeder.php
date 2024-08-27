@@ -21,18 +21,18 @@ class DatabaseSeeder extends Seeder
 
 
         // Comment This Later
-        Pengajuan::create([
-            'nama_tim' => 'Tim Humas dan Protokoler',
-            'nama_kegiatan' => 'Tes kegiatan fuad',
-            'created_by' => 14, // Pastikan ID ini sesuai dengan ID yang ada di tabel users
-            'status' => 'diproses',
-            'stage' => 'pembayaran',
-            'start_date' => now(),
-            'end_date' => '2024-08-30',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Pengajuan::create([
+        //     'nama_tim' => 'Tim Humas dan Protokoler',
+        //     'nama_kegiatan' => 'Tes kegiatan fuad',
+        //     'created_by' => 14, // Pastikan ID ini sesuai dengan ID yang ada di tabel users
+        //     'status' => 'diproses',
+        //     'stage' => 'pembayaran',
+        //     'start_date' => now(),
+        //     'end_date' => '2024-08-30',
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
 
-        $this->call(DocumentSeeder::class);
+        // $this->call(DocumentSeeder::class);
     }
 }
