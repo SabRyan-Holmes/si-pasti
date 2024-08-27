@@ -39,7 +39,6 @@ export default function UnggahBerkas({
         spm: "Surat Perintah Pembayaran(SPM)",
     };
 
-    // TODO: Lanjutin Nanti
     function submit(e) {
         e.preventDefault();
         post(route("keuangan.ajukan-berkas"), {

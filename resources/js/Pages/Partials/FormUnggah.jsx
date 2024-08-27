@@ -43,7 +43,7 @@ export default function FormUnggah({
     });
 
     function checkDone(berkas, _berkas) {
-        // Fungsi untuk mengecek apakah ada obj.nama yang berisi
+        // Fungsi untuk mengecek apakah semua sudah berisi
         if (berkas.length == _berkas.length) {
             return true;
         } else return false;
