@@ -165,7 +165,8 @@ export default function ShowBerkas({
                     </div>
                 </div>
 
-                {pengajuan.stage === "pesanan selesai" ? (
+
+                {pengajuan.stage === "x" ? (
                     <table className="table my-20 mt-3 border rounded-md border-primary/25 table-bordered">
                         {/* head */}
                         <thead className="bg-secondary">
@@ -292,18 +293,18 @@ export default function ShowBerkas({
                                 pengajuan={pengajuan}
                             />
                         </div>
-                        <div className="pb-16 mt-10 overflow-x-auto">
+                        {/* Tabel Berkas Pengajuan PBJ */}
+                        {/* <div className="pb-16 mt-10 overflow-x-auto">
                             <h2 className="text-base font-semibold">
                                 Berkas Pengajuan PBJ
                             </h2>
-                            {/* Tabel Berkas Pengajuan PBJ */}
 
                             <TabelBerkas
                                 daftarBerkas={_berkasPBJ}
                                 validasiLink={route("ppk.validasi")}
                                 pengajuan={pengajuan}
                             />
-                        </div>
+                        </div> */}
                     </>
                 )}
             </section>

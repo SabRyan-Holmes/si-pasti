@@ -23,7 +23,7 @@ export default function Sidebar({ divisi, active }) {
                     <a href="/">
                         <ApplicationLogo className="mx-auto text-gray-500 fill-current w-7 h-7 aspect-square " />
                     </a>
-                    <strong className="text-xs italic font-bold text-secondary/60">
+                    <strong className="text-xs italic font-bold text-slate-400">
                         BPS Provinsi Jambi
                     </strong>
                 </div>

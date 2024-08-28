@@ -11,12 +11,14 @@ import InputError from "@/Components/InputError";
 import { FaRegFolder } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { FormUnggah } from "../Partials";
+import { PiSealWarningDuotone } from "react-icons/pi";
 
 export default function UnggahBerkas({
     title,
     auth,
     pengajuan,
     berkasPembayaran,
+    isDoneOrder,
     flash,
 }) {
     const props = usePage().props;
@@ -123,6 +125,7 @@ export default function UnggahBerkas({
                     </div>
 
                     <div class="mt-10 capitalize max-w-screen-phone text-nowrap mb-8">
+                        {/* TODO: Kepikiran tibo2 pengen nambahiin keterangan lebih lengkap kayak nampilin tanggal diajukan/dimulai, stage, status, tanggal selesai, kayakny bagus, coba bikin design ny  */}
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>
                             <span>: {pengajuan.nama_kegiatan}</span>
@@ -140,11 +143,23 @@ export default function UnggahBerkas({
                     </div>
 
                     <div className="pb-5 max-w-screen-tablet">
-                        {/* Pengajuan PBJ */}
+                        {/* Berkas Pembayaran */}
+                        {!isDoneOrder && (
+                            <div
+                                role="alert"
+                                className="my-4 alert bg-secondary/25"
+                            >
+                                <PiSealWarningDuotone className="w-6 h-6 fill-warning" />
+                                <span className="text-sm">
+                                    Pesanan harus selesai terlebih dahulu!
+                                </span>
+                            </div>
+                        )}
                         <FormUnggah
                             setData={setData}
                             requiredBerkas={requiredPembayaran}
                             berkas={berkasPembayaran}
+                            checkedBefore={isDoneOrder}
                             processing={processing}
                             errors={errors}
                             submit={submit}

@@ -193,12 +193,11 @@ export default function ShowBerkas({
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
 
-    // TODO: Hapus lagi nanti, cuman untuk tes
-    // pengajuan.stage = "pesanan selesai";
-
-
     // FIXME: Ini kalo ditampilin semua tu kalo pengajuan stage ny pas pesanan selesai be atau juga seteahjh pesanan selesai, kayak pembayaran dan selesai juga
     //  Terus kalo misalkan udah ditampilin semua, itu kan tombol validasiny jadi hilang, kek mano pbj menvalidasiny kalo gitu?
+
+    // TODO: Hapus lagi nanti, cuman untuk tes
+    pengajuan.stage = "x";
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -290,7 +289,7 @@ export default function ShowBerkas({
                     </div>
                 </div>
 
-                {pengajuan.stage === "pesanan selesai" ? (
+                {pengajuan.stage === "x" ? (
                     <table className="table my-20 mt-3 border rounded-md border-primary/25 table-bordered">
                         {/* head */}
                         <thead className="bg-secondary">

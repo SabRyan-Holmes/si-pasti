@@ -253,9 +253,10 @@ export default function DaftarBerkas({
                                             ketua_tim.name.split(" / ")[1];
 
                                         return (
-                                            <tr
+                                            <Link as="tr"
+                                            href={route('show-all-berkas', data.nama_kegiatan)}
                                                 key={i}
-                                                className="group/item hover:bg-secondary/50 "
+                                                className="cursor-pointer group/item hover:bg-secondary/50 "
                                             >
                                                 <th>{i + 1}</th>
                                                 <td className="p-1">
@@ -471,7 +472,7 @@ export default function DaftarBerkas({
                                                         </>
                                                     )}
                                                 </td>
-                                            </tr>
+                                            </Link>
                                         );
                                     })}
                                 </tbody>

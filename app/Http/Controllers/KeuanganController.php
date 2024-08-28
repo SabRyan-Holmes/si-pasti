@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\berkasPembayaranStoreRequest;
 use App\Http\Requests\PengajuanStoreRequest;
 use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
 use Inertia\Inertia;
@@ -63,25 +64,22 @@ class KeuanganController extends Controller
     {
 
         $berkasPembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
-
-        // dd($pengajuan);
+        // Menggunakan array untuk pengecekan kondisi stage
+        $stagesDoneOrder = ['pesanan selesai', 'pembayaran', 'selesai'];
+        $isDoneOrder = in_array($pengajuan->stage, $stagesDoneOrder);
         return Inertia::render('Keuangan/UnggahBerkas', [
             'title' => 'Pengajuan berkas ke divisi PBJ',
             'pengajuan' => $pengajuan,
-            'berkasPembayaran' => $berkasPembayaran
+            'berkasPembayaran' => $berkasPembayaran,
+            'isDoneOrder' => $isDoneOrder
         ]);
     }
 
-    public function ajukan_berkas(Request $request)
+    public function ajukan_berkas(berkasPembayaranStoreRequest $request)
     {
-        // dd($request);
-        $rule = [
-            'pengajuan_id' => ['required', 'integer'],
-            'nama_kegiatan' => ['required', 'string'],
-            'spm' => ['required', 'file', 'mimes:pdf', 'max:15192']
-        ];
 
-        $request->validate($rule);
+
+        $request->validated();
 
         $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
         // Update Stage jadi pembayaran jika sudah mengirim BA, kuitansi oleh PPK, & spm oleh keuangan
@@ -124,12 +122,16 @@ class KeuanganController extends Controller
     public function show_pengajuan(Pengajuan $pengajuan)
     {
         $berkas_pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
-
+        // Menggunakan array untuk pengecekan kondisi stage
+        $stagesDoneOrder = ['pesanan selesai', 'pembayaran', 'selesai'];
+        // dd($pengajuan->stage);
+        $isDoneOrder = in_array($pengajuan->stage, $stagesDoneOrder);
         // dd($berkas_pembayaran);
         return Inertia::render('Keuangan/ShowPengajuan', [
             'title' => 'Detail Riwayat Pengajuan',
             'pengajuan' => $pengajuan,
             'berkasPembayaran' => $berkas_pembayaran,
+            'isDoneOrder' => $isDoneOrder
         ]);
     }
 
@@ -156,28 +158,6 @@ class KeuanganController extends Controller
 
         return redirect()->back()->with('message', 'Pengajuan berhasil diajukan!');
     }
-
-    public function ajukan_berkas_ulang(Request $request)
-    {
-        // dd($request);
-        $rule = [
-            'pengajuan_id' => ['required', 'integer'],
-            'nama_kegiatan' => ['required', 'string'],
-            'spm' => ['nullable', 'file', 'mimes:pdf', 'max:15192']
-        ];
-
-        $request->validate($rule);
-        //Pengajuan Ketua Tim /Pengadaan
-        $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
-        // Update Stage jadi pembayaran jika sudah mengirim BA, kuitansi oleh PPK, & spm oleh keuangan
-        Pengajuan::where('id', $request->pengajuan_id)->update([
-            'stage' => "pembayaran"
-        ]);
-        return redirect()->back()->with('message', 'Berkas berhasil diunggah!');
-    }
-
-
-
 
 
 

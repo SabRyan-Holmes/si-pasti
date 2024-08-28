@@ -62,6 +62,35 @@ class AuthController extends Controller
         ]);
     }
 
+
+    public function show_all_berkas(Pengajuan $pengajuan)
+    {
+        $berkas_kt = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
+        $berkas_ppk = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berkas ke divisi PPK')->get();
+
+        $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)
+            ->where('kategori', 'Pengajuan PBJ')->get();
+
+        $pengajuan_kontrak = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kontrak')->get();
+        $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
+
+        $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
+        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
+
+        return Inertia::render('ShowAllBerkas', [
+            'title' => 'Detail Berkas',
+            'pengajuan' => $pengajuan,
+            'ketuaTim' => $pengajuan->created_by,
+            'berkasKT' => $berkas_kt,
+            'berkasPPK' => $berkas_ppk,
+            'berkasPBJ' => $berkas_pbj,
+            'berkasPK' => $pengajuan_kontrak,
+            'berkasBA' => $berita_acara,
+            'berkasPembayaran' => $pembayaran,
+            'berkasKuitansi' => $kuitansi,
+        ]);
+    }
+
     public function riwayat_pengajuan()
     {
 

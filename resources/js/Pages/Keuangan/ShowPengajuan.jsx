@@ -7,17 +7,18 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { CgDetailsMore } from "react-icons/cg";
 import { TabelPengajuan } from "../Partials";
-
+import { PiSealWarningDuotone } from "react-icons/pi";
 
 export default function ShowPengajuan({
     title,
     auth,
     pengajuan,
-    flash,
     berkasPembayaran,
+    isDoneOrder,
+    flash,
 }) {
     const props = usePage().props;
-    const [isEdit, setisEdit] = useState(false)
+    const [isEdit, setisEdit] = useState(false);
 
     const requiredPembayaran = {
         spm: "Surat Perintah Pembayaran(SPM)",
@@ -49,7 +50,7 @@ export default function ShowPengajuan({
 
     function submit(e) {
         e.preventDefault(); // Mencegah perilaku default dari form submit
-        post(route("keuangan.ajukan-berkas-ulang"), {
+        post(route("keuangan.ajukan-berkas"), {
             data: data,
             _token: props.csrf_token,
             _method: "POST",
@@ -66,19 +67,21 @@ export default function ShowPengajuan({
             },
             onFinish: () => {
                 console.log("Submit selesai");
-                setisEdit(false)
+                setisEdit(false);
             },
         });
     }
-
-
-
 
     // Logika untuk mengecek apakah  smaa2 berisi
     function cekKeyNamaBerisi(berkasDB, berkasRow) {
         // Fungsi untuk mengecek apakah ada obj.nama yang berisi
         const adaNamaBerisi = (arr) => {
-            return arr.some(obj => obj.nama && obj.nama.trim() !== "" && obj.nama.trim() !== null);
+            return arr.some(
+                (obj) =>
+                    obj.nama &&
+                    obj.nama.trim() !== "" &&
+                    obj.nama.trim() !== null
+            );
         };
 
         // Cek jika salah satu array berkasDB atau berkasRow memiliki obj.nama yang berisi
@@ -87,9 +90,14 @@ export default function ShowPengajuan({
 
         // Jika setidaknya salah satu dari berkasDB atau berkasRow berisi nama, return false
         // Jika tidak ada sama sekali yang berisi, return true
-        return (isBerkasDBNamaValid || isBerkasRowNamaValid);
+        return isBerkasDBNamaValid || isBerkasRowNamaValid;
     }
-    const isDone = cekKeyNamaBerisi(berkasPembayaran, _berkasPembayaran);
+    let disabled = cekKeyNamaBerisi(berkasPembayaran, _berkasPembayaran);
+    if(!isDoneOrder) {
+        disabled = true
+    }
+
+
 
 
     const ketuaTim = pengajuan.created_by;
@@ -117,8 +125,21 @@ export default function ShowPengajuan({
         }
     }, [flash.message]);
 
+    useEffect(() => {
+        if (errors && Object.keys(errors).length > 0) {
+            const firstErrorMessage = Object.values(errors)[0]; // Mengambil nilai objek pertama
+
+            Toast.fire({
+                icon: "warning",
+                title: firstErrorMessage, // Menampilkan pesan error pertama
+            });
+        }
+    }, [errors]);
+
     console.log("data : 👇");
     console.log(data);
+    console.log('disabled');
+    console.log(disabled);
 
     return (
         <AuthenticatedLayout
@@ -195,12 +216,24 @@ export default function ShowPengajuan({
                             Berkas Surat Perintah Pembayaran
                         </h2>
                         {/* Tabel Berkas Pengajuan Pembayaran Start */}
+                        {!isDoneOrder && (
+                            <div
+                                role="alert"
+                                className="my-4 alert bg-secondary/25"
+                            >
+                                <PiSealWarningDuotone className="w-6 h-6 fill-warning" />
+                                <span className="text-sm">
+                                    Pesanan harus selesai terlebih dahulu!
+                                </span>
+                            </div>
+                        )}
+
                         <TabelPengajuan
                             data={data}
                             setData={setData}
                             daftarBerkas={_berkasPembayaran}
                             requiredBerkas={requiredPembayaran}
-                            isDisabled={isDone}
+                            isDisabled={disabled}
                             submit={submit}
                         />
                     </div>

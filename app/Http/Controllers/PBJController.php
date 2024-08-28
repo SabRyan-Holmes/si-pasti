@@ -55,6 +55,10 @@ class PBJController extends Controller
 
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
         $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
+        $stagesDoneOrder = ['pesanan selesai', 'pembayaran', 'selesai'];
+        $isDoneOrder = in_array($pengajuan->stage, $stagesDoneOrder);
+
+
 
         // Menggabungkan semua koleksi ke dalam satu array
         $all_documents = $berkas_pbj
@@ -63,16 +67,6 @@ class PBJController extends Controller
             ->merge($kuitansi)
             ->merge($pembayaran);
 
-        // Atau, jika Anda lebih suka menggunakan array_merge()
-        // $all_documents = array_merge(
-        //     $berkas_pbj->toArray(),
-        //     $pengajuan_kontrak->toArray(),
-        //     $berita_acara->toArray(),
-        //     $kuitansi->toArray(),
-        //     $pembayaran->toArray()
-        // );
-
-        // dd($all_documents);
 
         // dd($berkas_pbj);
         return Inertia::render('PBJ/ShowBerkas', [
@@ -85,12 +79,11 @@ class PBJController extends Controller
             'berkasPK' => $pengajuan_kontrak,
             'berkasBA' => $berita_acara,
             'berkasPembayaran' => $pembayaran,
-
             'berkasKuitansi' => $kuitansi,
-            // 'semuaBerkas' => $all_documents
+            'isDoneOrder' => $isDoneOrder
+
         ]);
     }
-
 
 
     public function unggah_berkas(Pengajuan $pengajuan)
@@ -108,7 +101,7 @@ class PBJController extends Controller
     {
         $request->validated();
         $this->storeDocument($request, 'ban', 'BAN', 'Berita Acara Negoisasi', 'Pengajuan Berkas ke divisi PPK');
-        $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan', 'Pengajuan Berkas ke divisi PPK');
+        $this->storeDocument($request, 'bahp', 'BAHP', 'Berita Acara Hasil Pemilihan(BAHP)', 'Pengajuan Berkas ke divisi PPK');
         return redirect()->back()->with('message', 'Berkas Berhasil Diajukan');
     }
 
@@ -264,7 +257,7 @@ class PBJController extends Controller
         }
 
         // FIXME: ini jadi selesai ny kalo kategori pengajuan kuitansi, ato khusus berkas kuitansi?
-        if ($berkas->kategori == "Pengajuan Kuitansi") {
+        if ($berkas->jenis_dokumen == "Pengajuan Kuitansi") {
             Pengajuan::where('id', $request->pengajuan_id)->update([
                 'stage' => 'selesai',
                 'status' => 'selesai',

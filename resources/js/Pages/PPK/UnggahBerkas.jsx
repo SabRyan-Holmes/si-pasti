@@ -8,6 +8,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { InputLabel, SecondaryButton } from "@/Components";
 import { FaCheck } from "react-icons/fa6";
 import { FormUnggah } from "../Partials";
+import { PiSealWarningDuotone } from "react-icons/pi";
 
 export default function UnggahBerkas({
     title,
@@ -18,6 +19,9 @@ export default function UnggahBerkas({
     berkasPK,
     berkasBA,
     berkasKuitansi,
+    isCheckedBerkasPBJ,
+    isCheckedBerkasPK,
+    isCheckedBerkasBA,
 }) {
     const [select, setSelect] = useState("");
     const props = usePage().props;
@@ -128,7 +132,7 @@ export default function UnggahBerkas({
     console.log("isi data");
     console.log(data);
 
-    const [submitLink, setSubmitLink] = useState('')
+    const [submitLink, setSubmitLink] = useState("");
 
     useEffect(() => {
         switch (select) {
@@ -350,38 +354,87 @@ export default function UnggahBerkas({
 
                             {/* Pengajuan Kontrak */}
                             {select == "Pengajuan Kontrak" && (
-                                <FormUnggah
-                                    setData={setData}
-                                    requiredBerkas={requiredBerkasPK}
-                                    berkas={berkasPK}
-                                    processing={processing}
-                                    errors={errors}
-                                    submit={submit}
-                                />
+                                <>
+                                    {!isCheckedBerkasPBJ && (
+                                        <div
+                                            role="alert"
+                                            className="my-4 alert bg-secondary/25"
+                                        >
+                                            <PiSealWarningDuotone className="w-6 h-6 fill-warning" />
+                                            <span className="text-sm">
+                                                Berkas sebelumnya harus
+                                                divalidasi terlebih dahulu oleh
+                                                PBJ!
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    <FormUnggah
+                                        setData={setData}
+                                        requiredBerkas={requiredBerkasPK}
+                                        berkas={berkasPK}
+                                        checkedBefore={isCheckedBerkasPBJ}
+                                        processing={processing}
+                                        errors={errors}
+                                        submit={submit}
+                                    />
+                                </>
                             )}
 
                             {/* Pengajuan Berita Acara */}
                             {select == "Pengajuan Berita Acara" && (
-                                <FormUnggah
-                                    setData={setData}
-                                    requiredBerkas={requiredBerkasBA}
-                                    berkas={berkasBA}
-                                    processing={processing}
-                                    errors={errors}
-                                    submit={submit}
-                                />
+                                <>
+                                    {!isCheckedBerkasPK && (
+                                        <div
+                                            role="alert"
+                                            className="my-4 alert bg-secondary/25"
+                                        >
+                                            <PiSealWarningDuotone className="w-6 h-6 fill-warning" />
+                                            <span className="text-sm">
+                                                Berkas sebelumnya harus
+                                                divalidasi terlebih dahulu oleh
+                                                PBJ!
+                                            </span>
+                                        </div>
+                                    )}
+                                    <FormUnggah
+                                        setData={setData}
+                                        requiredBerkas={requiredBerkasBA}
+                                        berkas={berkasBA}
+                                        checkedBefore={isCheckedBerkasPK}
+                                        processing={processing}
+                                        errors={errors}
+                                        submit={submit}
+                                    />
+                                </>
                             )}
 
                             {/* Pengajuan Kuitansi */}
                             {select == "Pengajuan Kuitansi" && (
-                                <FormUnggah
-                                    setData={setData}
-                                    requiredBerkas={requiredKuitansi}
-                                    berkas={berkasKuitansi}
-                                    processing={processing}
-                                    errors={errors}
-                                    submit={submit}
-                                />
+                                <>
+                                    {!isCheckedBerkasBA && (
+                                        <div
+                                            role="alert"
+                                            className="my-4 alert bg-secondary/25"
+                                        >
+                                            <PiSealWarningDuotone className="w-6 h-6 fill-warning" />
+                                            <span className="text-sm">
+                                                Berkas sebelumnya harus
+                                                divalidasi terlebih dahulu oleh
+                                                PBJ!
+                                            </span>
+                                        </div>
+                                    )}
+                                    <FormUnggah
+                                        setData={setData}
+                                        requiredBerkas={requiredKuitansi}
+                                        berkas={berkasKuitansi}
+                                        checkedBefore={isCheckedBerkasBA}
+                                        processing={processing}
+                                        errors={errors}
+                                        submit={submit}
+                                    />
+                                </>
                             )}
                         </div>
                     </div>

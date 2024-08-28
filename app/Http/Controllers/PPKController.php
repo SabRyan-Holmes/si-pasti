@@ -72,6 +72,19 @@ class PPKController extends Controller
         $berkasBA = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
         $berkasKuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
 
+        // Pengecekan apakah sudah divalidasi PBJ (is_valid yang tidak null || true)
+        $isCheckedBerkasPBJ = $berkasPBJ->contains(function ($berkas) {
+            // return $berkas->is_valid !== null && $berkas->is_valid == true;
+            return $berkas->is_valid == true;
+        });
+
+        $isCheckedBerkasPK = $berkasPK->contains(function ($berkas) {
+            return $berkas->is_valid == true;
+        });
+
+        $isCheckedBerkasBA = $berkasBA->contains(function ($berkas) {
+            return $berkas->is_valid == true;
+        });
         return Inertia::render('PPK/UnggahBerkas', [
             'title' => 'Pengajuan berkas ke divisi PBJ',
             'pengajuan' => $pengajuan,
@@ -79,6 +92,9 @@ class PPKController extends Controller
             'berkasPK' => $berkasPK,
             'berkasBA' => $berkasBA,
             'berkasKuitansi' => $berkasKuitansi,
+            'isCheckedBerkasPBJ' => $isCheckedBerkasPBJ,
+            'isCheckedBerkasPK' => $isCheckedBerkasPK,
+            'isCheckedBerkasBA' => $isCheckedBerkasBA,
         ]);
     }
 

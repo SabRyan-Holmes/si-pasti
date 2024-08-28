@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-// s
+//
 Route::get('/', function () {
     return Inertia::render('Auth/Login');
 })->middleware('guest');
@@ -23,6 +23,8 @@ Route::middleware(['auth'])->group(function () {
     // Rute untuk Daftar Berkas hanya bisa diakses oleh pbj, ppk, dan keuangan
     Route::middleware(['role:PBJ,PPK,Keuangan'])->group(function () {
         Route::get('/daftar-berkas', [AuthController::class, 'daftar_berkas'])->name('daftar-berkas');
+        Route::get('daftar-berkas/show-all-berkas/{pengajuan:nama_kegiatan}', [AuthController::class, 'show_all_berkas'])->name('show-all-berkas');
+
     });
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan', [AuthController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');
@@ -72,7 +74,6 @@ Route::middleware(['auth', 'pbj'])->prefix('pbj')->name('pbj.')->group(function 
     // Show Berkas
     // Route::get('/daftar-berkas/pengajuan', [PBJController::class, 'daftar_berkas'])->name('daftar-berkas');
     Route::get('/show-berkas/{pengajuan:nama_kegiatan}', [PBJController::class, 'show_berkas'])->name('show-berkas');
-    // Route::get('/show-berkas/{pengajuan:nama_kegiatan}', [PBJController::class, 'show_berkas'])->name('show-berkas');
 
     // Unggah Berkas
     Route::get('/unggah-berkas/{pengajuan:nama_kegiatan}', [PBJController::class, 'unggah_berkas'])->name('unggah-berkas');
@@ -97,7 +98,6 @@ Route::middleware(['auth', 'keuangan'])->prefix('keuangan')->name('keuangan.')->
     // Unggah Berkas
     Route::get('/unggah-berkas/{pengajuan:nama_kegiatan}', [KeuanganController::class, 'unggah_berkas'])->name('unggah-berkas');
     Route::post('/unggah-berkas', [KeuanganController::class, 'ajukan_berkas'])->name('ajukan-berkas');
-    Route::post('/unggah-berkas-ulang', [KeuanganController::class, 'ajukan_berkas_ulang'])->name('ajukan-berkas-ulang');
 
     // Riwayat Pengajuan
     // Route::get('/riwayat-pengajuan/pengajuan', [KeuanganController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');

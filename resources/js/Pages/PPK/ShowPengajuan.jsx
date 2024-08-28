@@ -179,7 +179,8 @@ export default function ShowPengajuan({
     function cekKeyNamaBerisi(berkasDB, berkasRow) {
         // Fungsi untuk mengecek apakah ada obj.nama yang berisi
         const adaNamaBerisi = (arr) => {
-            return arr.some(obj => obj.nama && obj.nama.trim() !== "" && obj.nama.trim() !== null);
+            // Logic mengecek apakah sudah diupload setidakny satu, dan apakah sudah ada divalidasi setidaknya satu
+            return arr.some(obj => obj.nama && obj.nama.trim() !== "" && obj.nama.trim() !== null &&  obj.is_valid !== null);
         };
 
         // Cek jika salah satu array berkasDB atau berkasRow memiliki obj.nama yang berisi
@@ -278,6 +279,7 @@ export default function ShowPengajuan({
                             submit={submit}
                         />
 
+                        {/* Nantii bikin  */}
                         <h2 className="mt-2 text-base font-semibold ">
                             Berkas Pemesanan/Pengajuan Kontrak
                         </h2>
@@ -326,28 +328,3 @@ export default function ShowPengajuan({
 
 
 
-
-   // Logika untuk mengecek apakah semua smaa2 dan terupload semua berisi
-    // NOTE ! Mungkin nanti beguno
-
-    // function cekKeyNamaBerisi(berkasDB, berkasRow) {
-    //     // Cek panjang kedua array sama
-    //     if (berkasDB.length !== berkasRow.length) {
-    //         return true;
-    //     }
-
-    //     // Fungsi untuk mengecek apakah nilai dari key 'nama' tidak kosong, null, atau undefined
-    //     const isNamaValid = (obj) =>
-    //         obj.nama !== undefined &&
-    //         obj.nama !== null &&
-    //         obj.nama.trim() !== "";
-
-    //     // Cek semua elemen di 'berkasDB'
-    //     const isBerkasDBNamaValid = berkasDB.every(isNamaValid);
-
-    //     // Cek semua elemen di 'berkasRow'
-    //     const isBerkasNamaValid = berkasRow.every(isNamaValid);
-
-    //     // Return true jika semua key 'nama' berisi nilai valid
-    //     return isBerkasNamaValid && isBerkasDBNamaValid;
-    // }

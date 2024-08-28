@@ -10,6 +10,7 @@ export default function FormUnggah({
     processing,
     errors,
     submit,
+    checkedBefore=true
 }) {
     const checkBerkas = (kategori, jenis_dokumen) => {
         return kategori.find((doc) => doc.jenis_dokumen === jenis_dokumen);
@@ -49,7 +50,12 @@ export default function FormUnggah({
         } else return false;
     }
 
-    const isDone = checkDone(berkas, _berkas);
+    let isDisabled = checkDone(berkas, _berkas);
+
+    if(!checkedBefore){
+        // Jadi disabled jika berkas sebelumny belum divalidasi
+        isDisabled = true
+    }
 
     return (
         <form onSubmit={submit} method="post" encType="multipart/form-data">
@@ -171,7 +177,7 @@ export default function FormUnggah({
 
             {/* Button */}
             <div className="flex justify-end w-full mt-4">
-                <SuccessButton disabled={processing || isDone} type="submit">
+                <SuccessButton disabled={processing || isDisabled} type="submit">
                     Ajukan
                     <IoIosSend className="w-5 h-5 ml-1" />
                 </SuccessButton>
