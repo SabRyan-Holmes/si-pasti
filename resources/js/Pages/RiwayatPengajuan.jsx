@@ -325,7 +325,7 @@ export default function RiwayatPengajuan({
 
                                                         {data.status ==
                                                             "ditolak" && (
-                                                            <div className="text-center bg-orange-50 label-success ">
+                                                            <div className="text-center bg-orange-50 label-warning ">
                                                                 {data.status}
                                                             </div>
                                                         )}

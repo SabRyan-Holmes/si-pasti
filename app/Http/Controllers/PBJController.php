@@ -240,8 +240,6 @@ class PBJController extends Controller
             ]);
         }
 
-
-
         // Pengajuan Berubah jadi selesai jika kuitansi sudah di validasi
         if ($berkas->jenis_dokumen == "Kuitansi" && $request->is_valid == true) {
             Pengajuan::where('id', $request->pengajuan_id)->update([
