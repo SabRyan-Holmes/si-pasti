@@ -318,6 +318,13 @@ class PPKController extends Controller
         Pengajuan::where('id', $request->pengajuan_id)->update([
             'stage' => 'diproses ppk'
         ]);
+        // Statis jadi ditolak sementara jika ada dokumen yg tidak valid
+        if ($request->is_valid == false) {
+            Pengajuan::where('id', $request->pengajuan_id)->update([
+                'status' => 'ditolak'
+            ]);
+        }
+
         redirect()->back()->with('message', 'Berhasil Diperbarui');
     }
 }

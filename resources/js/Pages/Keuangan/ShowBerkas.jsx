@@ -15,8 +15,6 @@ export default function ShowBerkas({
     berkasKuitansi,
     berkasPembayaran,
 }) {
-
-
     const props = usePage().props;
     // Function to get the key based on the value
     const getKeyByValue = (object, value) => {
@@ -168,7 +166,7 @@ export default function ShowBerkas({
                                     </a>
                                 </li>
                                 <li>
-                                    <a>
+                                    <a className="truncate max-w-screen-tablet">
                                         <FaRegFolderOpen className="w-4 h-4 mr-2" />
                                         {pengajuan.nama_kegiatan}
                                     </a>

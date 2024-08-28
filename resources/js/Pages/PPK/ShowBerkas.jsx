@@ -5,11 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 
-import {
-    FaCheck,
-    FaRegFolder,
-    FaRegFolderOpen,
-} from "react-icons/fa6";
+import { FaCheck, FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
 import { TabelBerkas } from "../Partials";
 import { SuccessButton } from "@/Components";
 
@@ -91,7 +87,6 @@ export default function ShowBerkas({
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
 
-
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -113,7 +108,7 @@ export default function ShowBerkas({
                                     </a>
                                 </li>
                                 <li>
-                                    <a>
+                                    <a className="truncate max-w-screen-tablet">
                                         <FaRegFolderOpen className="w-4 h-4 mr-2" />
                                         {pengajuan.nama_kegiatan}
                                     </a>
@@ -178,16 +173,16 @@ export default function ShowBerkas({
                 </div>
                 {/* Tabel Berkas Pengajuan PPK */}
                 <div className="pb-20 mt-5 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berita Acara PBJ
-                            </h2>
+                    <h2 className="text-base font-semibold">
+                        Berita Acara PBJ
+                    </h2>
 
-                            <TabelBerkas
-                                daftarBerkas={_berkasPPK}
-                                validasiLink={route("ppk.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
+                    <TabelBerkas
+                        daftarBerkas={_berkasPPK}
+                        validasiLink={route("ppk.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
             </section>
 
             {/* end of content */}

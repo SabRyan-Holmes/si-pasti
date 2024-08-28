@@ -216,7 +216,7 @@ export default function ShowBerkas({
                                     </a>
                                 </li>
                                 <li>
-                                    <a>
+                                    <a className="truncate max-w-screen-phone">
                                         <FaRegFolderOpen className="w-4 h-4 mr-2" />
                                         {pengajuan.nama_kegiatan}
                                     </a>
@@ -254,6 +254,7 @@ export default function ShowBerkas({
                                 <span>: {pengajuan.nama_tim}</span>
                             </div>
                         </div>
+
 
                         <SuccessButton
                             className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
@@ -327,16 +328,6 @@ export default function ShowBerkas({
                 </div>
 
                 <div className="pb-20 overflow-x-auto">
-                    <h2 className="text-base font-semibold">Berkas Kuitansi</h2>
-                    {/* Tabel Berkas Kuitansi */}
-                    <TabelBerkas
-                        daftarBerkas={_berkasKuitansi}
-                        validasiLink={route("pbj.validasi")}
-                        pengajuan={pengajuan}
-                    />
-                </div>
-
-                <div className="pb-20 overflow-x-auto">
                     <h2 className="text-base font-semibold">
                         Berkas Pembayaran
                     </h2>
@@ -347,6 +338,17 @@ export default function ShowBerkas({
                         pengajuan={pengajuan}
                     />
                 </div>
+
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">Berkas Kuitansi</h2>
+                    {/* Tabel Berkas Kuitansi */}
+                    <TabelBerkas
+                        daftarBerkas={_berkasKuitansi}
+                        validasiLink={route("pbj.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
+
             </section>
 
             {/* end of content */}

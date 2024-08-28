@@ -217,29 +217,13 @@ class PBJController extends Controller
 
     public function show_pengajuan(Pengajuan $pengajuan)
     {
-        $berkas_kt = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
         $berkas_ppk = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berkas ke divisi PPK')->get();
-        $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
 
-        $pengajuan_kontrak = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kontrak')->get();
-
-        $berita_acara = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berita Acara')->get();
-
-        $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
-        $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
-
-        // dd($berkas_kt);
-        // dd($berkas_pbj);
         return Inertia::render('PBJ/ShowPengajuan', [
             'title' => 'Detail Riwayat Pengajuan',
             'pengajuan' => $pengajuan,
-            'berkasKT' => $berkas_kt,
             'berkasPPK' => $berkas_ppk,
-            'berkasPBJ' => $berkas_pbj,
-            'berkasPK' => $pengajuan_kontrak,
-            'berkasBA' => $berita_acara,
-            'berkasKuitansi' => $kuitansi,
-            'berkasPembayaran' => $pembayaran,
+
         ]);
     }
 
@@ -256,8 +240,15 @@ class PBJController extends Controller
             ]);
         }
 
-        // FIXME: ini jadi selesai ny kalo kategori pengajuan kuitansi, ato khusus berkas kuitansi?
-        if ($berkas->jenis_dokumen == "Pengajuan Kuitansi") {
+        // Status jadi ditolak sementara jika ada dokumen yg tidak valid
+        if ($request->is_valid == false) {
+            Pengajuan::where('id', $request->pengajuan_id)->update([
+                'status' => 'ditolak'
+            ]);
+        }
+
+        // Pengajuan Berubah jadi selesai jika kuitansi sudah di validasi
+        if ($berkas->jenis_dokumen == "Kuitansi" && $request->is_valid == true) {
             Pengajuan::where('id', $request->pengajuan_id)->update([
                 'stage' => 'selesai',
                 'status' => 'selesai',
@@ -273,6 +264,6 @@ class PBJController extends Controller
         Pengajuan::where('id', $request->pengajuan_id)->update([
             'stage' => 'pesanan selesai'
         ]);
-        redirect()->back();
+        return redirect()->back()->with('message', 'Pemesanana berhasil ditandai selesai!');
     }
 }

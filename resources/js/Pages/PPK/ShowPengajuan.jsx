@@ -174,13 +174,17 @@ export default function ShowPengajuan({
         }
     }, [flash.message]);
 
-
-
     function cekKeyNamaBerisi(berkasDB, berkasRow) {
         // Fungsi untuk mengecek apakah ada obj.nama yang berisi
         const adaNamaBerisi = (arr) => {
             // Logic mengecek apakah sudah diupload setidakny satu, dan apakah sudah ada divalidasi setidaknya satu
-            return arr.some(obj => obj.nama && obj.nama.trim() !== "" && obj.nama.trim() !== null &&  obj.is_valid !== null);
+            return arr.some(
+                (obj) =>
+                    obj.nama &&
+                    obj.nama.trim() !== "" &&
+                    obj.nama.trim() !== null &&
+                    obj.is_valid !== null
+            );
         };
 
         // Cek jika salah satu array berkasDB atau berkasRow memiliki obj.nama yang berisi
@@ -225,7 +229,7 @@ export default function ShowPengajuan({
                                 </a>
                             </li>
                             <li>
-                                <a>
+                                <a className="truncate max-w-screen-tablet">
                                     <TiDocumentText className="w-4 h-4 mr-1" />
                                     {pengajuan.nama_kegiatan}
                                 </a>
@@ -323,8 +327,3 @@ export default function ShowPengajuan({
         </AuthenticatedLayout>
     );
 }
-
-
-
-
-

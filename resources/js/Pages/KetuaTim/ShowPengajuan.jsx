@@ -1,23 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
+import { useForm, Head, usePage, router } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
-import { MdEditDocument } from "react-icons/md";
-import { IoIosSend } from "react-icons/io";
-import {
-    FaDownload,
-    FaFileCircleCheck,
-    FaRegFolder,
-    FaRegFolderOpen,
-    FaUpload,
-} from "react-icons/fa6";
 import { IoDocumentTextOutline } from "react-icons/io5";
-
 import { TiDocumentText } from "react-icons/ti";
-import { SuccessButton } from "@/Components";
 import { TabelPengajuan } from "../Partials";
 
 export default function ShowPengajuan({
@@ -86,7 +74,6 @@ export default function ShowPengajuan({
         });
     }
 
-
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -138,12 +125,12 @@ export default function ShowPengajuan({
 
     const isDone = cekKeyNamaBerisi(berkasKT, _berkasKT);
 
-    console.log("isi data");
-    console.log(data);
-    console.log("errors :");
-    console.log(errors);
+    // console.log("isi data");
+    // console.log(data);
+    // console.log("errors :");
+    // console.log(errors);
+    // console.log("is Edit & isDone ", isEdit, isDone);
 
-    console.log("is Edit & isDone ", isEdit, isDone);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -164,7 +151,7 @@ export default function ShowPengajuan({
                                 </a>
                             </li>
                             <li>
-                                <a>
+                                <a className="truncate max-w-screen-tablet">
                                     <TiDocumentText className="w-4 h-4 mr-1" />
                                     {pengajuan.nama_kegiatan}
                                 </a>
@@ -184,6 +171,7 @@ export default function ShowPengajuan({
                 </div>
 
                 <main>
+                    {/* TODO: Bikin Komponen baru untuk detail pengajuan/kegiatan */}
                     <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
                         <div class="grid grid-cols-2 gap-0">
                             <span class="mr-1 font-bold">Nama Kegiatan</span>

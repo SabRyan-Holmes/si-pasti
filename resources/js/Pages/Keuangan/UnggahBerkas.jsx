@@ -102,9 +102,9 @@ export default function UnggahBerkas({
                                 </li>
 
                                 <li>
-                                    <span className="inline-flex items-center gap-2">
+                                    <a className="truncate max-w-screen-tablet">
                                         {pengajuan.nama_kegiatan}
-                                    </span>
+                                    </a>
                                 </li>
 
                                 <li>

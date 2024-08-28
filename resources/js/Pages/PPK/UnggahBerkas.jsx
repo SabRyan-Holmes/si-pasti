@@ -185,7 +185,9 @@ export default function UnggahBerkas({
                             </li>
 
                             <li>
-                                <span>{pengajuan.nama_kegiatan}</span>
+                                <a className="truncate max-w-screen-tablet">
+                                    {pengajuan.nama_kegiatan}
+                                </a>
                             </li>
 
                             <li>

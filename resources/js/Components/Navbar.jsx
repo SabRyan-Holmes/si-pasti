@@ -31,7 +31,7 @@ const Navbar = ({ user, title }) => {
                 <div className="flex-none">
                     <label
                         htmlFor="my-drawer-2"
-                        className="btn btn-square btn-ghost lg:hidden"
+                        className="btn btn-square btn-ghost "
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -49,11 +49,7 @@ const Navbar = ({ user, title }) => {
                     </label>
                 </div>
                 <div className="navbar-start">
-                    <button>
-                        <a className="text-2xl normal-case btn btn-ghost">
-                            {title}
-                        </a>
-                    </button>
+                    <strong className="text-2xl normal-case">{title}</strong>
                 </div>
                 <div className="navbar-end">
                     <div className="dropdown dropdown-end">

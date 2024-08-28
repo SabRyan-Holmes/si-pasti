@@ -93,12 +93,9 @@ export default function ShowPengajuan({
         return isBerkasDBNamaValid || isBerkasRowNamaValid;
     }
     let disabled = cekKeyNamaBerisi(berkasPembayaran, _berkasPembayaran);
-    if(!isDoneOrder) {
-        disabled = true
+    if (!isDoneOrder) {
+        disabled = true;
     }
-
-
-
 
     const ketuaTim = pengajuan.created_by;
     let nama = ketuaTim.name.split(" / ")[0];
@@ -138,7 +135,7 @@ export default function ShowPengajuan({
 
     console.log("data : 👇");
     console.log(data);
-    console.log('disabled');
+    console.log("disabled");
     console.log(disabled);
 
     return (
@@ -160,22 +157,11 @@ export default function ShowPengajuan({
                             </li>
 
                             <li>
-                                <span className="inline-flex items-center gap-2">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        className="w-4 h-4 stroke-current"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                        ></path>
-                                    </svg>
+                                <a className="truncate max-w-screen-tablet">
+                                    <IoDocumentTextOutline className="w-4 h-4 mr-2" />
+
                                     {pengajuan.nama_kegiatan}
-                                </span>
+                                </a>
                             </li>
                             <li>
                                 <span className="inline-flex items-center gap-2">

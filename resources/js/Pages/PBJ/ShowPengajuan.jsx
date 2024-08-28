@@ -14,94 +14,20 @@ export default function ShowPengajuan({
     auth,
     flash,
     pengajuan,
-    berkasPBJ,
-    berkasPK,
-    berkasBA,
-    berkasKuitansi,
-    berkasPembayaran,
+    berkasPPK, // BerkasPPK/Berita Acara PBJ
 }) {
     const props = usePage().props;
-    const requiredBerkasPBJ = {
-        rancangan_kontrak: "Rancangan Kontrak",
-        spekteknis: "Spekteknis",
-        rab: "RAB/HPS",
-        sppp: "Surat Penunjukan Penjabat Pengadaan(SPPP)",
+
+    // BerkasPPK/Berita Acara PBJ
+    const requiredBerkasPPK = {
+        ban: "Berita Acara Negoisasi",
+        bahp: "Berita Acara Hasil Pemilihan(BAHP)",
     };
 
-    // const requiredBerkasPK = ["SPPBJ", "surat kontrak"];
-    const requiredBerkasPK = {
-        sppbj: "Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)",
-        surat_kontrak: "Surat Kontrak/Surat Pesanan",
-    };
-    const requiredBerkasBA = {
-        bast: "Berita Acara Serah Terima(BAST)",
-        bap: "Berita Acara Pembayaran(BAP)",
-    };
-    const requiredKuitansi = {
-        kuitansi: "Kuitansi",
-        surat_pesanan: "Surat Pesanan",
-    };
-
-    const requiredPembayaran = {
-        spm: "Surat Perintah Pembayaran(SPM)",
-    };
-
-    const _berkasPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
-        const value = requiredBerkasPBJ[key];
+    const _berkasPPK = Object.keys(requiredBerkasPPK).map((key) => {
+        const value = requiredBerkasPPK[key];
         return (
-            berkasPBJ.find((d) => d.jenis_dokumen === value) || {
-                jenis_dokumen: value,
-                is_valid: null,
-                path: "",
-                nama: "",
-                tipe_file: "",
-            }
-        );
-    });
-
-    const _berkasPK = Object.keys(requiredBerkasPK).map((key) => {
-        const value = requiredBerkasPK[key];
-        return (
-            berkasPK.find((d) => d.jenis_dokumen === value) || {
-                jenis_dokumen: value,
-                is_valid: null,
-                path: "",
-                nama: "",
-                tipe_file: "",
-            }
-        );
-    });
-
-    const _berkasBA = Object.keys(requiredBerkasBA).map((key) => {
-        const value = requiredBerkasBA[key];
-        return (
-            berkasBA.find((d) => d.jenis_dokumen === value) || {
-                jenis_dokumen: value,
-                is_valid: null,
-                path: "",
-                nama: "",
-                tipe_file: "",
-            }
-        );
-    });
-
-    const _berkasKuitansi = Object.keys(requiredKuitansi).map((key) => {
-        const value = requiredKuitansi[key];
-        return (
-            berkasKuitansi.find((d) => d.jenis_dokumen === value) || {
-                jenis_dokumen: value,
-                is_valid: null,
-                path: "",
-                nama: "",
-                tipe_file: "",
-            }
-        );
-    });
-
-    const _berkasPembayaran = Object.keys(requiredPembayaran).map((key) => {
-        const value = requiredPembayaran[key];
-        return (
-            berkasPembayaran.find((d) => d.jenis_dokumen === value) || {
+            berkasPPK.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -116,23 +42,7 @@ export default function ShowPengajuan({
             pengajuan_id: pengajuan.id,
             nama_kegiatan: pengajuan.nama_kegiatan,
 
-            // Pengajuan PBJ
-            "rancangan kontrak": null,
-            spekteknis: null,
-            rab: null,
-            "surat penunjukan penjabat pengadaan": null,
-
-            // Pengajuan Kontrak
-            sppbj: null,
-            surat_kontrak: null,
-
-            // Pengajuan Berita Acara
-            bast: null,
-            bap: null,
-
-            // Pengajuan Kuitansi
-            kuitansi: null,
-            surat_pesanan: null,
+            // Berita Acara PBJs
         });
 
     function submit(e) {
@@ -181,10 +91,8 @@ export default function ShowPengajuan({
         return !(isBerkasDBNamaValid || isBerkasRowNamaValid);
     }
 
-    const isDonePBJ = cekKeyNamaBerisi(berkasPBJ, _berkasPBJ);
-    const isDonePK = cekKeyNamaBerisi(berkasPK, _berkasPK);
-    const isDoneBA = cekKeyNamaBerisi(berkasBA, _berkasBA);
-    const isDoneKuitansi = cekKeyNamaBerisi(berkasKuitansi, _berkasKuitansi);
+    const isDonePPK = cekKeyNamaBerisi(berkasPPK, _berkasPPK);
+
 
     const Toast = Swal.mixin({
         toast: true,
@@ -232,8 +140,8 @@ export default function ShowPengajuan({
                                 </a>
                             </li>
                             <li>
-                                <a>
-                                    <TiDocumentText className="w-4 h-4 mr-1" />
+                            <a className="truncate max-w-screen-tablet">
+                            <TiDocumentText className="w-4 h-4 mr-1" />
                                     {pengajuan.nama_kegiatan}
                                 </a>
                             </li>
@@ -274,70 +182,19 @@ export default function ShowPengajuan({
                     </div>
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">
-                            Berkas Pengajuan PBJ
+                            Berita Acara PBJ
                         </h2>
                         {/* Tabel Berkas Pengajuan PBJ Start */}
                         <TabelPengajuan
                             data={data}
                             setData={setData}
-                            daftarBerkas={_berkasPBJ}
-                            requiredBerkas={requiredBerkasPBJ}
+                            daftarBerkas={_berkasPPK}
+                            requiredBerkas={requiredBerkasPPK}
                             isDisabled={false}
                             submit={submit}
                         />
 
-                        <h2 className="mt-2 text-base font-semibold ">
-                            Berkas Berkas Pemesanan
-                        </h2>
-                        {/* Tabel Berkas Pemesanan */}
-                        <TabelPengajuan
-                            data={data}
-                            setData={setData}
-                            daftarBerkas={_berkasPK}
-                            requiredBerkas={requiredBerkasPK}
-                            isDisabled={isDonePBJ}
-                            submit={submit}
-                        />
 
-                        <h2 className="mt-2 text-base font-semibold">
-                            Berkas Berita Acara
-                        </h2>
-
-                        {/* Tabel Berkas Berita Acara */}
-                        <TabelPengajuan
-                            data={data}
-                            setData={setData}
-                            daftarBerkas={_berkasBA}
-                            requiredBerkas={requiredBerkasBA}
-                            isDisabled={isDonePK}
-                            submit={submit}
-                        />
-
-                        <h2 className="mt-2 text-base font-semibold">
-                            Berkas Kuitansi
-                        </h2>
-                        {/* Tabel Berkas Kuitansi */}
-                        <TabelPengajuan
-                            data={data}
-                            setData={setData}
-                            daftarBerkas={_berkasKuitansi}
-                            requiredBerkas={requiredKuitansi}
-                            isDisabled={isDoneBA}
-                            submit={submit}
-                        />
-
-                        <h2 className="mt-2 text-base font-semibold">
-                            Berkas Pembayaran
-                        </h2>
-                        {/* Tabel Berkas Pembayaran */}
-                        <TabelPengajuan
-                            data={data}
-                            setData={setData}
-                            daftarBerkas={_berkasPembayaran}
-                            requiredBerkas={requiredPembayaran}
-                            isDisabled={isDoneKuitansi}
-                            submit={submit}
-                        />
                     </div>
                 </main>
             </section>

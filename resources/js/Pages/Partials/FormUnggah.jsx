@@ -84,7 +84,7 @@ export default function FormUnggah({
                                         <a
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="underline text-primary"
+                                            className="underline text-primary truncate max-w-screen-phone"
                                         >
                                             {existingDocument.nama}
                                         </a>
@@ -97,6 +97,7 @@ export default function FormUnggah({
                                                 <a
                                                     href={`/storage/${documentPath}`}
                                                     target="_blank"
+                                                    rel="noopener noreferrer"
                                                     className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
                                                 >
                                                     Lihat
@@ -106,6 +107,7 @@ export default function FormUnggah({
                                                 {/* Tombol "Download" */}
                                                 <a
                                                     href={`/storage/${documentPath}`}
+                                                    rel="noopener noreferrer"
                                                     download={
                                                         existingDocument.nama
                                                     }
@@ -134,7 +136,7 @@ export default function FormUnggah({
                                             Pilih File
                                         </label>
 
-                                        <div className="">
+                                        {/* <div className="">
                                             <input
                                                 type="file"
                                                 name={fieldName}
@@ -148,7 +150,7 @@ export default function FormUnggah({
                                                 }}
                                                 className="hidden"
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             ) : (
