@@ -240,19 +240,14 @@ class PBJController extends Controller
             ]);
         }
 
-        // Status jadi ditolak sementara jika ada dokumen yg tidak valid
-        if ($request->is_valid == false) {
-            Pengajuan::where('id', $request->pengajuan_id)->update([
-                'status' => 'ditolak'
-            ]);
-        }
+
 
         // Pengajuan Berubah jadi selesai jika kuitansi sudah di validasi
         if ($berkas->jenis_dokumen == "Kuitansi" && $request->is_valid == true) {
             Pengajuan::where('id', $request->pengajuan_id)->update([
                 'stage' => 'selesai',
                 'status' => 'selesai',
-                'end_data' => now()
+                'end_date' => now()
             ]);
         }
 
