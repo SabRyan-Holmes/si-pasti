@@ -54,14 +54,14 @@ class PPKController extends Controller
 
     public function show_berkas(Pengajuan $pengajuan)
     {
-        $berkas_pbj = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan PBJ')->get();
         $berkas_ketua_tim = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Permintaan Pengadaan')->get();
+        $berkas_ppk = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Berkas ke divisi PPK')->get();
         $stagesDoneOrder = ['pesanan selesai', 'pembayaran', 'selesai'];
         $isDoneOrder = in_array($pengajuan->stage, $stagesDoneOrder);
         return Inertia::render('PPK/ShowBerkas', [
             'title' => 'Status Pengadaan Barang',
             'pengajuan' => $pengajuan,
-            'berkasPBJ' => $berkas_pbj,
+            'berkasPPK' => $berkas_ppk,
             'berkasKT' => $berkas_ketua_tim,
             'isDoneOrder' => $isDoneOrder
         ]);

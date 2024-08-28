@@ -43,7 +43,7 @@ return new class extends Migration
                 // Pengajuan Berita Acara
                 'Berita Acara Serah Terima(BAST)',
                 'Berita Acara Pembayaran(BAP)',
-                // Pengajuan ke PPK
+                // Pengajuan ke PPK /Berita Acara PBJ
                 'Berita Acara Negoisasi',
                 'Berita Acara Hasil Pemilihan(BAHP)',
                 // Pengajuan Kuitansi

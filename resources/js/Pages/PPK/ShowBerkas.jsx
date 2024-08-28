@@ -4,11 +4,9 @@ import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FaEye } from "react-icons/fa";
 
 import {
     FaCheck,
-    FaDownload,
     FaRegFolder,
     FaRegFolderOpen,
 } from "react-icons/fa6";
@@ -21,7 +19,7 @@ export default function ShowBerkas({
     flash,
     pengajuan,
     berkasKT,
-    berkasPBJ,
+    berkasPPK,
     isDoneOrder,
     // semuaBerkas,
 }) {
@@ -34,11 +32,10 @@ export default function ShowBerkas({
         surat_permintaan: "Surat Permintaan",
     };
 
-    const requiredBerkasPBJ = {
-        rancangan_kontrak: "Rancangan Kontrak",
-        spekteknis: "Spekteknis",
-        rab: "RAB/HPS",
-        sppp: "Surat Penunjukan Penjabat Pengadaan(SPPP)",
+    //Berita Acara PBJ
+    const requiredBerkasPPK = {
+        ban: "Berita Acara Negoisasi",
+        bahp: "Berita Acara Hasil Pemilihan(BAHP)",
     };
 
     const _berkasKT = Object.keys(requiredBerkasKT).map((key) => {
@@ -54,10 +51,10 @@ export default function ShowBerkas({
         );
     });
 
-    const _berkasPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
-        const value = requiredBerkasPBJ[key];
+    const _berkasPPK = Object.keys(requiredBerkasPPK).map((key) => {
+        const value = requiredBerkasPPK[key];
         return (
-            berkasPBJ.find((d) => d.jenis_dokumen === value) || {
+            berkasPPK.find((d) => d.jenis_dokumen === value) || {
                 jenis_dokumen: value,
                 is_valid: null,
                 path: "",
@@ -67,7 +64,7 @@ export default function ShowBerkas({
         );
     });
 
-    const semuaBerkas = [..._berkasKT, ..._berkasPBJ];
+    const semuaBerkas = [..._berkasKT, ..._berkasPPK];
 
     const Toast = Swal.mixin({
         toast: true,
@@ -167,11 +164,11 @@ export default function ShowBerkas({
                     </div>
                 </div>
 
-                <div className="pb-16 mt-10 overflow-x-auto">
+                <div className="pb-10 mt-10 overflow-x-auto">
                     <h2 className="text-base font-semibold">
                         Berkas Ketua Tim
                     </h2>
-                    {/* Tabel Berkas Pengajuan PBJ */}
+                    {/* Tabel Berkas Pengajuan PPK */}
 
                     <TabelBerkas
                         daftarBerkas={_berkasKT}
@@ -179,18 +176,18 @@ export default function ShowBerkas({
                         pengajuan={pengajuan}
                     />
                 </div>
-                {/* Tabel Berkas Pengajuan PBJ */}
-                {/* <div className="pb-16 mt-10 overflow-x-auto">
+                {/* Tabel Berkas Pengajuan PPK */}
+                <div className="pb-20 mt-5 overflow-x-auto">
                             <h2 className="text-base font-semibold">
-                                Berkas Pengajuan PBJ
+                                Berita Acara PBJ
                             </h2>
 
                             <TabelBerkas
-                                daftarBerkas={_berkasPBJ}
+                                daftarBerkas={_berkasPPK}
                                 validasiLink={route("ppk.validasi")}
                                 pengajuan={pengajuan}
                             />
-                        </div> */}
+                        </div>
             </section>
 
             {/* end of content */}
