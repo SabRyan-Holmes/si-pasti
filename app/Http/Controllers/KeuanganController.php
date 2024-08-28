@@ -11,13 +11,11 @@ use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Traits\CheckPayments;
 
 
 class KeuanganController extends Controller
 {
 
-    use CheckPayments;
 
     public function daftar_berkas()
     {
@@ -87,7 +85,6 @@ class KeuanganController extends Controller
 
         $this->storeDocument($request, 'spm', 'SPM', 'Surat Perintah Pembayaran(SPM)', 'Berkas Pembayaran');
         // Update Stage jadi pembayaran jika sudah mengirim BA, kuitansi oleh PPK, & spm oleh keuangan
-        $this->checkPaymentStatus($request->pengajuan_id, true, true);
         Pengajuan::where('id', $request->pengajuan_id)->update([
             'stage' => 'pembayaran'
         ]);

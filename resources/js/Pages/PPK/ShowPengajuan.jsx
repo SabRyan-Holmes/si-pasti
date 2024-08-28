@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
+import { useForm,  Head, usePage, router } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TiDocumentText } from "react-icons/ti";
-import TabelPengajuan from "../Partials/TabelPengajuan";
+import { DetailPengajuan, TabelPengajuan } from "@/Pages/Partials";
+import { SecondaryButton } from "@/Components";
 
 export default function ShowPengajuan({
     title,
@@ -20,9 +20,6 @@ export default function ShowPengajuan({
 }) {
     const props = usePage().props;
     // Function to get the key based on the value
-    const getKeyByValue = (object, value) => {
-        return Object.keys(object).find((key) => object[key] === value);
-    };
 
     const requiredBerkasPBJ = {
         rancangan_kontrak: "Rancangan Kontrak",
@@ -135,23 +132,19 @@ export default function ShowPengajuan({
 
             onSuccess: () => {
                 clearErrors();
-                console.log("Submit selesai dari On Success");
-
+                reset();
                 router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
             },
             onError: () => {
                 console.log("Gagal submit");
             },
             onFinish: () => {
-                console.log("Submit selesai");
                 // Balikkan
                 setisEdit(false);
             },
         });
     }
 
-    console.log("isi data");
-    console.log(data);
 
     const Toast = Swal.mixin({
         toast: true,
@@ -202,12 +195,11 @@ export default function ShowPengajuan({
     const isDoneKuitansi = cekKeyNamaBerisi(berkasKuitansi, _berkasKuitansi);
 
     const [isEdit, setisEdit] = useState(false);
-    console.log("isDone : ", isDonePBJ, isDonePK, isDoneBA, isDoneKuitansi);
-    console.log("errors :");
-    console.log(errors);
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
+    // console.log("isDone : ", isDonePBJ, isDonePK, isDoneBA, isDoneKuitansi);
+    // console.log("errors :");
+    // console.log(errors);
+    // console.log("isi data");
+    // console.log(data);
 
     return (
         <AuthenticatedLayout
@@ -249,26 +241,8 @@ export default function ShowPengajuan({
                 </div>
 
                 <main>
-                    <div className="mt-10 capitalize max-w-screen-phone text-nowrap">
-                        <div className="grid grid-cols-2 gap-0">
-                            <span className="mr-1 font-bold">
-                                Nama Kegiatan
-                            </span>
-                            <span>: {pengajuan.nama_kegiatan}</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-0">
-                            <span className="mr-1 font-bold">
-                                Ketua TIM /NIP
-                            </span>
-                            <span>
-                                : {nama} {gelar}
-                            </span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-0">
-                            <span className="mr-1 font-bold">Nama Tim</span>
-                            <span>: {pengajuan.nama_tim}</span>
-                        </div>
-                    </div>
+                <DetailPengajuan pengajuan={pengajuan}/>
+
 
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">

@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
+import React, { useEffect } from "react";
+import { Link, Head, usePage } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
-import { MdEditDocument } from "react-icons/md";
-import { IoIosArrowDown, IoIosSend } from "react-icons/io";
-import { Dropdown, InputLabel, SuccessButton } from "@/Components";
+import { FaEye } from "react-icons/fa";
+import { SecondaryButton, SuccessButton } from "@/Components";
 import {
     FaCheck,
     FaDownload,
     FaRegFolder,
     FaRegFolderOpen,
 } from "react-icons/fa6";
-import { TabelBerkas } from "./Partials";
+import { DetailPengajuan } from "./Partials";
 
 export default function ShowBerkas({
     title,
@@ -190,9 +187,6 @@ export default function ShowBerkas({
         }
     }, [flash.message]);
 
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
 
 
     return (
@@ -236,24 +230,8 @@ export default function ShowBerkas({
                     </div>
 
                     <div className="flex items-center justify-between ">
-                        <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">
-                                    Nama Kegiatan
-                                </span>
-                                <span>: {pengajuan.nama_kegiatan}</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Ketua Tim </span>
-                                <span>
-                                    : {nama} {gelar}{" "}
-                                </span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Nama Tim</span>
-                                <span>: {pengajuan.nama_tim}</span>
-                            </div>
-                        </div>
+                    <DetailPengajuan pengajuan={pengajuan}/>
+
 
                         {/* Muncul tombol kalo hanya pbj */}
                         {auth.user.divisi == "PBJ" ? (
@@ -319,7 +297,7 @@ export default function ShowBerkas({
                     <tbody>
                         {semuaBerkas.map((berkas, i) => (
                             <tr key={i}>
-                                <th className="text-primary w-fit text-center">
+                                <th className="text-center text-primary w-fit">
                                     {i + 1}
                                 </th>
                                 <td className="capitalize">

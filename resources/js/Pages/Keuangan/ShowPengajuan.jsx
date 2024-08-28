@@ -6,7 +6,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { CgDetailsMore } from "react-icons/cg";
-import { TabelPengajuan } from "../Partials";
+import { DetailPengajuan, TabelPengajuan } from "@/Pages/Partials";
 import { PiSealWarningDuotone } from "react-icons/pi";
 
 export default function ShowPengajuan({
@@ -37,7 +37,7 @@ export default function ShowPengajuan({
         );
     });
 
-    const { data, setData, post, processing, errors, reset, clearErrors } =
+    const { data, setData, post, processing, errors, clearErrors } =
         useForm({
             pengajuan_id: pengajuan.id,
             nama_kegiatan: pengajuan.nama_kegiatan,
@@ -59,7 +59,6 @@ export default function ShowPengajuan({
             onSuccess: () => {
                 clearErrors();
                 console.log("Submit selesai dari On Success");
-
                 router.reload(); // Anda dapat menentukan komponen mana yang ingin di-refresh
             },
             onError: () => {
@@ -97,10 +96,6 @@ export default function ShowPengajuan({
         disabled = true;
     }
 
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
-
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -125,7 +120,6 @@ export default function ShowPengajuan({
     useEffect(() => {
         if (errors && Object.keys(errors).length > 0) {
             const firstErrorMessage = Object.values(errors)[0]; // Mengambil nilai objek pertama
-
             Toast.fire({
                 icon: "warning",
                 title: firstErrorMessage, // Menampilkan pesan error pertama
@@ -133,10 +127,10 @@ export default function ShowPengajuan({
         }
     }, [errors]);
 
-    console.log("data : 👇");
-    console.log(data);
-    console.log("disabled");
-    console.log(disabled);
+    // console.log("data : 👇");
+    // console.log(data);
+    // console.log("disabled");
+    // console.log(disabled);
 
     return (
         <AuthenticatedLayout
@@ -181,22 +175,8 @@ export default function ShowPengajuan({
                 </div>
 
                 <main>
-                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Kegiatan</span>
-                            <span>: {pengajuan.nama_kegiatan}</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Ketua TIM /NIP</span>
-                            <span>
-                                : {nama} {gelar}
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Tim</span>
-                            <span>: {pengajuan.nama_tim}</span>
-                        </div>
-                    </div>
+                <DetailPengajuan pengajuan={pengajuan}/>
+
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">
                             Berkas Surat Perintah Pembayaran

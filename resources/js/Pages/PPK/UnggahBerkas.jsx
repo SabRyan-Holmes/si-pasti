@@ -7,7 +7,7 @@ import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import { InputLabel, SecondaryButton } from "@/Components";
 import { FaCheck } from "react-icons/fa6";
-import { FormUnggah } from "../Partials";
+import { DetailPengajuan, FormUnggah } from "@/Pages/Partials";
 import { PiSealWarningDuotone } from "react-icons/pi";
 
 export default function UnggahBerkas({
@@ -59,6 +59,7 @@ export default function UnggahBerkas({
             onSuccess: () => {
                 reset();
                 clearErrors();
+                location.reload();
             },
             onFinish: () => {
                 // setTimeout(function () {
@@ -80,7 +81,6 @@ export default function UnggahBerkas({
         sppp: "Surat Penunjukan Penjabat Pengadaan(SPPP)",
     };
 
-    // const requiredBerkasPK = ["SPPBJ", "surat kontrak"];
     const requiredBerkasPK = {
         sppbj: "Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)",
         surat_kontrak: "Surat Kontrak/Surat Pesanan",
@@ -97,13 +97,6 @@ export default function UnggahBerkas({
     };
 
     // Fungsi untuk memeriksa apakah dokumen sudah ada di berkasPBJ
-    const checkBerkas = (kategori, jenis_dokumen) => {
-        return kategori.find((doc) => doc.jenis_dokumen === jenis_dokumen);
-    };
-
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
 
     const Toast = Swal.mixin({
         toast: true,
@@ -210,24 +203,7 @@ export default function UnggahBerkas({
                 <div className="px-12 mx-auto mt-10">
                     {/* Dro */}
                     <div className="mx-auto ">
-                        <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">
-                                    Nama Kegiatan
-                                </span>
-                                <span>: {pengajuan.nama_kegiatan}</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Ketua Tim </span>
-                                <span>
-                                    : {nama} {gelar}{" "}
-                                </span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Nama Tim</span>
-                                <span>: {pengajuan.nama_tim}</span>
-                            </div>
-                        </div>
+                        <DetailPengajuan pengajuan={pengajuan} />
 
                         <div className="pb-5 max-w-screen-tablet">
                             <InputLabel

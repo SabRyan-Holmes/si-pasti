@@ -17,13 +17,31 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <!-- Scripts -->
+
     @routes
     @viteReactRefresh
+    {{-- COMMENT THIS @vite WHEN PRODCUTION!!! --}}
     @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
     @inertiaHead
+
+    <!----------------------------------------------- NOTE:  FOR HOSTING!! --------------------------------------------------->
+    <!-- Import manifest.json -->
+    {{-- @php
+        $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+    @endphp --}}
+
+    <!-- Vite imports -->
+    {{-- <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.jsx']['file']) }}"></script>
+    <script type="module"
+        src="{{ asset('build/' . $manifest['resources/js/Pages/' . $page['component'] . '.jsx']['file']) }}"></script> --}}
+
+    <!-- Import CSS -->
+    {{-- CHANGE THIS LATER!! --}}
+    {{-- <link rel="stylesheet" href="{{ asset('build/assets/app-DLREyfNz.css') }}"> --}}
+    <!----------------------------------------------- NOTE:  FOR HOSTING!! --------------------------------------------------->
 </head>
 
-<body className="font- antialiased">
+<body className="antialiased">
     @inertia
 </body>
 

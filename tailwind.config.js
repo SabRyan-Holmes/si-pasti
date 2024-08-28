@@ -76,7 +76,7 @@ export default {
 
                     success: "#22c55f",
 
-                    warning: "#fb7185",
+                    warning: "#F08282",
 
                     error: "#ff0000",
                 },

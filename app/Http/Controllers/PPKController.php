@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\PPK\UnggahBerkasStoreRequest;
 use App\Http\Requests\PPK\UnggahBerkasUlangRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Traits\CheckPayments;
 use Illuminate\Support\Facades\Log;
 
 class PPKController extends Controller
@@ -23,7 +22,6 @@ class PPKController extends Controller
     /**
      * Display the specified resource.
      */
-    use CheckPayments;
 
     public function daftar_berkas()
     {
@@ -299,7 +297,7 @@ class PPKController extends Controller
 
         // dd($berkas_pbj);
         return Inertia::render('PPK/ShowPengajuan', [
-            'title' => 'Detail Riwayat Pengajuan',
+            'title' => 'Detail Pengajuan',
             'pengajuan' => $pengajuan,
             'ketuaTim' => $pengajuan->created_by,
             'berkasPBJ' => $berkas_pbj,

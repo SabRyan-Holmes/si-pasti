@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Link, Head, router } from "@inertiajs/react";
+import { Link, Head, router } from "@inertiajs/react";
 import moment from "moment/min/moment-with-locales";
 import { RiFolderUploadFill } from "react-icons/ri";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import ReactPaginate from "react-paginate";
-import { TiArrowRight, TiArrowLeft } from "react-icons/ti";
-import { FaCheck, FaEye, FaUpload } from "react-icons/fa6";
+import { TiArrowRight } from "react-icons/ti";
+import { FaUpload } from "react-icons/fa6";
 import { FaRegFolder } from "react-icons/fa";
 import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
@@ -14,12 +14,11 @@ import {
     MdOutlineKeyboardDoubleArrowRight,
 } from "react-icons/md";
 import { TbPencilCheck } from "react-icons/tb";
-
+import noData from '@/../../resources/assets/image/no-data.jpg'
 export default function DaftarBerkas({
     title,
     auth,
     pengajuans,
-    flash,
     searchReq: initialSearch,
     byStatusReq: initialStatus,
     byStageReq: initialStage,
@@ -229,19 +228,21 @@ export default function DaftarBerkas({
                             <table className="table overflow-hidden text-xs table-bordered rounded-xl ">
                                 <thead className="text-sm font-medium text-white border bg-primary rounded-xl border-secondary/15">
                                     <tr>
-                                        <th></th>
-                                        <th>Nama Ketua Tim</th>
-                                        <th>Name Kegiatan</th>
-                                        <th className="text-center">
+                                        <th width="3%"></th>
+                                        <th width="25%">Nama Ketua Tim</th>
+                                        <th width="25%">Name Kegiatan</th>
+                                        <th width="7%" className="text-center">
                                             Tanggal Pengajuan
                                         </th>
-                                        <th className="text-center">
+                                        <th width="7%" className="text-center">
                                             Tanggal Selesai
                                         </th>
-                                        <th className="text-center">
+                                        <th width="7%" className="text-center">
                                             Status/Stage
                                         </th>
-                                        <th className="text-center">Aksi</th>
+                                        <th width="15%" className="text-center">
+                                            Aksi
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="border-secondary/15">
@@ -253,13 +254,23 @@ export default function DaftarBerkas({
                                             ketua_tim.name.split(" / ")[1];
 
                                         return (
-                                            <Link as="tr"
-                                            href={route('show-all-berkas', data.nama_kegiatan)}
+                                            <Link
+                                                as="tr"
+                                                href={
+                                                    auth.user.divisi !==
+                                                        "Keuangan" &&
+                                                    route(
+                                                        "show-all-berkas",
+                                                        data.nama_kegiatan
+                                                    )
+                                                }
                                                 key={i}
-                                                className="cursor-pointer group/item hover:bg-secondary/50 "
+                                                className="cursor-pointer group/item hover:bg-secondary/50"
                                             >
-                                                <th>{i + 1}</th>
-                                                <td className="p-1">
+                                                <th className="text-base">
+                                                    {i + 1}
+                                                </th>
+                                                <td className="p-1 px-3">
                                                     <div className="flex-row items-center gap-3">
                                                         <span className="text-sm font-bold">
                                                             {name} {gelar}
@@ -269,13 +280,15 @@ export default function DaftarBerkas({
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="p-1 text-sm font-medium capitalize">
+                                                <td className="p-1 px-3 text-sm font-medium capitalize">
                                                     {data.nama_kegiatan}
                                                 </td>
-                                                <td className="p-1 text-sm text-center">
-                                                    {moment(
-                                                        data.created_at
-                                                    ).format("LL")}
+                                                <td className="p-0 m-0 text-sm text-center">
+                                                    <span>
+                                                        {moment(
+                                                            data.start_date
+                                                        ).format("LL")}
+                                                    </span>
                                                 </td>
                                                 <td className="p-1 font-medium text-center">
                                                     {data.status ==
@@ -289,30 +302,30 @@ export default function DaftarBerkas({
                                                         <span>_</span>
                                                     )}
                                                 </td>
-                                                <td className="p-1">
+                                                <td className="p-1 px-2">
                                                     <div className="flex-row items-center gap-3">
                                                         {data.status ==
                                                             "diproses" && (
-                                                            <div className="text-center bg-orange-50 label-base ">
+                                                            <div className="label-secondary">
                                                                 {data.status}
                                                             </div>
                                                         )}
 
                                                         {data.status ==
                                                             "selesai" && (
-                                                            <div className="text-center bg-orange-50 label-success ">
+                                                            <div className="label-success ">
                                                                 {data.status}
                                                             </div>
                                                         )}
 
                                                         {data.status ==
                                                             "ditolak" && (
-                                                            <div className="text-center bg-orange-50 label-warning ">
+                                                            <div className="label-warning ">
                                                                 {data.status}
                                                             </div>
                                                         )}
-
-                                                        <div className="mt-1 text-xs text-center label-base bg-base-100 text-nowrap">
+                                                        <div className="my-1" />
+                                                        <div className="label-primary">
                                                             {data.stage}
                                                         </div>
                                                     </div>
@@ -354,7 +367,7 @@ export default function DaftarBerkas({
 
                                                     {/* Divisi PBJ */}
                                                     {auth.user.divisi ===
-                                                    "PBJ" ? (
+                                                        "PBJ" && (
                                                         <>
                                                             <Link
                                                                 as="a"
@@ -384,25 +397,6 @@ export default function DaftarBerkas({
                                                                 <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
                                                             </Link>
                                                         </>
-                                                    ) : (
-                                                        auth.user.divisi ===
-                                                            "PBJ" &&
-                                                        data.status ===
-                                                            "selesai" &&
-                                                        ""
-                                                        // <Link
-                                                        //     as="a"
-                                                        //     href={route(
-                                                        //         "pbj.berkas-done",
-                                                        //         data.nama_kegiatan
-                                                        //     )}
-                                                        //     className="items-center justify-center inline-block gap-1 mx-auto font-medium text-center transition-all group/button hover:scale-105 group-hover/item:bg-secondary group-hover/item:text-white text-secondary action-btn border-hijau/20 hover:bg-hijau hover:text-white"
-                                                        // >
-                                                        //     <span>
-                                                        //         Unggah
-                                                        //     </span>
-                                                        //     <RiFolderUploadFill className="fill-secondary group-hover/item:fill-white" />
-                                                        // </Link>
                                                     )}
 
                                                     {/* Divisi PPK */}
@@ -537,11 +531,14 @@ export default function DaftarBerkas({
                         </div>
                     </>
                 ) : (
-                    <div className="flex items-center justify-center h-96 ">
-                        <strong className="my-auto text-2xl">
-                            Belum Ada Pengajuan Terbaru!!
-                        </strong>
+                    <div className="flex-row items-center justify-center w-full text-center h-96 ">
+                    <div className="m-40 space-y-7" >
+                    <strong className="my-auto text-3xl">
+                        Belum Ada Berkas Terbaru!!
+                    </strong>
+                    <img src={noData} className="m-auto my-auto h-52 w-72" alt="" srcset="" />
                     </div>
+                </div>
                 )}
             </section>
         </AuthenticatedLayout>

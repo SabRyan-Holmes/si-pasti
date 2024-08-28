@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { useForm, usePage } from "@inertiajs/react";
-import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
-import { IoIosSend } from "react-icons/io";
-import InputLabel from "@/Components/InputLabel";
-import InputError from "@/Components/InputError";
 import { FaRegFolder } from "react-icons/fa6";
 import Swal from "sweetalert2";
-import { FormUnggah } from "../Partials";
+import { DetailPengajuan, FormUnggah } from "@/Pages/Partials";
 import { PiSealWarningDuotone } from "react-icons/pi";
+import { SecondaryButton } from "@/Components";
 
 export default function UnggahBerkas({
     title,
@@ -57,9 +53,6 @@ export default function UnggahBerkas({
             },
         });
     }
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
 
     const Toast = Swal.mixin({
         toast: true,
@@ -124,23 +117,7 @@ export default function UnggahBerkas({
                         </SecondaryButton>
                     </div>
 
-                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap mb-8">
-                        {/* TODO: Kepikiran tibo2 pengen nambahiin keterangan lebih lengkap kayak nampilin tanggal diajukan/dimulai, stage, status, tanggal selesai, kayakny bagus, coba bikin design ny  */}
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Kegiatan</span>
-                            <span>: {pengajuan.nama_kegiatan}</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Ketua Tim</span>
-                            <span>
-                                : {nama} {gelar}
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Tim</span>
-                            <span>: {pengajuan.nama_tim}</span>
-                        </div>
-                    </div>
+                    <DetailPengajuan pengajuan={pengajuan}/>
 
                     <div className="pb-5 max-w-screen-tablet">
                         {/* Berkas Pembayaran */}

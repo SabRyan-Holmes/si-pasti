@@ -4,8 +4,7 @@ import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
-import { TabelPengajuan } from "../Partials";
+import { DetailPengajuan, TabelPengajuan } from "@/Pages/Partials";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TiDocumentText } from "react-icons/ti";
 
@@ -114,9 +113,6 @@ export default function ShowPengajuan({
             });
         }
     }, [flash.message]);
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
 
     console.log("errors :");
     console.log(errors);
@@ -160,26 +156,8 @@ export default function ShowPengajuan({
                 </div>
 
                 <main className="px-7">
-                    <div className="mt-10 capitalize max-w-screen-phone text-nowrap">
-                        <div className="grid grid-cols-2 gap-0">
-                            <span className="mr-1 font-bold">
-                                Nama Kegiatan
-                            </span>
-                            <span>: {pengajuan.nama_kegiatan}</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-0">
-                            <span className="mr-1 font-bold">
-                                Ketua TIM /NIP
-                            </span>
-                            <span>
-                                : {nama} {gelar}
-                            </span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-0">
-                            <span className="mr-1 font-bold">Nama Tim</span>
-                            <span>: {pengajuan.nama_tim}</span>
-                        </div>
-                    </div>
+                <DetailPengajuan pengajuan={pengajuan}/>
+
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">
                             Berita Acara PBJ

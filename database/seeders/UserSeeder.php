@@ -219,16 +219,15 @@ class UserSeeder extends Seeder
             'nama_tim' => 'Tim Kerja SDM dan Hukum',
         ]);
 
-        // FIXME: NIP tidak unique
-        // User::create([
-        //     'name' => 'Gafur / S.ST., M.Si.',
-        //     'nip' => '197907272002121010',
-        //     'divisi' => 'Ketua Tim',
-        //     'password' => static::$password ??= Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-        // ])->nama_tim()->create([
-        //     'nama_tim' => 'Tim Keuangan',
-        // ]);
+        User::create([
+            'name' => 'Gafur / S.ST., M.Si.',
+            'nip' => '197907272002121010',
+            'divisi' => 'Ketua Tim',
+            'password' => static::$password ??= Hash::make('password'),
+            'remember_token' => Str::random(10),
+        ])->nama_tim()->create([
+            'nama_tim' => 'Tim Keuangan',
+        ]);
 
         User::create([
             'name' => 'Eva Riani / S.ST.,M.E.',
@@ -290,17 +289,17 @@ class UserSeeder extends Seeder
 
 
         // <==============================PBJ, PPK & Keuangan START==============================>
-        // FIXME: NIP tidak unik
-
-        // User::create([
-        //     'name' => 'Sunandar / SE., M.Si.',
-        //     'nip' => '197405041993121001',
-        //     'divisi' => 'PBJ',
-        //     'password' => static::$password ??= Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-        // ])->nama_tim()->create([
-        //     'nama_tim' => 'Pengadaan Barang dan Jasa',
-        // ]);
+        //NOTE: Sementara untuk ngebedain nip yg sama, dijadiin nip_divisi , nanti bisa diupdate sendiri secara manual di menu edit profil
+        User::create([
+            'name' => 'Sunandar / SE., M.Si.',
+            'nip' => 'nip_pbj',
+            'email' => 'pbj.bps@gmail.com',
+            'divisi' => 'PBJ',
+            'password' => static::$password ??= Hash::make('password'),
+            'remember_token' => Str::random(10),
+        ])->nama_tim()->create([
+            'nama_tim' => 'Pengadaan Barang dan Jasa',
+        ]);
 
         User::create([
             'name' => 'Diyas Marliyanda / S.E.',
@@ -322,9 +321,10 @@ class UserSeeder extends Seeder
             'nama_tim' => 'Pengadaan Barang dan Jasa',
         ]);
 
+        //NOTE: Ini juga NIP tidak unik
         User::create([
             'name' => 'Gafur / S.ST., M.Si.',
-            'nip' => '197907272002121010',
+            'nip' => 'nip_ppk',
             'email' => 'ppk.bps@gmail.com',
             'divisi' => 'PPK',
             'password' => static::$password ??= Hash::make('password'),

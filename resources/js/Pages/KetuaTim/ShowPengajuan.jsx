@@ -6,7 +6,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { TiDocumentText } from "react-icons/ti";
-import { TabelPengajuan } from "../Partials";
+import { DetailPengajuan, TabelPengajuan } from "@/Pages/Partials";
 
 export default function ShowPengajuan({
     title,
@@ -96,9 +96,7 @@ export default function ShowPengajuan({
     }, [flash.message]);
 
     const [isEdit, setisEdit] = useState(false);
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
+
 
     // Logika untuk mengecek apakah  smaa2 berisi
     function cekKeyNamaBerisi(berkasDB, documentsRow) {
@@ -171,23 +169,8 @@ export default function ShowPengajuan({
                 </div>
 
                 <main>
-                    {/* TODO: Bikin Komponen baru untuk detail pengajuan/kegiatan */}
-                    <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Kegiatan</span>
-                            <span>: {pengajuan.nama_kegiatan}</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Ketua TIM /NIP</span>
-                            <span>
-                                : {nama} {gelar}
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-0">
-                            <span class="mr-1 font-bold">Nama Tim</span>
-                            <span>: {pengajuan.nama_tim}</span>
-                        </div>
-                    </div>
+                    <DetailPengajuan pengajuan={pengajuan}/>
+
 
                     <div className="mt-10 mb-20 overflow-x-auto">
                         <h2 className="text-base font-semibold">

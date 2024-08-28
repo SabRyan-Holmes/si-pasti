@@ -11,6 +11,7 @@ import { Link, router } from "@inertiajs/react";
 import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
 import { IoDocumentTextOutline } from "react-icons/io5";
+import noData from '@/../../resources/assets/image/no-data.jpg'
 
 export default function RiwayatPengajuan({
     title,
@@ -244,13 +245,13 @@ export default function RiwayatPengajuan({
                             <table className="table overflow-hidden text-xs table-bordered rounded-xl ">
                                 <thead className="bg-primary">
                                     <tr>
-                                        <th></th>
-                                        <th>Nama Ketua Tim</th>
-                                        <th>Name Kegiatan</th>
-                                        <th className="text-center">
+                                        <th width="3%"></th>
+                                        <th width="20%">Nama Ketua Tim</th>
+                                        <th width="25%">Name Kegiatan</th>
+                                        <th width="10%" className="text-center">
                                             Tanggal Pengajuan
                                         </th>
-                                        <th className="text-center">
+                                        <th width="10%" className="text-center">
                                             Tanggal Selesai
                                         </th>
                                         <th className="text-center">Status</th>
@@ -274,10 +275,12 @@ export default function RiwayatPengajuan({
                                                     data.nama_kegiatan
                                                 )}
                                                 key={i}
-                                                className="group/item hover:bg-secondary/50 hover:cursor-pointer"
+                                                className="group/item hover:bg-secondary/40 hover:cursor-pointer"
                                             >
-                                                <th>{i + 1}</th>
-                                                <td className="p-1">
+                                                <th className="text-base">
+                                                    {i + 1}
+                                                </th>
+                                                <td className="p-1 px-3">
                                                     <div className="flex-row items-center gap-3">
                                                         <span className="text-sm font-bold">
                                                             {name} {gelar}
@@ -287,12 +290,12 @@ export default function RiwayatPengajuan({
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="p-1 text-sm font-medium capitalize">
+                                                <td className="p-1 px-3 text-sm font-medium capitalize">
                                                     {data.nama_kegiatan}
                                                 </td>
                                                 <td className="p-1 text-sm text-center">
                                                     {moment(
-                                                        data.created_at
+                                                        data.start_date
                                                     ).format("LL")}
                                                 </td>
                                                 <td className="p-1 font-medium text-center">
@@ -308,31 +311,29 @@ export default function RiwayatPengajuan({
                                                     )}
                                                 </td>
                                                 <td className="p-1">
-                                                    <div className="flex-row items-center gap-3">
-                                                        {data.status ==
-                                                            "diproses" && (
-                                                            <div className="text-center bg-orange-50 label-base ">
-                                                                {data.status}
-                                                            </div>
-                                                        )}
+                                                    {data.status ==
+                                                        "diproses" && (
+                                                        <div className="label-secondary">
+                                                            {data.status}
+                                                        </div>
+                                                    )}
 
-                                                        {data.status ==
-                                                            "selesai" && (
-                                                            <div className="text-center bg-orange-50 label-success ">
-                                                                {data.status}
-                                                            </div>
-                                                        )}
+                                                    {data.status ==
+                                                        "selesai" && (
+                                                        <div className="label-success ">
+                                                            {data.status}
+                                                        </div>
+                                                    )}
 
-                                                        {data.status ==
-                                                            "ditolak" && (
-                                                            <div className="text-center bg-orange-50 label-warning ">
-                                                                {data.status}
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                    {data.status ==
+                                                        "ditolak" && (
+                                                        <div className="label-warning ">
+                                                            {data.status}
+                                                        </div>
+                                                    )}
                                                 </td>
                                                 <td>
-                                                    <div className="mt-1 text-xs text-center label-base bg-base-100 text-nowrap">
+                                                    <div className="label-primary">
                                                         {data.stage}
                                                     </div>
                                                 </td>
@@ -401,10 +402,13 @@ export default function RiwayatPengajuan({
                         </div>
                     </>
                 ) : (
-                    <div className="flex items-center justify-center h-96 ">
-                        <strong className="my-auto text-2xl">
+                    <div className="flex-row items-center justify-center w-full text-center h-96 ">
+                        <div className="m-40 space-y-7" >
+                        <strong className="my-auto text-3xl">
                             Belum Ada Pengajuan Terbaru!!
                         </strong>
+                        <img src={noData} className="m-auto my-auto h-52 w-72" alt="" srcset="" />
+                        </div>
                     </div>
                 )}
             </section>

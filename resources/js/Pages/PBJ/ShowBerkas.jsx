@@ -1,28 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useForm, Link, Head, usePage, router } from "@inertiajs/react";
+import React, { useEffect } from "react";
+import { Link, Head, usePage } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FaEdit, FaEye, FaFileUpload } from "react-icons/fa";
-import { MdEditDocument } from "react-icons/md";
-import { IoIosArrowDown, IoIosSend } from "react-icons/io";
-import { Dropdown, InputLabel, SuccessButton } from "@/Components";
-import {
-    FaCheck,
-    FaDownload,
-    FaRegFolder,
-    FaRegFolderOpen,
-} from "react-icons/fa6";
-import { TabelBerkas } from "../Partials";
+import { SuccessButton } from "@/Components";
+import { FaCheck, FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
+import { DetailPengajuan, TabelBerkas } from "@/Pages/Partials";
 
 export default function ShowBerkas({
     title,
     auth,
     flash,
     pengajuan,
-    berkasKT,
-    berkasPPK,
     berkasPBJ,
     berkasPK,
     berkasBA,
@@ -33,16 +23,6 @@ export default function ShowBerkas({
 }) {
     const props = usePage().props;
     // Function to get the key based on the value
-
-    const requiredBerkasKT = {
-        kak: "Kerangka Ajuan Kerja",
-        form_permintaan: "Form Permintaan",
-        surat_permintaan: "Surat Permintaan",
-    };
-    const requiredBerkasPPK = {
-        ban: "Berita Acara Negoisasi",
-        bahp: "Berita Acara Hasil Pemilihan(BAHP)",
-    };
 
     const requiredBerkasPBJ = {
         rancangan_kontrak: "Rancangan Kontrak",
@@ -67,32 +47,6 @@ export default function ShowBerkas({
     const requiredPembayaran = {
         spm: "Surat Perintah Pembayaran(SPM)",
     };
-
-    const _berkasKT = Object.keys(requiredBerkasKT).map((key) => {
-        const value = requiredBerkasKT[key];
-        return (
-            berkasKT.find((d) => d.jenis_dokumen === value) || {
-                jenis_dokumen: value,
-                is_valid: null,
-                path: "",
-                nama: "",
-                tipe_file: "",
-            }
-        );
-    });
-
-    const _berkasPPK = Object.keys(requiredBerkasPPK).map((key) => {
-        const value = requiredBerkasPPK[key];
-        return (
-            berkasPPK.find((d) => d.jenis_dokumen === value) || {
-                jenis_dokumen: value,
-                is_valid: null,
-                path: "",
-                nama: "",
-                tipe_file: "",
-            }
-        );
-    });
 
     const _berkasPBJ = Object.keys(requiredBerkasPBJ).map((key) => {
         const value = requiredBerkasPBJ[key];
@@ -159,16 +113,6 @@ export default function ShowBerkas({
         );
     });
 
-    const semuaBerkas = [
-        ..._berkasKT,
-        ..._berkasPPK,
-        ..._berkasPBJ,
-        ..._berkasPK,
-        ..._berkasBA,
-        ..._berkasKuitansi,
-        ..._berkasPembayaran,
-    ];
-
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -189,11 +133,6 @@ export default function ShowBerkas({
             });
         }
     }, [flash.message]);
-
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
-
 
     return (
         <AuthenticatedLayout
@@ -236,25 +175,7 @@ export default function ShowBerkas({
                     </div>
 
                     <div className="flex items-center justify-between ">
-                        <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">
-                                    Nama Kegiatan
-                                </span>
-                                <span>: {pengajuan.nama_kegiatan}</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Ketua Tim </span>
-                                <span>
-                                    : {nama} {gelar}{" "}
-                                </span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Nama Tim</span>
-                                <span>: {pengajuan.nama_tim}</span>
-                            </div>
-                        </div>
-
+                        <DetailPengajuan pengajuan={pengajuan} />
 
                         <SuccessButton
                             className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
@@ -348,7 +269,6 @@ export default function ShowBerkas({
                         pengajuan={pengajuan}
                     />
                 </div>
-
             </section>
 
             {/* end of content */}

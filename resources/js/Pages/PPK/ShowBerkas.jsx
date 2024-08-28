@@ -2,12 +2,10 @@ import React, { useEffect } from "react";
 import { Head, usePage } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import SecondaryButton from "@/Components/SecondaryButton";
 import { RiArrowGoBackFill } from "react-icons/ri";
-
 import { FaCheck, FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
-import { TabelBerkas } from "../Partials";
-import { SuccessButton } from "@/Components";
+import { DetailPengajuan, TabelBerkas } from "@/Pages/Partials";
+import { SecondaryButton, SuccessButton } from "@/Components";
 
 export default function ShowBerkas({
     title,
@@ -17,10 +15,8 @@ export default function ShowBerkas({
     berkasKT,
     berkasPPK,
     isDoneOrder,
-    // semuaBerkas,
 }) {
     const props = usePage().props;
-    // Function to get the key based on the value
 
     const requiredBerkasKT = {
         kak: "Kerangka Ajuan Kerja",
@@ -60,8 +56,6 @@ export default function ShowBerkas({
         );
     });
 
-    const semuaBerkas = [..._berkasKT, ..._berkasPPK];
-
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -82,10 +76,6 @@ export default function ShowBerkas({
             });
         }
     }, [flash.message]);
-
-    const ketuaTim = pengajuan.created_by;
-    let nama = ketuaTim.name.split(" / ")[0];
-    let gelar = ketuaTim.name.split(" / ")[1];
 
     return (
         <AuthenticatedLayout
@@ -128,24 +118,7 @@ export default function ShowBerkas({
                     </div>
 
                     <div className="flex items-center justify-between ">
-                        <div class="mt-10 capitalize max-w-screen-phone text-nowrap">
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">
-                                    Nama Kegiatan
-                                </span>
-                                <span>: {pengajuan.nama_kegiatan}</span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Ketua Tim </span>
-                                <span>
-                                    : {nama} {gelar}{" "}
-                                </span>
-                            </div>
-                            <div class="grid grid-cols-2 gap-0">
-                                <span class="mr-1 font-bold">Nama Tim</span>
-                                <span>: {pengajuan.nama_tim}</span>
-                            </div>
-                        </div>
+                        <DetailPengajuan pengajuan={pengajuan} />
 
                         {isDoneOrder && (
                             <SuccessButton
