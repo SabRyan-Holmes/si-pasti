@@ -28,6 +28,7 @@ export default function ShowBerkas({
     berkasBA,
     berkasKuitansi,
     berkasPembayaran,
+    isDoneOrder,
     // semuaBerkas,
 }) {
     const props = usePage().props;
@@ -193,11 +194,7 @@ export default function ShowBerkas({
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
 
-    // FIXME: Ini kalo ditampilin semua tu kalo pengajuan stage ny pas pesanan selesai be atau juga seteahjh pesanan selesai, kayak pembayaran dan selesai juga
-    //  Terus kalo misalkan udah ditampilin semua, itu kan tombol validasiny jadi hilang, kek mano pbj menvalidasiny kalo gitu?
 
-    // TODO: Hapus lagi nanti, cuman untuk tes
-    pengajuan.stage = "x";
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -259,16 +256,19 @@ export default function ShowBerkas({
                         </div>
 
                         <SuccessButton
-                            className="relative mr-3 scale-110 hover:scale-[1.2] group transition-all duration-200 disabled:hover:scale-110"
-                            disabled={pengajuan.stage == "pesanan selesai"}
+                            className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
+                            disabled={isDoneOrder}
                         >
                             <Link
                                 as="button"
-                                href={route("pbj.order-done")}
+                                href={
+                                    auth.user.divisi == "PBJ" &&
+                                    route("pbj.order-done")
+                                }
                                 method="post"
                                 data={{ pengajuan_id: pengajuan.id }}
                             >
-                                {pengajuan.stage == "pemesanan selesai" ? (
+                                {isDoneOrder ? (
                                     <span>Pemesanan Selesai</span>
                                 ) : (
                                     <span>Konfirmasi Selesai</span>
@@ -279,8 +279,8 @@ export default function ShowBerkas({
                                     <FaCheck className="float-right w-4 h-4 ml-1" />
                                 )}
                                 {/* Absolute hover yang menampilkan Kata2 "Konfirmasi Pesanan Selesai" */}
-                                {pengajuan.stage !== "pesanan selesai" && (
-                                    <div className="absolute hidden scale-75 group-hover:flex bg-slate-700 text-white text-sm py-2 px-3 rounded bottom-[-50px] left-1/2 transform -translate-x-1/2 whitespace-nowrap after:content-[''] after:absolute after:left-1/2 after:bottom-full after:-translate-x-1/2 after:border-8 after:border-transparent after:border-b-gray-700">
+                                {!isDoneOrder && (
+                                    <div className="absolute hidden scale-75 group-hover:flex bg-slate-700 text-white text-sm py-3 px-3 rounded bottom-[-45px] left-1/2 transform -translate-x-1/2 whitespace-nowrap after:content-[''] after:absolute after:left-1/2 after:bottom-full after:-translate-x-1/2 after:border-8 after:border-transparent after:border-b-gray-700">
                                         Konfirmasi Pesanan Selesai
                                     </div>
                                 )}
@@ -289,183 +289,64 @@ export default function ShowBerkas({
                     </div>
                 </div>
 
-                {pengajuan.stage === "x" ? (
-                    <table className="table my-20 mt-3 border rounded-md border-primary/25 table-bordered">
-                        {/* head */}
-                        <thead className="bg-secondary">
-                            <tr className="text-sm ">
-                                <th width="5%"></th>
-                                <th width="30%">Nama Berkas</th>
-                                <th width="35%">Berkas</th>
-                                <th width="15%" className="text-center">
-                                    Status
-                                </th>
-                                <th width="15%" className="text-center">
-                                    Keterangan
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {semuaBerkas.map((berkas, i) => (
-                                <tr key={i}>
-                                    <th className="text-primary">{i + 1}</th>
-                                    <td className="capitalize">
-                                        {berkas.jenis_dokumen}
-                                    </td>
+                <div className="pb-16 mt-10 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                        Berkas Pengajuan PBJ
+                    </h2>
+                    {/* Tabel Berkas Pengajuan PBJ */}
 
-                                    <td className="text-sm capitalize">
-                                        <div className="relative group">
-                                            {berkas.nama ? (
-                                                <>
-                                                    <a
-                                                        target="_blank"
-                                                        className="underline hover:text-primary text-primary decoration-primary"
-                                                    >
-                                                        {berkas.nama}.
-                                                        <span className="lowercase">
-                                                            {berkas.tipe_file}
-                                                        </span>
-                                                    </a>
-                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
-                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
-                                                        {/* Tombol "Lihat" */}
+                    <TabelBerkas
+                        daftarBerkas={_berkasPBJ}
+                        validasiLink={route("pbj.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
 
-                                                        <a
-                                                            href={`/storage/${berkas.path}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                        >
-                                                            Lihat
-                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                        </a>
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                        Berkas Pemesanan/ Kontrak
+                    </h2>
+                    {/* Tabel Berkas Pemesanan/Kontrak */}
+                    <TabelBerkas
+                        daftarBerkas={_berkasPK}
+                        validasiLink={route("pbj.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
 
-                                                        {/* Tombol "Download" */}
-                                                        <a
-                                                            href={`/storage/${berkas.path}`}
-                                                            download={
-                                                                berkas.nama
-                                                            }
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                        >
-                                                            Unduh
-                                                            <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                        </a>
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <span className="text-center">
-                                                    -
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="p-1 text-center">
-                                        {berkas.is_valid === null &&
-                                        berkas.nama ? (
-                                            <div className="label-base bg-secondary/15">
-                                                Diproses
-                                            </div>
-                                        ) : (
-                                            <span className="text-center">
-                                                -
-                                            </span>
-                                        )}
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                        Berkas Berita Acara
+                    </h2>
+                    {/* Tabel Berkas Berita Acara */}
+                    <TabelBerkas
+                        daftarBerkas={_berkasBA}
+                        validasiLink={route("pbj.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
 
-                                        {berkas.is_valid == true && (
-                                            <div className="label-success">
-                                                Valid
-                                            </div>
-                                        )}
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">Berkas Kuitansi</h2>
+                    {/* Tabel Berkas Kuitansi */}
+                    <TabelBerkas
+                        daftarBerkas={_berkasKuitansi}
+                        validasiLink={route("pbj.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
 
-                                        {berkas.is_valid == false && (
-                                            <div className="label-warning">
-                                                Tidak Valid
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="w-full p-0 mx-auto ">
-                                        {berkas.nama ? (
-                                            <div className=" label-success">
-                                                {pengajuan.status}
-                                            </div>
-                                        ) : (
-                                            <div className=" label-base bg-base-300 text-nowrap">
-                                                Berkas tidak diajukan
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                            <tr></tr>
-                        </tbody>
-                    </table>
-                ) : (
-                    <>
-                        <div className="pb-16 mt-10 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berkas Pengajuan PBJ
-                            </h2>
-                            {/* Tabel Berkas Pengajuan PBJ */}
-
-                            <TabelBerkas
-                                daftarBerkas={_berkasPBJ}
-                                validasiLink={route("pbj.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
-
-                        <div className="pb-20 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berkas Pemesanan/ Kontrak
-                            </h2>
-                            {/* Tabel Berkas Pemesanan/Kontrak */}
-                            <TabelBerkas
-                                daftarBerkas={_berkasPK}
-                                validasiLink={route("pbj.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
-
-                        <div className="pb-20 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berkas Berita Acara
-                            </h2>
-                            {/* Tabel Berkas Berita Acara */}
-                            <TabelBerkas
-                                daftarBerkas={_berkasBA}
-                                validasiLink={route("pbj.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
-
-                        <div className="pb-20 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berkas Kuitansi
-                            </h2>
-                            {/* Tabel Berkas Kuitansi */}
-                            <TabelBerkas
-                                daftarBerkas={_berkasKuitansi}
-                                validasiLink={route("pbj.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
-
-                        <div className="pb-20 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berkas Pembayaran
-                            </h2>
-                            {/* Tabel Berkas Ketua Tim Start */}
-                            <TabelBerkas
-                                daftarBerkas={_berkasPembayaran}
-                                validasiLink={route("pbj.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
-                    </>
-                )}
+                <div className="pb-20 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                        Berkas Pembayaran
+                    </h2>
+                    {/* Tabel Berkas Ketua Tim Start */}
+                    <TabelBerkas
+                        daftarBerkas={_berkasPembayaran}
+                        validasiLink={route("pbj.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
             </section>
 
             {/* end of content */}

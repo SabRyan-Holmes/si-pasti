@@ -22,6 +22,7 @@ export default function ShowBerkas({
     pengajuan,
     berkasKT,
     berkasPBJ,
+    isDoneOrder,
     // semuaBerkas,
 }) {
     const props = usePage().props;
@@ -93,8 +94,7 @@ export default function ShowBerkas({
     let nama = ketuaTim.name.split(" / ")[0];
     let gelar = ketuaTim.name.split(" / ")[1];
 
-    // TODO: Hapus lagi nanti, cuman untuk tes
-    // pengajuan.stage = "pesanan selesai";
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -154,147 +154,33 @@ export default function ShowBerkas({
                                 <span>: {pengajuan.nama_tim}</span>
                             </div>
                         </div>
-                        {pengajuan.stage == "pesanan selesai" && (
+
+                        {isDoneOrder && (
                             <SuccessButton
-                                className="relative mr-3 scale-110 hover:scale-[1.2] group transition-all duration-200 disabled:text-black disabled:text-opacity-100 disabled:hover:scale-110"
-                                disabled={pengajuan.stage == "pesanan selesai"}
+                                className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
+                                disabled={isDoneOrder}
                             >
-                                <span>Pemesanan Selesai</span>
+                                Pemesanan Selesai
+                                <FaCheck className="float-right w-4 h-4 ml-1" />
                             </SuccessButton>
                         )}
                     </div>
                 </div>
 
+                <div className="pb-16 mt-10 overflow-x-auto">
+                    <h2 className="text-base font-semibold">
+                        Berkas Ketua Tim
+                    </h2>
+                    {/* Tabel Berkas Pengajuan PBJ */}
 
-                {pengajuan.stage === "x" ? (
-                    <table className="table my-20 mt-3 border rounded-md border-primary/25 table-bordered">
-                        {/* head */}
-                        <thead className="bg-secondary">
-                            <tr className="text-sm ">
-                                <th width="5%"></th>
-                                <th width="30%">Nama Berkas</th>
-                                <th width="35%">Berkas</th>
-                                <th width="15%" className="text-center">
-                                    Status
-                                </th>
-                                <th width="15%" className="text-center">
-                                    Keterangan
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {semuaBerkas.map((berkas, i) => (
-                                <tr key={i}>
-                                    <th className="text-primary">{i + 1}</th>
-                                    <td className="capitalize">
-                                        {berkas.jenis_dokumen}
-                                    </td>
-
-                                    <td className="text-sm capitalize">
-                                        <div className="relative group">
-                                            {berkas.nama ? (
-                                                <>
-                                                    <a
-                                                        target="_blank"
-                                                        className="underline hover:text-primary text-primary decoration-primary"
-                                                    >
-                                                        {berkas.nama}.
-                                                        <span className="lowercase">
-                                                            {berkas.tipe_file}
-                                                        </span>
-                                                    </a>
-                                                    {/* Kontainer untuk tombol "Lihat" dan "Download" */}
-                                                    <div className="absolute flex justify-center gap-2 transition-opacity opacity-0 group-hover:opacity-100">
-                                                        {/* Tombol "Lihat" */}
-
-                                                        <a
-                                                            href={`/storage/${berkas.path}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
-                                                        >
-                                                            Lihat
-                                                            <FaEye className="mx-1 fill-hijau/75 group-hover/button:fill-white" />
-                                                        </a>
-
-                                                        {/* Tombol "Download" */}
-                                                        <a
-                                                            href={`/storage/${berkas.path}`}
-                                                            download={
-                                                                berkas.nama
-                                                            }
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"
-                                                        >
-                                                            Unduh
-                                                            <FaDownload className="mx-1 fill-secondary/75 group-hover/button:fill-white" />
-                                                        </a>
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <span className="text-center">
-                                                    -
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="p-1 text-center">
-                                        {berkas.is_valid === null &&
-                                        berkas.nama ? (
-                                            <div className="label-base bg-secondary/15">
-                                                Diproses
-                                            </div>
-                                        ) : (
-                                            <span className="text-center">
-                                                -
-                                            </span>
-                                        )}
-
-                                        {berkas.is_valid == true && (
-                                            <div className="label-success">
-                                                Valid
-                                            </div>
-                                        )}
-
-                                        {berkas.is_valid == false && (
-                                            <div className="label-warning">
-                                                Tidak Valid
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="w-full p-0 mx-auto ">
-                                        {berkas.nama ? (
-                                            <div className=" label-success">
-                                                {pengajuan.status}
-                                            </div>
-                                        ) : (
-                                            <div className=" label-base bg-base-300 text-nowrap">
-                                                Berkas tidak diajukan
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                            <tr></tr>
-                        </tbody>
-                    </table>
-                ) : (
-                    <>
-                        <div className="pb-16 mt-10 overflow-x-auto">
-                            <h2 className="text-base font-semibold">
-                                Berkas Ketua Tim
-                            </h2>
-                            {/* Tabel Berkas Pengajuan PBJ */}
-
-                            <TabelBerkas
-                                daftarBerkas={_berkasKT}
-                                validasiLink={route("ppk.validasi")}
-                                pengajuan={pengajuan}
-                            />
-                        </div>
-                        {/* Tabel Berkas Pengajuan PBJ */}
-                        {/* <div className="pb-16 mt-10 overflow-x-auto">
+                    <TabelBerkas
+                        daftarBerkas={_berkasKT}
+                        validasiLink={route("ppk.validasi")}
+                        pengajuan={pengajuan}
+                    />
+                </div>
+                {/* Tabel Berkas Pengajuan PBJ */}
+                {/* <div className="pb-16 mt-10 overflow-x-auto">
                             <h2 className="text-base font-semibold">
                                 Berkas Pengajuan PBJ
                             </h2>
@@ -305,8 +191,6 @@ export default function ShowBerkas({
                                 pengajuan={pengajuan}
                             />
                         </div> */}
-                    </>
-                )}
             </section>
 
             {/* end of content */}

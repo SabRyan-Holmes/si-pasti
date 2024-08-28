@@ -24,7 +24,6 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:PBJ,PPK,Keuangan'])->group(function () {
         Route::get('/daftar-berkas', [AuthController::class, 'daftar_berkas'])->name('daftar-berkas');
         Route::get('daftar-berkas/show-all-berkas/{pengajuan:nama_kegiatan}', [AuthController::class, 'show_all_berkas'])->name('show-all-berkas');
-
     });
     // Riwayat Pengajuan
     Route::get('/riwayat-pengajuan', [AuthController::class, 'riwayat_pengajuan'])->name('riwayat-pengajuan');

@@ -28,23 +28,28 @@ return new class extends Migration
             $table->string('tipe_file');
             // $table->string('jenis_dokumen');
             $table->enum('jenis_dokumen', [
+                // Pengajuan KT
                 'Kerangka Ajuan Kerja',
                 'Form Permintaan',
                 'Surat Permintaan',
+                // Pengajuan PBJ
                 'Rancangan Kontrak',
                 'Spekteknis',
                 'RAB/HPS',
                 'Surat Penunjukan Penjabat Pengadaan(SPPP)',
+                // Pengajuan Kontrak/Pesanan
                 'Surat Penetapan Pemenang Barang dan Jasa(SPPBJ)',
                 'Surat Kontrak/Surat Pesanan',
+                // Pengajuan Berita Acara
                 'Berita Acara Serah Terima(BAST)',
+                'Berita Acara Pembayaran(BAP)',
                 // Pengajuan ke PPK
                 'Berita Acara Negoisasi',
                 'Berita Acara Hasil Pemilihan(BAHP)',
-                // Kuitansi
-                'Berita Acara Pembayaran(BAP)',
+                // Pengajuan Kuitansi
+                'Kuitansi',
                 'Surat Pesanan',
-                // Pembayaran
+                // Berkas Pembayaran
                 'Surat Perintah Pembayaran(SPM)',
 
             ]);

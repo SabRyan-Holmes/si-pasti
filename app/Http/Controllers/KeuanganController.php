@@ -49,6 +49,8 @@ class KeuanganController extends Controller
     {
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
         $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
+        $stagesDoneOrder = ['pesanan selesai', 'pembayaran', 'selesai'];
+        $isDoneOrder = in_array($pengajuan->stage, $stagesDoneOrder);
 
         return Inertia::render('Keuangan/ShowBerkas', [
             'title' => 'Detail Berkas',
@@ -56,6 +58,8 @@ class KeuanganController extends Controller
             'ketuaTim' => $pengajuan->created_by,
             'berkasKuitansi' => $kuitansi,
             'berkasPembayaran' => $pembayaran,
+            'isDoneOrder' => $isDoneOrder
+
         ]);
     }
 

@@ -11,7 +11,8 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
-    public function dashboard() {
+    public function dashboard()
+    {
         $processed = Pengajuan::where('status', 'diproses')->count();
         $rejected = Pengajuan::where('status', 'ditolak')->count();
         $done = Pengajuan::where('status', 'selesai')->count();
@@ -31,7 +32,7 @@ class AuthController extends Controller
             'rejectedCount' => $rejected,
             'doneCount' => $done,
             'processCount' => $processed,
-            'data'=> $data
+            'data' => $data
 
         ]);
     }
@@ -77,6 +78,9 @@ class AuthController extends Controller
         $kuitansi = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Pengajuan Kuitansi')->get();
         $pembayaran = Document::where('pengajuan_id', $pengajuan->id)->where('kategori', 'Berkas Pembayaran')->get();
 
+        $stagesDoneOrder = ['pesanan selesai', 'pembayaran', 'selesai'];
+        $isDoneOrder = in_array($pengajuan->stage, $stagesDoneOrder);
+
         return Inertia::render('ShowAllBerkas', [
             'title' => 'Detail Berkas',
             'pengajuan' => $pengajuan,
@@ -88,6 +92,7 @@ class AuthController extends Controller
             'berkasBA' => $berita_acara,
             'berkasPembayaran' => $pembayaran,
             'berkasKuitansi' => $kuitansi,
+            'isDoneOrder' => $isDoneOrder
         ]);
     }
 
@@ -99,7 +104,7 @@ class AuthController extends Controller
 
 
         // Kalau Ketua Tim hanya bisa lihat Pengajuan dari dirinya
-        if(Auth::user()->divisi == "Ketua Tim") {
+        if (Auth::user()->divisi == "Ketua Tim") {
             $pengajuans = Pengajuan::where('created_by', Auth::user()->id)->latest();
         }
 
