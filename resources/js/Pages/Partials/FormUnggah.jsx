@@ -95,7 +95,7 @@ export default function FormUnggah({
                                                 {/* Tombol "Lihat" */}
 
                                                 <a
-                                                    href={`/storage/${documentPath}`}
+                                                    href={`/public/storage/${documentPath}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
@@ -106,7 +106,7 @@ export default function FormUnggah({
 
                                                 {/* Tombol "Download" */}
                                                 <a
-                                                    href={`/storage/${documentPath}`}
+                                                    href={`/public/storage/${documentPath}`}
                                                     rel="noopener noreferrer"
                                                     download={
                                                         existingDocument.nama

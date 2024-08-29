@@ -42,7 +42,7 @@ export default function TabelSemuaBerkas({ semuaBerkas }) {
                                             {/* Tombol "Lihat" */}
 
                                             <a
-                                                href={`/storage/${berkas.path}`}
+                                                href={`/public/storage/${berkas.path}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
@@ -53,7 +53,7 @@ export default function TabelSemuaBerkas({ semuaBerkas }) {
 
                                             {/* Tombol "Download" */}
                                             <a
-                                                href={`/storage/${berkas.path}`}
+                                                href={`/public/storage/${berkas.path}`}
                                                 download={berkas.nama}
                                                 target="_blank"
                                                 rel="noopener noreferrer"

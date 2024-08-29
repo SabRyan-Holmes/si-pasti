@@ -87,7 +87,8 @@ class KetuaTimController extends Controller
 
             if ($existingDocument) {
                 // Menghapus file sebelumnya
-                Storage::delete('/storage/' . $existingDocument->path);
+                // NOTE: Default
+                Storage::delete('/public/storage/' . $existingDocument->path);
 
                 // Mengupdate dokumen yang sudah ada
                 $existingDocument->update([

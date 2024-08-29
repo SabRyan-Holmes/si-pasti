@@ -34,7 +34,7 @@ export default function TabelBerkas({ daftarBerkas, pengajuan, validasiLink }) {
                                 <td className="text-sm capitalize">
                                     <div className="relative group">
                                         <a
-                                            href={`/storage/${data.path}`}
+                                            href={`/public/storage/${data.path}`}
                                             target="_blank"
                                             className="underline hover:text-primary text-primary decoration-primary"
                                         >
@@ -49,7 +49,7 @@ export default function TabelBerkas({ daftarBerkas, pengajuan, validasiLink }) {
                                             {/* Tombol "Lihat" */}
 
                                             <a
-                                                href={`/storage/${data.path}`}
+                                                href={`/public/storage/${data.path}`}
                                                 target="_blank"
                                                 className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-hijau/75 border-hijau/20 hover:bg-hijau hover:text-white"
                                             >
@@ -59,7 +59,7 @@ export default function TabelBerkas({ daftarBerkas, pengajuan, validasiLink }) {
 
                                             {/* Tombol "Download" */}
                                             <a
-                                                href={`/storage/${data.path}`}
+                                                href={`/public/storage/${data.path}`}
                                                 download={data.nama}
                                                 target="_blank"
                                                 className="flex items-end justify-center h-8 font-medium text-center group/button action-btn text-secondary/75 border-secondary/20 hover:bg-secondary hover:text-white"

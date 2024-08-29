@@ -184,7 +184,7 @@ class KeuanganController extends Controller
 
             if ($existingDocument) {
                 // Menghapus file sebelumnya
-                Storage::delete('/storage/' . $existingDocument->path);
+                Storage::delete('/public/storage/' . $existingDocument->path);
 
                 // Mengupdate dokumen yang sudah ada
                 $existingDocument->update([
