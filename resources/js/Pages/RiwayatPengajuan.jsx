@@ -11,7 +11,7 @@ import { Link, router } from "@inertiajs/react";
 import { InputLabel } from "@/Components";
 import { HiDocumentSearch } from "react-icons/hi";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import noData from '@/../../resources/assets/image/no-data.jpg'
+import noData from "@/../../resources/assets/image/no-data.jpg";
 
 export default function RiwayatPengajuan({
     title,
@@ -198,7 +198,6 @@ export default function RiwayatPengajuan({
                                         <option>dipesan pbj</option>
                                         <option>pesanan selesai</option>
                                         <option>pembayaran</option>
-                                        <option>diproses keuangan</option>
                                         <option>selesai</option>
                                     </select>
                                 </div>
@@ -313,27 +312,27 @@ export default function RiwayatPengajuan({
                                                 <td className="p-1">
                                                     {data.status ==
                                                         "diproses" && (
-                                                        <div className="label-secondary">
+                                                        <div className="label-secondary group-hover/item:bg-secondary group-hover/item:text-white">
                                                             {data.status}
                                                         </div>
                                                     )}
 
                                                     {data.status ==
                                                         "selesai" && (
-                                                        <div className="label-success ">
+                                                        <div className="label-success group-hover/item:bg-success group-hover/item:text-white">
                                                             {data.status}
                                                         </div>
                                                     )}
 
                                                     {data.status ==
                                                         "ditolak" && (
-                                                        <div className="label-warning ">
+                                                        <div className="label-warning group-hover/item:bg-warning group-hover/item:text-white">
                                                             {data.status}
                                                         </div>
                                                     )}
                                                 </td>
                                                 <td>
-                                                    <div className="label-primary">
+                                                    <div className="label-primary group-hover/item:bg-primary/80 group-hover/item:text-white">
                                                         {data.stage}
                                                     </div>
                                                 </td>
@@ -403,11 +402,16 @@ export default function RiwayatPengajuan({
                     </>
                 ) : (
                     <div className="flex-row items-center justify-center w-full text-center h-96 ">
-                        <div className="m-40 space-y-7" >
-                        <strong className="my-auto text-3xl">
-                            Belum Ada Pengajuan Terbaru!!
-                        </strong>
-                        <img src={noData} className="m-auto my-auto h-52 w-72" alt="" srcset="" />
+                        <div className="m-40 space-y-7">
+                            <strong className="my-auto text-3xl">
+                                Belum Ada Pengajuan Terbaru!!
+                            </strong>
+                            <img
+                                src={noData}
+                                className="m-auto my-auto h-52 w-72"
+                                alt=""
+                                srcset=""
+                            />
                         </div>
                     </div>
                 )}

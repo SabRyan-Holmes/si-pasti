@@ -181,7 +181,6 @@ export default function DaftarBerkas({
                                         <option>dipesan pbj</option>
                                         <option>pesanan selesai</option>
                                         <option>pembayaran</option>
-                                        <option>diproses keuangan</option>
                                         <option>selesai</option>
                                     </select>
                                 </div>
@@ -228,19 +227,19 @@ export default function DaftarBerkas({
                             <table className="table overflow-hidden text-xs table-bordered rounded-xl ">
                                 <thead className="text-sm font-medium text-white border bg-primary rounded-xl border-secondary/15">
                                     <tr>
-                                        <th width="3%"></th>
-                                        <th width="25%">Nama Ketua Tim</th>
-                                        <th width="25%">Name Kegiatan</th>
-                                        <th width="7%" className="text-center">
+                                        <th ></th>
+                                        <th >Nama Ketua Tim</th>
+                                        <th >Name Kegiatan</th>
+                                        <th className="text-center">
                                             Tanggal Pengajuan
                                         </th>
-                                        <th width="7%" className="text-center">
+                                        <th className="text-center">
                                             Tanggal Selesai
                                         </th>
-                                        <th width="7%" className="text-center">
+                                        <th className="text-center">
                                             Status/Stage
                                         </th>
-                                        <th width="15%" className="text-center">
+                                        <th className="text-center">
                                             Aksi
                                         </th>
                                     </tr>
@@ -280,7 +279,7 @@ export default function DaftarBerkas({
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="p-1 px-3 text-sm font-medium capitalize">
+                                                <td className="p-1 px-3 text-sm font-medium capitalize truncate">
                                                     {data.nama_kegiatan}
                                                 </td>
                                                 <td className="p-0 m-0 text-sm text-center">
@@ -306,26 +305,26 @@ export default function DaftarBerkas({
                                                     <div className="flex-row items-center gap-3">
                                                         {data.status ==
                                                             "diproses" && (
-                                                            <div className="label-secondary">
+                                                            <div className="label-secondary group-hover/item:bg-secondary group-hover/item:text-white">
                                                                 {data.status}
                                                             </div>
                                                         )}
 
                                                         {data.status ==
                                                             "selesai" && (
-                                                            <div className="label-success ">
+                                                            <div className="label-success group-hover/item:bg-success group-hover/item:text-white">
                                                                 {data.status}
                                                             </div>
                                                         )}
 
                                                         {data.status ==
                                                             "ditolak" && (
-                                                            <div className="label-warning ">
+                                                            <div className="label-warning group-hover/item:bg-warning group-hover/item:text-white">
                                                                 {data.status}
                                                             </div>
                                                         )}
                                                         <div className="my-1" />
-                                                        <div className="label-primary">
+                                                        <div className="label-primary group-hover/item:bg-primary/80 group-hover/item:text-white">
                                                             {data.stage}
                                                         </div>
                                                     </div>

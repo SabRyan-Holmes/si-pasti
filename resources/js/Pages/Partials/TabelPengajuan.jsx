@@ -30,7 +30,7 @@ export default function TabelPengajuan({
     };
 
     return (
-        <form onSubmit={submit} enctype="multipart/form-data">
+        <form onSubmit={submit} encType="multipart/form-data">
             <table className="table mt-3 border rounded-md border-primary/25 table-bordered">
                 {/* head */}
                 <thead className="bg-secondary">
@@ -100,7 +100,7 @@ export default function TabelPengajuan({
 
                                     <td className="text-center text-nowrap">
                                         {berkas.is_valid == null && (
-                                            <div className="label-base bg-secondary/10">
+                                            <div className="label-secondary">
                                                 Diproses
                                             </div>
                                         )}

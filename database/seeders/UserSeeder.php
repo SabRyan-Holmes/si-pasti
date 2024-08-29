@@ -344,5 +344,15 @@ class UserSeeder extends Seeder
             'nama_tim' => 'Keuangan',
         ]);
 
+        User::create([
+            'name' => 'Mitha Rama Sari / S.E',
+            'nip' => '198610202005022001',
+            'divisi' => 'Keuangan',
+            'password' => static::$password ??= Hash::make('password'),
+            'remember_token' => Str::random(10),
+        ])->nama_tim()->create([
+            'nama_tim' => 'Keuangan',
+        ]);
+
     }
 }

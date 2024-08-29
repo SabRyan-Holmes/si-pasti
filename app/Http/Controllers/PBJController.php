@@ -236,7 +236,8 @@ class PBJController extends Controller
         $berkas = Document::find($request->id);
         if ($berkas->kategori == "Pengajuan Kontrak") {
             Pengajuan::where('id', $request->pengajuan_id)->update([
-                'stage' => 'dipesan PBJ'
+                'stage' => 'dipesan PBJ',
+                'status' => 'diproses'
             ]);
         }
 
@@ -257,6 +258,6 @@ class PBJController extends Controller
         Pengajuan::where('id', $request->pengajuan_id)->update([
             'stage' => 'pesanan selesai'
         ]);
-        return redirect()->back()->with('message', 'Pemesanana berhasil ditandai selesai!');
+        return redirect()->back()->with('message', 'Pemesanan berhasil ditandai selesai!');
     }
 }

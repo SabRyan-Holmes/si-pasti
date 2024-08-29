@@ -29,7 +29,7 @@ export default function UnggahBerkas({
         recentlySuccessful,
     } = useForm({
         pengajuan_id: pengajuan.id,
-        nama_kegiatan: "",
+        nama_kegiatan: pengajuan.nama_kegiatan,
         // spm: null,
     });
 
@@ -82,7 +82,7 @@ export default function UnggahBerkas({
             current={route().current()}
         >
             {/* content */}
-            <div className="mx-24">
+            <section className="px-12 mx-auto mb-16 phone:h-screen laptop:h-full max-w-screen-laptop">
                 <div className="mb-6">
                     <div className="flex justify-between mt-7">
                         <div className="mt-3 text-sm breadcrumbs">
@@ -119,7 +119,7 @@ export default function UnggahBerkas({
 
                     <DetailPengajuan pengajuan={pengajuan}/>
 
-                    <div className="pb-5 max-w-screen-tablet">
+                    <div className="pb-5 max-w-screen-laptop">
                         {/* Berkas Pembayaran */}
                         {!isDoneOrder && (
                             <div
@@ -143,7 +143,7 @@ export default function UnggahBerkas({
                         />
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* end of content */}
         </AuthenticatedLayout>

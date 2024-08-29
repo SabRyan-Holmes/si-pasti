@@ -73,7 +73,7 @@ export default function TabelBerkas({ daftarBerkas, pengajuan, validasiLink }) {
 
                                 <td className="text-center">
                                     {data.is_valid === null && (
-                                        <div className="label-base bg-secondary/15">
+                                        <div className="label-secondary">
                                             Diproses
                                         </div>
                                     )}

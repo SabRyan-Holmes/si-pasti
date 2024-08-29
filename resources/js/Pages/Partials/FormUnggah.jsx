@@ -84,7 +84,7 @@ export default function FormUnggah({
                                         <a
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="underline text-primary truncate max-w-screen-phone"
+                                            className="underline truncate text-primary max-w-screen-phone"
                                         >
                                             {existingDocument.nama}
                                         </a>
@@ -158,11 +158,14 @@ export default function FormUnggah({
                                     <input
                                         type="file"
                                         name={fieldName}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+
                                             setData(
                                                 fieldName,
                                                 e.target.files[0]
                                             )
+                                            console.log(fieldName)
+                                        }
                                         }
                                         className="text-sm text-gray-600 file:absolute file:right-1 file:bg-primary/85 file:text-white file:border-0 file:py-1 file:px-3 file:rounded-full file:shadow-sm file:shadow-blue-500/30"
                                     />

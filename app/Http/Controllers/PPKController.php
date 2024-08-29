@@ -100,7 +100,9 @@ class PPKController extends Controller
 
     public function ajukan_berkas_pbj(PengajuanPBJStoreRequest $request)
     {
+        // dd($request);
         $request->validated();
+
         $this->storeDocument($request, 'rancangan_kontrak', 'RC', 'Rancangan Kontrak', 'Pengajuan PBJ');
         $this->storeDocument($request, 'spekteknis', 'SPEKTEKNIS', 'Spekteknis', 'Pengajuan PBJ');
         $this->storeDocument($request, 'rab', 'RAB', 'RAB/HPS', 'Pengajuan PBJ');
@@ -314,8 +316,11 @@ class PPKController extends Controller
         ]);
 
         Pengajuan::where('id', $request->pengajuan_id)->update([
-            'stage' => 'diproses ppk'
+            'stage' => 'diproses ppk',
+            'status' => 'diproses'
         ]);
+
+
         // Statis jadi ditolak sementara jika ada dokumen yg tidak valid
         if ($request->is_valid == false) {
             Pengajuan::where('id', $request->pengajuan_id)->update([

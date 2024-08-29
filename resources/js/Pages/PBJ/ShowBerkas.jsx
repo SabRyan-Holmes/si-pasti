@@ -174,40 +174,41 @@ export default function ShowBerkas({
                         </SecondaryButton>
                     </div>
 
-                    <div className="flex items-center justify-between ">
+                    <div className="w-full mt-12 ">
                         <DetailPengajuan pengajuan={pengajuan} />
-
-                        <SuccessButton
-                            className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
-                            disabled={isDoneOrder}
-                        >
-                            <Link
-                                as="button"
-                                href={
-                                    auth.user.divisi == "PBJ" &&
-                                    route("pbj.order-done")
-                                }
-                                method="post"
-                                data={{ pengajuan_id: pengajuan.id }}
+                        <div className="flex justify-end ">
+                            <SuccessButton
+                                className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
+                                disabled={isDoneOrder}
                             >
-                                {isDoneOrder ? (
-                                    <span>Pemesanan Selesai</span>
-                                ) : (
-                                    <span>Konfirmasi Selesai</span>
-                                )}
-                                {pengajuan.stage == "pesanan selesai" ? (
-                                    ""
-                                ) : (
-                                    <FaCheck className="float-right w-4 h-4 ml-1" />
-                                )}
-                                {/* Absolute hover yang menampilkan Kata2 "Konfirmasi Pesanan Selesai" */}
-                                {!isDoneOrder && (
-                                    <div className="absolute hidden scale-75 group-hover:flex bg-slate-700 text-white text-sm py-3 px-3 rounded bottom-[-45px] left-1/2 transform -translate-x-1/2 whitespace-nowrap after:content-[''] after:absolute after:left-1/2 after:bottom-full after:-translate-x-1/2 after:border-8 after:border-transparent after:border-b-gray-700">
-                                        Konfirmasi Pesanan Selesai
-                                    </div>
-                                )}
-                            </Link>
-                        </SuccessButton>
+                                <Link
+                                    as="button"
+                                    href={
+                                        auth.user.divisi == "PBJ" &&
+                                        route("pbj.order-done")
+                                    }
+                                    method="post"
+                                    data={{ pengajuan_id: pengajuan.id }}
+                                >
+                                    {isDoneOrder ? (
+                                        <span>Pemesanan Selesai</span>
+                                    ) : (
+                                        <span>Konfirmasi Selesai</span>
+                                    )}
+                                    {pengajuan.stage == "pesanan selesai" ? (
+                                        ""
+                                    ) : (
+                                        <FaCheck className="float-right w-4 h-4 ml-1" />
+                                    )}
+                                    {/* Absolute hover yang menampilkan Kata2 "Konfirmasi Pesanan Selesai" */}
+                                    {!isDoneOrder && (
+                                        <div className="absolute hidden scale-75 group-hover:flex bg-slate-700 text-white text-sm py-3 px-3 rounded bottom-[-45px] left-1/2 transform -translate-x-1/2 whitespace-nowrap after:content-[''] after:absolute after:left-1/2 after:bottom-full after:-translate-x-1/2 after:border-8 after:border-transparent after:border-b-gray-700">
+                                            Konfirmasi Pesanan Selesai
+                                        </div>
+                                    )}
+                                </Link>
+                            </SuccessButton>
+                        </div>
                     </div>
                 </div>
 

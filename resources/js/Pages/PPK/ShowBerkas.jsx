@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FaCheck, FaRegFolder, FaRegFolderOpen } from "react-icons/fa6";
 import { DetailPengajuan, TabelBerkas } from "@/Pages/Partials";
 import { SecondaryButton, SuccessButton } from "@/Components";
+
 
 export default function ShowBerkas({
     title,
@@ -117,18 +118,21 @@ export default function ShowBerkas({
                         </SecondaryButton>
                     </div>
 
-                    <div className="flex items-center justify-between ">
-                        <DetailPengajuan pengajuan={pengajuan} />
 
-                        {isDoneOrder && (
-                            <SuccessButton
-                                className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
-                                disabled={isDoneOrder}
-                            >
-                                Pemesanan Selesai
-                                <FaCheck className="float-right w-4 h-4 ml-1" />
-                            </SuccessButton>
-                        )}
+
+                    <div className="w-full mt-12">
+                        <DetailPengajuan pengajuan={pengajuan} />
+                        <div className="flex justify-end ">
+                            {isDoneOrder && (
+                                <SuccessButton
+                                    className="relative mr-3 scale-110 hover:scale-[1.15] group transition-all duration-200 disabled:hover:scale-110"
+                                    disabled={isDoneOrder}
+                                >
+                                    Pemesanan Selesai
+                                    <FaCheck className="float-right w-4 h-4 ml-1" />
+                                </SuccessButton>
+                            )}
+                        </div>
                     </div>
                 </div>
 

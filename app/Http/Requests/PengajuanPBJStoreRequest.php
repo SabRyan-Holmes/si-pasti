@@ -34,7 +34,7 @@ class PengajuanPBJStoreRequest extends FormRequest
 
             // Rule kustom untuk memastikan salah satu berkas harus diupload
             // Menggunakan required_without_all
-            'rancangan_kontrak' => ['required_without_all:spekteknis,rab, sppp', 'file', 'mimes:pdf', 'max:15192'],
+            'rancangan_kontrak' => ['required_without_all:spekteknis,rab,sppp', 'file', 'mimes:pdf', 'max:15192'],
             'spekteknis' => ['required_without_all:rancangan_kontrak,rab,sppp,', 'file', 'mimes:pdf', 'max:15192'],
             'rab' => ['required_without_all:rancangan_kontrak,spekteknis,sppp,', 'file', 'mimes:pdf', 'max:15192'],
             'sppp' => ['required_without_all:rancangan_kontrak,spekteknis,rab,', 'file', 'mimes:pdf', 'max:15192'],

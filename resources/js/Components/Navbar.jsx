@@ -100,7 +100,7 @@ const Navbar = ({ user, title }) => {
                                 </li>
                                 <li>
                                     <Link href={route("profile.edit")}>
-                                        Edit Profile
+                                        Edit Profil
                                     </Link>
                                 </li>
                                 <li>

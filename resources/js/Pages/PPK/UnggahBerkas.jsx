@@ -205,7 +205,7 @@ export default function UnggahBerkas({
                     <div className="mx-auto ">
                         <DetailPengajuan pengajuan={pengajuan} />
 
-                        <div className="pb-5 max-w-screen-tablet">
+                        <div className="pb-5 max-w-screen-laptop">
                             <InputLabel
                                 value="Pilih Berkas"
                                 htmlFor="pilihBerkas"
@@ -243,7 +243,8 @@ export default function UnggahBerkas({
                                             }}
                                         >
                                             <span>Pengajuan PBJ</span>
-                                            {berkasPBJ.length > 0 && (
+                                            {/* Mungkin bagsuny ini centnag kalo dah dicek validasi pbj jugo? */}
+                                            {berkasPBJ.length > 0  && (
                                                 <FaCheck className="w-4 h-4 fill-hijau" />
                                             )}
                                         </li>
@@ -317,6 +318,7 @@ export default function UnggahBerkas({
                                     Pengajuan Kuitansi
                                 </option>
                             </select> */}
+                            <div className="w-full">
 
                             {/* Pengajuan PBJ */}
                             {select == "Pengajuan PBJ" && (
@@ -414,6 +416,8 @@ export default function UnggahBerkas({
                                     />
                                 </>
                             )}
+                            </div>
+
                         </div>
                     </div>
                 </div>

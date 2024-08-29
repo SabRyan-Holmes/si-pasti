@@ -123,7 +123,7 @@ export default function UnggahBerkas({
                 <DetailPengajuan pengajuan={pengajuan}/>
 
 
-                <div className="pb-5 mt-10 max-w-screen-tablet">
+                <div className="pb-5 mt-10 max-w-screen-laptop">
                     {/* Pengajuan PBJ */}
 
                     <FormUnggah
